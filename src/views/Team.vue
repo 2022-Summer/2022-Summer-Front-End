@@ -6,8 +6,7 @@
 
       <el-dialog
         :visible.sync="teamInfoVisible"
-        width="30%"
-        :before-close="handleClose">
+        width="30%">
         <el-descriptions title="团队信息">
           <el-descriptions-item label="团队名">{{team.name}}</el-descriptions-item>
           <el-descriptions-item label="发起者">{{team.belong}}</el-descriptions-item>
@@ -47,8 +46,7 @@
         <el-dialog
           title="请输入要邀请的用户邮箱"
           :visible.sync="inviteVisible"
-          width="30%"
-          :before-close="handleClose">
+          width="30%">
           <el-input v-model="input1"></el-input>
           <span slot="footer" class="dialog-footer">
             <el-button type="primary" @click="inviteSure">发送邀请</el-button>
@@ -58,8 +56,7 @@
 
         <el-dialog
           :visible.sync="memberInfoVisible"
-          width="30%"
-          :before-close="handleClose">
+          width="30%">
           <el-descriptions title="成员信息">
             <el-descriptions-item label="姓名">{{Members[memberSelected].name}}</el-descriptions-item>
             <el-descriptions-item label="邮箱">{{Members[memberSelected].email}}</el-descriptions-item>
@@ -90,8 +87,7 @@
         <el-dialog
           title="请输入项目新标题"
           :visible.sync="renameVisible"
-          width="30%"
-          :before-close="handleClose">
+          width="30%">
           <el-input v-model="input" placeholder="请输入项目新标题"></el-input>
           <span slot="footer" class="dialog-footer">
             <el-button type="primary" @click="renameSure">确 定</el-button>
@@ -204,7 +200,7 @@ export default {
       ],
       Recycle:[//回收站项目列表
         {
-          "id":2,
+          "id":3,
           "title":"回收站项目",
           "startTime":"2020.1.1",
           "leader":"zy2"

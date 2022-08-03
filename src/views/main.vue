@@ -43,6 +43,20 @@
           <el-button type="primary" id="editFinish" @click="save">保存个人资料</el-button>
         </div>
       </div>
+      <div id="myTeamTable" v-if="mainIndex===2">
+        <el-table :data="myTeams" style="width: 100%">
+          <el-table-column type="index"> </el-table-column>
+          <el-table-column prop="name" label="团队名"></el-table-column>
+          <el-table-column prop="belong" label="发起者"></el-table-column>
+          <el-table-column prop="foundedTime" label="建立时间"></el-table-column>
+          <el-table-column prop="id" label="操作">
+            <template slot-scope="scope">
+              <el-button type="primary" @click="intoTeam(scope.row.id)">进入团队</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-button type="success" class="bottomButton" @click="buildTeam">建立团队</el-button>
+      </div>
     </el-main>
   </el-container>
 </template>
@@ -60,16 +74,34 @@ export default {
       input6: '',
       input7: '',
       input8: '',
-        mainIndex:1,//不同值显示不同板块
-        name:'1',
-        username:'2',
-        description:'3',
-        grade:'4',
-        major:'5',
-        sex:'男',  
-        password:'1',
-        headshot:''
+      mainIndex:1,//不同值显示不同板块
+      name:'1',
+      username:'2',
+      description:'3',
+      grade:'4',
+      major:'5',
+      sex:'男',  
+      password:'1',
+      headshot:'',
+      myTeams:[
+        {
+          "id":1,
+          "name":"没头发",
+          "belong":"zy1",
+          "foundedTime":"2020.1.1",
+          "memberNum":6,
+          "intro":"这是一个团队"
+        },
+        {
+          "id":2,
+          "name":"有头发",
+          "belong":"zy1",
+          "foundedTime":"2020.1.1",
+          "memberNum":6,
+          "intro":"这也是一个团队"
         }
+      ]
+    }
   },
   created(){
       if(!islogin){
@@ -99,7 +131,7 @@ export default {
       }
   }, 
   methods: {
-        save: function(){
+    save: function(){
         this.$axios({
         method: 'post',           /* 指明请求方式，可以是 get 或 post */
         url: '/api/user/info/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
@@ -130,16 +162,24 @@ export default {
         .catch(err => {
         console.log(err);         /* 若出现异常则在终端输出相关信息 */
       });
+    },
+    to1(){
+      this.mainIndex=1;
+    },
+    to2(){
+      this.mainIndex=2;
+    },
+    intoTeam(val){//进入id为val的团队主页
+
+    },
+    buildTeam(){
+      this.$router.push('/BuildTeam');
     }
   }
 }
 </script>
 
 <style scoped>
-#search {
-  font-family: 'Noto Serif SC', serif;
-  margin-top: 20px;
-}
 #head {
   background-color: #d4e7d9;
   color: #333;
@@ -151,10 +191,12 @@ export default {
   color: #333;
   text-align: center;
 }
-#tip,#latestTable,#courseTable,#exerTable,#lifeTable,#newTable{
+#infoTable,#myTeamTable{
   margin-top: 20px;
 }
-.tipText {
-  margin-bottom: 20px;
+.bottomButton {
+  float: left;
+  margin-top: 20px;
+  margin-left: 20px;
 }
 </style>
