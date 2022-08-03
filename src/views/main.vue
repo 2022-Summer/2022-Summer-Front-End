@@ -23,12 +23,6 @@
             <el-form-item label="简介">
               <el-input class="infoInput" :placeholder="description" v-model="input4"></el-input>
             </el-form-item>
-            <el-form-item label="专业">
-              <el-input class="infoInput" :placeholder="major" v-model="input6"></el-input>
-            </el-form-item>
-            <el-form-item label="年级">
-              <el-input class="infoInput" :placeholder="grade" v-model="input5"></el-input>
-            </el-form-item>
             <el-form-item label="性别">
               <el-select class="infoInput" :placeholder="sex" v-model="input7">
                 <el-option label="男" value="男"></el-option>
@@ -56,16 +50,12 @@ export default {
       input2: '',
       input3: '',
       input4: '',
-      input5: '',
-      input6: '',
       input7: '',
       input8: '',
         mainIndex:1,//不同值显示不同板块
         name:'1',
         username:'2',
         description:'3',
-        grade:'4',
-        major:'5',
         sex:'男',  
         password:'1',
         headshot:''
@@ -86,7 +76,6 @@ export default {
               this.name=res.data.name;
               this.username=res.data.username;
               this.description=res.data.description;
-              this.major=res.data.major;
               this.sex=res.data.sex;
               this.password=res.data.password;
               this.headshot=res.data.headshot;
@@ -107,10 +96,9 @@ export default {
             name:this.input1,
             username:this.input2,
             description:this.input4,
-            major:this.input5,
-            grade:this.input6,
             sex:this.input7,
-            password:this.input8
+            password:this.input8,
+            headshot:this.headshot,
         })
         })
         .then((res) => {
@@ -122,7 +110,7 @@ export default {
             this.major = this.input5,
             this.grade = this.input6,
             this.sex = this.input7,
-            this.password = this.input8
+            this.password = this.input8,
             this.$message.success("保存成功");
               break;
           }

@@ -2,10 +2,10 @@
   <div id="login" class="login">
     <div class="wrap">
       <h1>登 录</h1>
-      <el-form :model="form" ref="form" class="form">
-        <el-form-item prop="username">
-          <el-input placeholder="邮箱" type="username" v-model="form.mailbox" autocomplete="off"></el-input>
-        </el-form-item>
+      <el-form :model="form" ref="form" :rules="rules" class="form">
+      <el-form-item  prop="mailbox">
+        <el-input placeholder="邮箱" v-model="form.mailbox"></el-input>
+      </el-form-item>
         <el-form-item id="password" prop="password">
           <el-input
               placeholder="密码"
@@ -35,17 +35,36 @@ import qs from "qs";
 export default {
   name: "main",
   data() {
-    return {
+    var checkEmail = (rule, value, callback) => {
+    const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
+    if (!value) {
+      return callback(new Error('邮箱不能为空'))
+    }
+    setTimeout(() => {
+      if (mailReg.test(value)) {
+        callback()
+      } else {
+        callback(new Error('请输入正确的邮箱格式'))
+      }
+    }, 100)
+  }
+ return {
       form: {
         password: '',
-      }
+        mailbox:'',
+      },
+      rules: {
+      mailbox: [
+      { validator: checkEmail, trigger: 'change' }
+    ]
+  }
     }
   },
   methods: {
     login: function () {
-      // 检查表单是否有填写内容
+      // 检查表单是否有填写内容      
       if (this.form.mailbox === '' || this.form.password === '') {
-        this.$message.warning("请输入学号和密码！");
+        this.$message.warning("请输入邮箱和密码!");
         return;
       }
       this.$axios({

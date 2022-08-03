@@ -9,9 +9,9 @@ export default new Vuex.Store({
     username:'xxx',
     mailbox:'',
     name:'xx',//真实姓名
-    team:0,
     projectid:0,
     wordid:0,
+    teamid:'',
   },
   getters: {
   },
