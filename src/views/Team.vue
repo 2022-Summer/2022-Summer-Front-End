@@ -98,9 +98,9 @@
       <div id="recycleList" v-if="teamIndex === 3">
         <el-table :data="Recycle" style="width: 100%">
           <el-table-column type="index"> </el-table-column>
-          <el-table-column prop="title" label="标题" width=300px></el-table-column>
-          <el-table-column prop="leader" label="负责人" width=300px></el-table-column>
-          <el-table-column prop="startTime" label="创立时间" width=300px></el-table-column>
+          <el-table-column prop="title" label="标题"></el-table-column>
+          <el-table-column prop="leader" label="负责人"></el-table-column>
+          <el-table-column prop="startTime" label="创立时间"></el-table-column>
           <el-table-column prop="id" label="操作">
             <template slot-scope="scope">
               <el-button type="success" @click="recoverProject(scope.row.id)">恢复项目</el-button>
@@ -297,7 +297,7 @@ export default {
 
     },
     addProject(){//新建项目
-      this.$router.push('BuildProject')
+
     },
 
     recoverProject(val){//恢复项目

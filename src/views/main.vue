@@ -5,15 +5,17 @@
         <el-menu id="menu" mode="horizontal"  active-text-color="#ffd04b">
           <el-menu-item @click="to1" index="1">个人资料</el-menu-item>
           <el-menu-item @click="to2" index="2">我的团队</el-menu-item>
+          <el-menu-item @click="to3" index="3">
+            <el-badge :value="myInvitations.length" class="item">
+              团队邀请
+            </el-badge>
+          </el-menu-item>
         </el-menu>
       </div>
       <div id="infoTable" v-if="mainIndex===1">
         <div>
           <el-form  label-width="80px">
-          <h1></h1>
-            <el-form-item label="头像">
-            <img :src="headshot">
-            </el-form-item>
+            <el-form-item label="头像"><img :src="headshot"></el-form-item>
             <el-form-item label="姓名">
               <el-input class="infoInput" :placeholder="name" v-model="input1"></el-input>
             </el-form-item>
@@ -57,6 +59,20 @@
         </el-table>
         <el-button type="success" class="bottomButton" @click="buildTeam">建立团队</el-button>
       </div>
+      <div id="inviteTable" v-if="mainIndex===3">
+        <el-table :data="myInvitations" style="width: 100%">
+          <el-table-column type="index"> </el-table-column>
+          <el-table-column prop="teamName" label="团队"></el-table-column>
+          <el-table-column prop="invitor" label="邀请人"></el-table-column>
+          <el-table-column prop="inviteTime" label="邀请时间"></el-table-column>
+          <el-table-column prop="id" label="操作">
+            <template slot-scope="scope">
+              <el-button type="primary" @click="accept(scope.row.teamID)">进入团队</el-button>
+              <el-button type="danger" @click="refuse(scope.row.id)">拒绝邀请</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
     </el-main>
   </el-container>
 </template>
@@ -83,6 +99,7 @@ export default {
       sex:'男',  
       password:'1',
       headshot:'',
+      invitations:2,//收到的邀请总数
       myTeams:[
         {
           "id":1,
@@ -99,6 +116,22 @@ export default {
           "foundedTime":"2020.1.1",
           "memberNum":6,
           "intro":"这也是一个团队"
+        }
+      ],
+      myInvitations:[
+        {
+          "id":1,//邀请id
+          "teamID":3,//发出邀请的队伍id
+          "teamName":"没头发",
+          "invitor":"zy1",//发出邀请者
+          "inviteTime":"2020.1.1"
+        },
+        {
+          "id":2,
+          "teamID":4,
+          "teamName":"有头发",
+          "invitor":"zy2",
+          "inviteTime":"2020.1.1"
         }
       ]
     }
@@ -169,17 +202,25 @@ export default {
     to2(){
       this.mainIndex=2;
     },
+    to3(){
+      this.mainIndex=3;
+    },
     intoTeam(val){//进入id为val的团队主页
 
     },
     buildTeam(){
       this.$router.push('/BuildTeam');
+    },
+    accept(val){//当前用户加入主键为val的队伍，身份普通成员
+    },
+    refuse(val){//直接删除主键为val的邀请即可
     }
   }
 }
 </script>
 
 <style scoped>
+/*
 #head {
   background-color: #d4e7d9;
   color: #333;
@@ -191,12 +232,17 @@ export default {
   color: #333;
   text-align: center;
 }
-#infoTable,#myTeamTable{
+#infoTable,#myTeamTable,#inviteTable{
   margin-top: 20px;
 }
 .bottomButton {
   float: left;
   margin-top: 20px;
   margin-left: 20px;
+}
+*/
+.el-form-item {
+  width: 60%;
+  margin:25px 20%;
 }
 </style>

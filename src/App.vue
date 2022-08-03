@@ -1,23 +1,24 @@
 <template>
   <div id="app">
-  <el-container>
-        <el-header>
-      <h1>墨书</h1>
-    </el-header>
-   <el-header>
-     <nav class="nav1">  
-     <el-button type="primary" v-on:click="gotologin" v-if="!this.$store.state.islogin">登录</el-button>
-      <h1 v-if="$store.state.islogin">欢迎,
-      <router-link to="/User">{{$store.state.username}}</router-link></h1>
-      </nav>
-      <nav class="nav2">
-             <el-button type="primary" v-on:click="logout" v-if="this.$store.state.islogin">退出登录</el-button>
-      </nav>
-    </el-header>
-    <el-main> 
-         <router-view/>
-    </el-main>
-  </el-container>
+    <el-container>
+      <el-header height="100px" >
+        <img src="./assets/img/moshu_banner.png" width="300" height="100">
+        <div style="margin-top: 30px;float:right;">
+          <el-button type="primary" v-on:click="gotologin" v-if="!this.$store.state.islogin">
+            登录
+          </el-button>
+          <h1 v-if="$store.state.islogin">
+            欢迎,<router-link to="/User">{{$store.state.username}}</router-link>
+          </h1>
+          <el-button type="primary" v-on:click="logout" v-if="this.$store.state.islogin">
+            退出登录
+          </el-button>
+        </div>>
+      </el-header>
+      <el-main>
+        <router-view/>
+      </el-main>
+    </el-container>
   </div>
 </template>
 
@@ -77,6 +78,7 @@
 </script>
 
 <style>
+/*
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -113,5 +115,32 @@
   line-height: var(--footer-height);
   background: #42b983;
   color: #fff;
-}
+}*/
+  .el-header {
+    background-color: #B3C0D1;
+    color: #333;
+    text-align: center;
+  }
+  .el-aside {
+    background-color: #D3DCE6;
+    color: #333;
+    text-align: center;
+    line-height: 200px;
+  }
+  .el-main {
+    background-color: #E9EEF3;
+    color: #333;
+    text-align: center;
+    line-height: 160px;
+  }
+  body > .el-container {
+    margin-bottom: 40px;
+  }
+  .el-container:nth-child(5) .el-aside,
+  .el-container:nth-child(6) .el-aside {
+    line-height: 260px;
+  }
+  .el-container:nth-child(7) .el-aside {
+    line-height: 320px;
+  }
 </style>
