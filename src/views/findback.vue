@@ -54,7 +54,7 @@ export default {
       send: function () {
       this.$axios({
         method: 'get',           
-        url: '/api/user/register/',       
+        url: '/api/user/password/',       
         params:{
           mailbox:this.form.mailbox
         }
