@@ -297,7 +297,7 @@ export default {
 
     },
     addProject(){//新建项目
-
+      this.$router.push('BuildProject')
     },
 
     recoverProject(val){//恢复项目
