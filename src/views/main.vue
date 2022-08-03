@@ -5,6 +5,9 @@
         <el-menu id="menu" mode="horizontal"  active-text-color="#ffd04b">
           <el-menu-item @click="to1" index="1">个人资料</el-menu-item>
           <el-menu-item @click="to2" index="2">我的团队</el-menu-item>
+          <el-menu-item @click="to3" index="3">
+          <el-badge :value="myInvitations.length" class="item">团队邀请</el-badge>
+          </el-menu-item>
         </el-menu>
       </div>
       <div id="infoTable" v-if="mainIndex===1">
@@ -43,13 +46,27 @@
           <el-table-column prop="name" label="团队名"></el-table-column>
           <el-table-column prop="belong" label="发起者"></el-table-column>
           <el-table-column prop="foundedTime" label="建立时间"></el-table-column>
-          <el-table-column prop="id" label="操作">
+          <el-table-column prop="teamid" label="操作">
             <template slot-scope="scope">
-              <el-button type="primary" @click="intoTeam(scope.row.id)">进入团队</el-button>
+              <el-button type="primary" @click="intoTeam(scope.row.teamid)">进入团队</el-button>
             </template>
           </el-table-column>
         </el-table>
         <el-button type="success" class="bottomButton" @click="buildTeam">建立团队</el-button>
+      </div>
+            <div id="inviteTable" v-if="mainIndex===3">
+        <el-table :data="myInvitations" style="width: 100%">
+          <el-table-column type="index"> </el-table-column>
+          <el-table-column prop="teamName" label="团队名"></el-table-column>
+          <el-table-column prop="invitor" label="邀请人"></el-table-column>
+          <el-table-column prop="inviteTime" label="邀请时间"></el-table-column>
+          <el-table-column prop="id" label="操作">
+            <template slot-scope="scope">
+              <el-button type="primary" @click="accept(scope.row.id)">进入团队</el-button>
+              <el-button type="danger" @click="refuse(scope.row.id)">拒绝邀请</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
       </div>
     </el-main>
   </el-container>
@@ -73,22 +90,29 @@ export default {
         sex:'男',  
         password:'1',
         headshot:'',
+        invitations:2,//收到的邀请总数
         myTeams:[
         {
-          "id":1,
+          "teamid":1,
           "name":"没头发",
           "belong":"zy1",
           "foundedTime":"2020.1.1",
-          "memberNum":6,
-          "intro":"这是一个团队"
+        }
+      ],
+        myInvitations:[
+        {
+          "id":1,//邀请id
+          "teamID":3,//发出邀请的队伍id
+          "teamName":"没头发",
+          "invitor":"zy1",//发出邀请者
+          "inviteTime":"2020.1.1"
         },
         {
           "id":2,
-          "name":"有头发",
-          "belong":"zy1",
-          "foundedTime":"2020.1.1",
-          "memberNum":6,
-          "intro":"这也是一个团队"
+          "teamID":4,
+          "teamName":"有头发",
+          "invitor":"zy2",
+          "inviteTime":"2020.1.1"
         }
       ]
     }
@@ -111,6 +135,34 @@ export default {
               this.sex=res.data.sex;
               this.password=res.data.password;
               this.headshot=res.data.headshot;
+              break;
+          }
+        })
+        .catch(err => {
+        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      });
+      this.$axios({
+        method: 'get',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/user/invited/'     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        })
+        .then((res) => {
+          switch (res.data.errno){
+            case 0:
+              this.myInvitations=res.data.myInvitations;
+              break;
+          }
+        })
+        .catch(err => {
+        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      });
+      this.$axios({
+        method: 'get',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/user/team/'     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        })
+        .then((res) => {
+          switch (res.data.errno){
+            case 0:
+              this.myTeams=res.data.myTeams;
               break;
           }
         })
@@ -157,22 +209,103 @@ export default {
     to2(){
       this.mainIndex=2;
     },
+     to3(){
+      this.mainIndex=3;
+    },
     intoTeam(val){//进入id为val的团队主页
       this.$store.state.teamid=val;
       this.$router.push('/team');
     },
     buildTeam(){
       this.$router.push('/BuildTeam');
+    },
+    accept(val){//当前用户加入主键为val的队伍，身份普通成员
+        this.$axios({
+        method: 'post',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/user/invited/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        data: qs.stringify({      /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+        id:val,
+        op:0
+        })
+        })
+        .then((res) => {
+          switch (res.data.errno) {
+            case 0:
+            this.$message.success("加入成功");
+              break;
+          }
+        })
+        .catch(err => {
+        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      });
+      this.$axios({
+        method: 'get',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/user/invited/'     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        })
+        .then((res) => {
+          switch (res.data.errno){
+            case 0:
+              this.myInvitations=res.data.myInvitations;
+              break;
+          }
+        })
+        .catch(err => {
+        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      });
+       this.$axios({
+        method: 'get',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/user/team/'     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        })
+        .then((res) => {
+          switch (res.data.errno){
+            case 0:
+              this.myTeams=res.data.myTeams;
+              break;
+          }
+        })
+        .catch(err => {
+        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      });
+    },
+    refuse(val){//直接删除主键为val的邀请即可
+      this.$axios({
+        method: 'post',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/user/invited/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        data: qs.stringify({      /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+        id:val,
+        op:1
+        })
+        })
+        .then((res) => {
+          switch (res.data.errno) {
+            case 0:
+            this.$message.success("已拒绝邀请");
+              break;
+          }
+        })
+        .catch(err => {
+        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      });
+      this.$axios({
+        method: 'get',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/user/invited/'     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        })
+        .then((res) => {
+          switch (res.data.errno){
+            case 0:
+              this.myInvitations=res.data.myInvitations;
+              break;
+          }
+        })
+        .catch(err => {
+        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      });
     }
   }
 }
 </script>
 
 <style scoped>
-#search {
-  font-family: 'Noto Serif SC', serif;
-  margin-top: 20px;
-}
 #head {
   background-color: #d4e7d9;
   color: #333;
@@ -184,10 +317,12 @@ export default {
   color: #333;
   text-align: center;
 }
-#tip,#latestTable,#courseTable,#exerTable,#lifeTable,#newTable{
+#infoTable,#myTeamTable,#inviteTable{
   margin-top: 20px;
 }
-.tipText {
-  margin-bottom: 20px;
+.bottomButton {
+  float: left;
+  margin-top: 20px;
+  margin-left: 20px;
 }
 </style>
