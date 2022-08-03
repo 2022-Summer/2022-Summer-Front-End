@@ -105,7 +105,7 @@ export default {
             }, 1000);
             break;
           case 1002:
-            this.$message.error("该学号已被注册!");
+            this.$message.error("该邮箱已被注册!");
             break;
           case 1003:
             this.$message.error("两次输入的密码不一致!");

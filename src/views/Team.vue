@@ -503,10 +503,7 @@ export default {
       });
     },
     addProject(){//新建项目
-
-
-
-//跳转到新建项目页面
+      this.$router.push('BuildProject');
     },
     recoverProject(val){//恢复项目
     this.$axios({

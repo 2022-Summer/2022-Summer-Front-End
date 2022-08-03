@@ -158,6 +158,8 @@ export default {
       this.mainIndex=2;
     },
     intoTeam(val){//进入id为val的团队主页
+      this.$store.state.teamid=val;
+      this.$router.push('/team');
     },
     buildTeam(){
       this.$router.push('/BuildTeam');

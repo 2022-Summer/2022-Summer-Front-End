@@ -28,6 +28,7 @@ export default {
         }
   },
   created(){
+    
   }, 
   methods: {
     to1: function(){
