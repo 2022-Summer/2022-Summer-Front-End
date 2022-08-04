@@ -15,14 +15,7 @@
       <el-link icon="el-icon-paperclip" type="primary">添加需要上传的文件</el-link>
     </el-upload>
 <div>
-  <el-button
-                  type="primary"
-                  size="mini"
-                  style="color: white"
-                  @click="downloadfile(scope.$index, scope.row)"
-                >
-                  下载
-   </el-button>
+    <el-button type="primary" @click="upload()">上传</el-button>
 </div>
 </div>
 </template>
