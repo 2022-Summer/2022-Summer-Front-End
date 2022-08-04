@@ -367,12 +367,7 @@ export default {
                         break;
                 }
             });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消移出'
-          });          
-        });
+        })
     },
     addMember(){//邀请新成员
       this.inviteVisible=true;
@@ -429,12 +424,7 @@ export default {
             });
           //返回个人主页
           this.$router.push('/');
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消退出'
-          });          
-        });
+        })
     },
     projectDetail(val){//跳转项目详情页，val为项目id
         this.$store.state.projectid = val;
