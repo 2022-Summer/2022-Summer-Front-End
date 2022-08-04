@@ -11,8 +11,7 @@
         :auto-upload="false"
         :on-remove="handleRemove"
         :before-remove="beforeRemove"
-        multiple
-        :file-list="fileList">
+        multiple>
       <el-link icon="el-icon-paperclip" type="primary">添加需要上传的文件</el-link>
     </el-upload>
   <el-button type="primary" @click="upload">上传</el-button>
@@ -25,6 +24,9 @@
         headers:{
           Authorization:localStorage.token
         },
+        filelist:[{
+          name:''
+        }]
       };
     },
     created(){      
@@ -64,15 +66,8 @@
       .catch(err => {
         console.log(err);         /* 若出现异常则在终端输出相关信息 */
       })
-      then((res) => {
-        if (res.status === 200) {
-          thisInfo.$message.success('修改信息成功')
-        } else {
-          thisInfo.$message.success('修改信息失败')
-        }
         thisInfo.formFileList = []
         thisInfo.uploadFormFileList = []
-      })
     }
     }
   }
