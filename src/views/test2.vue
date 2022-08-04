@@ -1,6 +1,6 @@
 <template>
  <div style="width: 70%;margin-left: 30px;margin-top: 30px;">
- <el-button class="filter-item" type="success" icon="el-icon-download" @click="downFile(id)">下载</el-button>
+ <el-button class="filter-item" type="success" icon="el-icon-download" @click="downloadFile(id)">下载</el-button>
  </div>
 </template>
 
