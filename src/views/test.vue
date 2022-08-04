@@ -16,16 +16,6 @@
       <el-link icon="el-icon-paperclip" type="primary">添加需要上传的文件</el-link>
     </el-upload>
   <el-button type="primary" @click="upload">上传</el-button>
-  <el-upload
-  class="upload-demo"
-  action="http://localhost:8000/api/project/upload/"
-  :headers="headers"
-  :on-preview="handlePreview"
-  :on-remove="handleRemove"
-  :before-remove="beforeRemove"
-  multiple>
-  <el-button size="small" type="primary">点击上传</el-button>
-</el-upload>
 </div>
 </template>
 <script>
