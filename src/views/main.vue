@@ -118,7 +118,7 @@ export default {
     }
   },
   created(){
-      if(!islogin){
+      if(!this.$store.state.islogin){
         this.$message.warning("请先登录");
       }
       else{
@@ -129,12 +129,12 @@ export default {
         .then((res) => {
           switch (res.data.errno){
             case 0:
-              this.name=res.data.name;
-              this.username=res.data.username;
-              this.description=res.data.description;
-              this.sex=res.data.sex;
-              this.password=res.data.password;
-              this.headshot=res.data.headshot;
+              this.name=res.data.data.name;
+              this.username=res.data.data.username;
+              this.description=res.data.data.description;
+              this.sex=res.data.data.sex;
+              this.password=res.data.data.password;
+              this.headshot=res.data.data.headshot;
               break;
           }
         })
@@ -191,8 +191,6 @@ export default {
             this.name = this.input1,
             this.username = this.input2,
             this.description = this.input4,
-            this.major = this.input5,
-            this.grade = this.input6,
             this.sex = this.input7,
             this.password = this.input8,
             this.$message.success("保存成功");

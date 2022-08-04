@@ -10,8 +10,8 @@
       </el-form-item>
 
     </el-form>
-    <el-button type="primary" class="bottomButton" @click="buildproj()">创建项目</el-button>
-    <el-button type="danger" class="bottomButton" @click="cancelproj()">取消创建</el-button>
+    <el-button type="primary" class="bottomButton" @click="buildproj">创建项目</el-button>
+    <el-button type="danger" class="bottomButton" @click="cancelproj">取消创建</el-button>
   </div>
 </template>
 
@@ -26,7 +26,7 @@ export default {
     }
   },
   methods: {
-    buildproj(){
+    buildproj:function(){
     this.$axios({
         method: "post" /* 指明请求方式，可以是 get 或 post */,
           url: "/api/project/new/" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
@@ -35,7 +35,7 @@ export default {
           teamid:this.$store.state.teamid,
           email:this.$store.state.mailbox,
           title:this.NewProject.Name,
-          Descrition:this.NewProject.Descrition
+          Description:this.NewProject.Description
             }),
             }).then((res) => {
                 switch (res.data.errno) {
@@ -46,7 +46,7 @@ export default {
             });
       this.$router.back()
     },
-    cancelproj(){
+    cancelproj:function(){
       this.$router.back()
     }
   }
