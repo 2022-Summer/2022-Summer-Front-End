@@ -247,7 +247,7 @@ export default {
         .then((res) => {
           switch (res.data.errno){
             case 0:
-              this.myStatus=res.data.myStatus;
+              this.myStatus=res.data.MyStatus;
               this.Members=res.data.Members;
               break;
           }
