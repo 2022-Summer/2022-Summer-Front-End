@@ -13,9 +13,31 @@
       </div>
         <div id="infoTable" v-if="projectIndex===1">
         <el-button type="primary" @click="newPrototype" class="bottomButton" round>新建原型</el-button>
+                <el-table :data="words" style="width: 100%">
+          <el-table-column type="index"> </el-table-column>
+          <el-table-column prop="title" label="名称"></el-table-column>
+          <el-table-column prop="lastEditTime" label="最后编辑时间"></el-table-column>
+          <el-table-column prop="id" label="操作">
+            <template slot-scope="scope">
+              <el-button type="primary" @click="Detail1(scope.row.id)">下载</el-button>
+              <el-button type="danger" @click="Delete1(scope.row.id)">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
       </div>
       <div id="infoTable" v-if="projectIndex===2">
         <el-button type="primary" @click="newPicture" class="bottomButton" round>新建图</el-button>
+          <el-table :data="words" style="width: 100%">
+          <el-table-column type="index"> </el-table-column>
+          <el-table-column prop="title" label="名称"></el-table-column>
+          <el-table-column prop="lastEditTime" label="最后编辑时间"></el-table-column>
+          <el-table-column prop="id" label="操作">
+            <template slot-scope="scope">
+              <el-button type="primary" @click="Detail2(scope.row.id)">下载</el-button>
+              <el-button type="danger" @click="Delete2(scope.row.id)">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
       </div>
       <div id="wordTable" v-if="projectIndex===3">
         <el-table :data="words" style="width: 100%">
@@ -60,13 +82,73 @@ export default {
           lastEditor:"zy3",
           lastEditTime:"2022.1.1"
         }
-      ]
+      ],
+      File1:[{
+        id:1,
+        title:'xx.txt',
+        lastEditTime:''
+      }],
+      File2:[{
+        id:1,
+        title:'xx.txt',
+        lastEditTime:''
+      }]
         }
   },
   created(){
-
-
-
+      this.$axios({
+        method: 'get',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/project/file/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        params: {
+          projectid: this.$store.state.projectid,
+          type:0
+        }
+        })
+        .then((res) => {
+          switch (res.data.errno){
+            case 0:
+              this.File1=res.data.file;
+              break;
+          }
+        })
+        .catch(err => {
+        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      });
+        this.$axios({
+        method: 'get',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/project/file/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        params: {
+          projectid: this.$store.state.projectid,
+          type:1
+        }
+        })
+        .then((res) => {
+          switch (res.data.errno){
+            case 0:
+              this.File2=res.data.file;
+              break;
+          }
+        })
+        .catch(err => {
+        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      });
+       this.$axios({
+        method: 'get',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/project/doc/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        params: {
+          projectid: this.$store.state.projectid,
+        }
+        })
+        .then((res) => {
+          switch (res.data.errno){
+            case 0:
+              this.words=res.data.word;
+              break;
+          }
+        })
+        .catch(err => {
+        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      });
 
   }, 
   methods: {
@@ -91,8 +173,46 @@ export default {
       this.$store.state.wordid=0;
       this.$router.push('/word');
     },
-    wordDetail(val){/*查看id为val的文档详情*/},
-    wordDelete(val){/*删除id为val的文档*/},
+    wordDetail(val){/*查看id为val的文档详情*/
+      this.$store.state.wordid=val;
+      this.$router.push('/word');
+    },
+    wordDelete(val){/*删除id为val的文档*/
+        this.$axios({
+        method: 'post',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/project/deword/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        data: qs.stringify({      /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+            wordid:val
+        })
+        })
+        .then((res) => {
+          switch (res.data.errno) {
+            case 0:
+            this.$message.success("删除成功");
+              break;
+          }
+        })
+        .catch(err => {
+        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      });
+       this.$axios({
+        method: 'get',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/project/doc/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        params: {
+          projectid: this.$store.state.projectid,
+        }
+        })
+        .then((res) => {
+          switch (res.data.errno){
+            case 0:
+              this.words=res.data.word;
+              break;
+          }
+        })
+        .catch(err => {
+        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      });
+    },
   }
 }
 </script>

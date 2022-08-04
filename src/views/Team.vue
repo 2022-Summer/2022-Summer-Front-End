@@ -36,14 +36,14 @@
           <el-table-column prop="id" label="操作">
             <template slot-scope="scope">
               <el-button type="info" @click="memberInfo(scope.$index)">查看成员信息</el-button>
-              <el-button v-if="scope.row.status==='管理员'&&myStatus==='团队发起者'" type="warning" @click="delAdmin(scope.row.email)">移除管理员</el-button>
-              <el-button v-if="scope.row.status==='管理员'&&myStatus==='团队发起者'" type="danger" @click="out(scope.row.email)">移出团队</el-button>
-              <el-button v-if="scope.row.status==='普通成员'&&myStatus!=='普通成员'" type="primary" @click="addAdmin(scope.row.email)">设为管理员</el-button>
-              <el-button v-if="scope.row.status==='普通成员'&&myStatus!=='普通成员'" type="danger" @click="out(scope.row.email)">移出团队</el-button>
+              <el-button v-if="scope.row.status==='管理员'&&myStatus==='发起人'" type="warning" @click="delAdmin(scope.row.email)">移除管理员</el-button>
+              <el-button v-if="scope.row.status==='管理员'&&myStatus==='发起人'" type="danger" @click="out(scope.row.email)">移出团队</el-button>
+              <el-button v-if="scope.row.status==='普通用户'&&myStatus!=='普通用户'" type="primary" @click="addAdmin(scope.row.email)">设为管理员</el-button>
+              <el-button v-if="scope.row.status==='普通用户'&&myStatus!=='普通用户'" type="danger" @click="out(scope.row.email)">移出团队</el-button>
             </template>
           </el-table-column>
         </el-table>
-        <el-button type="success" class="bottomButton" v-if="myStatus!=='普通成员'" @click="addMember">邀请新成员</el-button>
+        <el-button type="success" class="bottomButton" v-if="myStatus!=='普通用户'" @click="addMember">邀请新成员</el-button>
         <el-dialog
           title="请输入要邀请的用户邮箱"
           :visible.sync="inviteVisible"
@@ -359,7 +359,7 @@ export default {
           data: qs.stringify({
                     /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
           teamid:this.$store.state.teamid,
-          email:this.input1,
+          email:val,
           op:1
                 }),
             }).then((res) => {
@@ -504,7 +504,7 @@ export default {
         .then((res) => {
           switch (res.data.errno){
             case 0:
-              this.Projects=res.data.Projects;
+              this.Projects=res.data.projects;
               break;
           }
         })
@@ -559,7 +559,7 @@ export default {
         .then((res) => {
           switch (res.data.errno){
             case 0:
-              this.Projects=res.data.Projects;
+              this.Projects=res.data.projects;
               break;
           }
         })
