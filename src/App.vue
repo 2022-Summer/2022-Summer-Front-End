@@ -17,8 +17,12 @@
       </el-header>
       <el-container>
         <el-aside width="20%">
-          我是侧边栏<br>
-          待添加内容
+          <div style="margin:50% 10%;text-align:left;">
+            <p>(◍•ᴗ•◍)我是侧边栏</p>
+            <p>该区域待开发</p>
+            <p>里面的内容，以后再来使用吧</p>
+            <p style="color:darkred">Tips：为了更好的浏览体验，建议使用分辨率大于等于1600*900的设备访问本网站</p>
+          </div>
         </el-aside>
         <el-main style="padding:20px 0 0 0;">
           <router-view/>
@@ -132,7 +136,6 @@
     background-color: #D3DCE6;
     color: #333;
     text-align: center;
-    line-height: 200px;
   }
   .el-main {
     background-color: #E9EEF3;
