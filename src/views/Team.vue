@@ -225,11 +225,11 @@ export default {
           switch (res.data.errno){
             case 0:
               this.team.id=this.$store.state.teamid;
-              this.team.name=res.data.teamname;
-              this.team.belong=res.data.belong;
-              this.team.foundedTime=res.data.foundedTime;
-              this.team.memberNum=res.data.memberNum;
-              this.team.intro=res.data.intro;
+              this.team.name=res.data.data.teamname;
+              this.team.belong=res.data.data.belong;
+              this.team.foundedTime=res.data.data.foundedTime;
+              this.team.memberNum=res.data.data.memberNum;
+              this.team.intro=res.data.data.intro;
               break;
           }
         })
