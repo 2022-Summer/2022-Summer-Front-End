@@ -265,7 +265,7 @@ export default {
         .then((res) => {
           switch (res.data.errno){
             case 0:
-              this.Projects=res.data.Projects;
+              this.Projects=res.data.projects;
               break;
           }
         })
