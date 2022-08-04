@@ -3,14 +3,14 @@
     <el-main id="main">
       <div>
         <el-menu id="menu" mode="horizontal"  active-text-color="#ffd04b">
-          <el-menu-item @click="to1" index="1">设计原型</el-menu-item>
-          <el-menu-item @click="to2" index="2">绘制图</el-menu-item>
-            <el-menu-item @click="to3" index="3">编辑文档</el-menu-item>
+          <el-menu-item @click="to1" index="1">原型设计</el-menu-item>
+          <el-menu-item @click="to2" index="2">图绘制</el-menu-item>
+            <el-menu-item @click="to3" index="3">文档编辑</el-menu-item>
         </el-menu>
       </div>
       <div id="infoTable" v-if="projectIndex===3">
         <div>
-            <el-button type="primary" @click="newword" round>新建文档</el-button>
+            <el-button type="primary" @click="newword" class="bottomButton" round>新建文档</el-button>
             <!--大抵还是要显示已经生成的文档吧，至于怎么做，还不知道-->
         </div>
       </div>
@@ -69,5 +69,10 @@ export default {
 }
 .tipText {
   margin-bottom: 20px;
+}
+.bottomButton {
+  float: left;
+  margin-top: 20px;
+  margin-left: 20px;
 }
 </style>

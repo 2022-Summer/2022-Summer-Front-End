@@ -68,7 +68,7 @@
           <el-table-column prop="inviteTime" label="邀请时间"></el-table-column>
           <el-table-column prop="id" label="操作">
             <template slot-scope="scope">
-              <el-button type="primary" @click="accept(scope.row.teamID)">进入团队</el-button>
+              <el-button type="primary" @click="accept(scope.row.teamID,scope.row.id)">进入团队</el-button>
               <el-button type="danger" @click="refuse(scope.row.id)">拒绝邀请</el-button>
             </template>
           </el-table-column>
@@ -212,7 +212,7 @@ export default {
     buildTeam(){
       this.$router.push('/BuildTeam');
     },
-    accept(val){//当前用户加入主键为val的队伍，身份普通成员
+    accept(teamID,id){//当前用户加入主键为teamID的队伍，身份普通成员；然后删除主键为id的邀请
     },
     refuse(val){//直接删除主键为val的邀请即可
     }
