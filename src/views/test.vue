@@ -1,6 +1,6 @@
 <template>
-<div>
-      <el-upload
+  <div>
+    <el-upload
         ref="upload"
         style="display: inline"
         drag
@@ -14,68 +14,66 @@
         multiple>
       <el-link icon="el-icon-paperclip" type="primary">添加需要上传的文件</el-link>
     </el-upload>
-  <el-button type="primary" @click="upload">上传</el-button>
-<el-table
-            height="470"
-            :data="tableData"
-            style="width: 100%;"
-            :default-sort="{prop: 'created', order: 'descending'}"
-          >
-           
-              <template slot-scope="scope">
- 
-                <el-link targer="_blank" :href="`${download_url}?id=${scope.row.id}`">
-                </el-link>
-                <el-button
-                  type="primary"
-                  size="mini"
-                  style="color: white"
-                  @click="downloadfile(scope.$index, scope.row)"
-                >
-                  下载
-                </el-button>
-                <br>
-                <br>
-              </template>
-          </el-table>
-</div>
+    <el-button type="primary" @click="upload">上传</el-button>
+    <el-table
+        height="470"
+        :data="tableData"
+        style="width: 100%;"
+        :default-sort="{prop: 'created', order: 'descending'}"
+    >
+
+      <template slot-scope="scope">
+
+        <el-link targer="_blank" :href="`${download_url}?id=${scope.row.id}`">
+        </el-link>
+        <el-button
+            type="primary"
+            size="mini"
+            style="color: white"
+            @click="downloadfile(scope.$index, scope.row)"
+        >
+          下载
+        </el-button>
+        <br>
+        <br>
+      </template>
+    </el-table>
+  </div>
 </template>
 <script>
-  export default {
- data() {
-      return {
-        headers:{
-          Authorization:localStorage.token
-        },
-        filelist:[
-        ]
-      };
+export default {
+  data() {
+    return {
+      headers: {
+        Authorization: localStorage.token
+      },
+      filelist: []
+    };
+  },
+  created() {
+  },
+  methods: {
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
     },
-    created(){      
+    handlePreview(file) {
+      console.log(file);
     },
-    methods: {
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
-      },
-      handlePreview(file) {
-        console.log(file);
-      },
-      beforeRemove(file, fileList) {
-        return this.$confirm(`确定移除 ${ file.name }？`);
-      },
-      upload(){
-        this.$refs.upload.submit();
-      },
-      handleUploadForm(param) {
+    beforeRemove(file, fileList) {
+      return this.$confirm(`确定移除 ${file.name}？`);
+    },
+    upload() {
+      this.$refs.upload.submit();
+    },
+    handleUploadForm(param) {
       let thisInfo = this
       let formData = new FormData()
       // 在formData中加入我们需要的参数
       formData.append('file', param.file)
-    	formData.append('projectid', this.$store.state.projectid)
-      formData.append('email',this.$store.state.mailbox)
-    // 向后端发送数据
-      thisInfo.$axios.post('/api/project/upload/', formData).
-        then(res => {              /* res 是 response 的缩写 */
+      formData.append('projectid', this.$store.state.projectid)
+      formData.append('email', this.$store.state.mailbox)
+      // 向后端发送数据
+      thisInfo.$axios.post('/api/project/upload/', formData).then(res => {              /* res 是 response 的缩写 */
         switch (res.data.errno) {
           case 0:
             this.$message.success("上传成功!")
@@ -85,12 +83,12 @@
             break;
         }
       })
-      .catch(err => {
-        console.log(err);         /* 若出现异常则在终端输出相关信息 */
-      })
+          .catch(err => {
+            console.log(err);         /* 若出现异常则在终端输出相关信息 */
+          })
       thisInfo.formFileList = []
       thisInfo.uploadFormFileList = []
     }
-    }
   }
+}
 </script>
