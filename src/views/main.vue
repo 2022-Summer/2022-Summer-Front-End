@@ -14,9 +14,6 @@
         <div>
           <el-form  label-width="80px">
           <h1></h1>
-            <el-form-item label="头像">
-            <img :src="headshot">
-            </el-form-item>
             <el-form-item label="姓名">
               <el-input class="infoInput" :placeholder="name" v-model="input1"></el-input>
             </el-form-item>
@@ -82,14 +79,12 @@ export default {
       input3: '',
       input4: '',
       input7: '',
-      input8: '',
         mainIndex:1,//不同值显示不同板块
         name:'1',
         username:'2',
         description:'3',
         sex:'男',  
         password:'1',
-        headshot:'',
         invitations:2,//收到的邀请总数
         myTeams:[
         {
@@ -134,7 +129,6 @@ export default {
               this.description=res.data.data.description;
               this.sex=res.data.data.sex;
               this.password=res.data.data.password;
-              this.headshot=res.data.data.headshot;
               break;
           }
         })
