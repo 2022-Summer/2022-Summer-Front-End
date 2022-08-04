@@ -20,7 +20,7 @@
           我是侧边栏<br>
           待添加内容
         </el-aside>
-        <el-main>
+        <el-main style="padding:20px 0 0 0;">
           <router-view/>
         </el-main>
       </el-container>
