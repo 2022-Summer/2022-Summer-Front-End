@@ -2,17 +2,17 @@
   <div id="login" class="login">
     <div class="wrap">
       <h1>注 册</h1>
-      <el-form :model="form" ref="form" class="form">
+      <el-form :model="form" ref="form" :rules="rules" class="form">
         <el-form-item prop="name">
           <el-input placeholder="姓名" v-model="form.name" autocomplete="off"></el-input>
         </el-form-item>
          <el-form-item prop="username">
           <el-input placeholder="昵称" v-model="form.username" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item>
-          <el-input placeholder="邮箱" v-model="form.mailbox" autocomplete="off"></el-input>       
-          <el-button type="primary" plain float="right" @click="send">发送验证码</el-button>
+        <el-form-item prop="mailbox">
+        <el-input placeholder="邮箱" v-model="form.mailbox"></el-input>   
         </el-form-item>
+        <el-button type="primary" plain float="right" @click="send" style="margin-bottom:20px;">发送验证码</el-button>
         <el-form-item >
           <el-input placeholder="验证码" v-model="form.code" autocomplete="off"></el-input>
         </el-form-item>
@@ -47,6 +47,19 @@ import qs from "qs";
 export default {
   name: "NewRegister",
   data() {
+     var checkEmail = (rule, value, callback) => {
+    const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
+    if (!value) {
+      return callback(new Error('邮箱不能为空'))
+    }
+    setTimeout(() => {
+      if (mailReg.test(value)) {
+        callback()
+      } else {
+        callback(new Error('请输入正确的邮箱格式'))
+      }
+    }, 100)
+  }
     return {
       form: {
         name: '',
@@ -55,7 +68,12 @@ export default {
         password2: '',
         mailbox:'',
         code:'',
-      }
+      },
+      rules: {
+      mailbox: [
+      { validator: checkEmail, trigger: 'change' }
+    ]
+  }
     }
   },
   methods: {
@@ -87,7 +105,7 @@ export default {
             }, 1000);
             break;
           case 1002:
-            this.$message.error("该学号已被注册!");
+            this.$message.error("该邮箱已被注册!");
             break;
           case 1003:
             this.$message.error("两次输入的密码不一致!");
@@ -137,9 +155,10 @@ export default {
 <style scoped>
 #login {
   font-family: 'Noto Serif SC', serif;
-  position:absolute;
-  width: 100%;
-  height: 100%;
+  position: relative;
+  top:0;
+  left: 0;
+  height: 800px;
   background-color: rgb(246, 246, 246);
 }
 #login >>> .el-input__inner {
@@ -159,7 +178,7 @@ export default {
   backface-visibility: hidden;
 }
 #login .wrap {
-  width: 350px;
+  width: 300px;
   height: auto;
   padding: 0 25px 0 25px;
   line-height: 40px;
@@ -167,7 +186,7 @@ export default {
   display: inline-block;
   background-color: rgba(255, 255, 255, 0.85);
   border-radius: 20px;
-  margin-top: 50px;
+  margin-top: 150px;
   box-shadow: darkgrey 1px 1px 1px 1px ;
 }
 #login .btn_login {

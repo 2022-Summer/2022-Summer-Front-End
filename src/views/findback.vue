@@ -2,10 +2,10 @@
   <div id="login" class="login">
     <div class="wrap">
       <h1>找回密码</h1>
-      <el-form :model="form" ref="form" class="form">
-        <el-form-item prop="id">
-          <el-input placeholder="邮箱" type="mailbox"  v-model="form.mailbox" autocomplete="off"></el-input>
-        </el-form-item>
+      <el-form :model="form" ref="form" :rules="rules" class="form">
+      <el-form-item  prop="mailbox">
+        <el-input placeholder="邮箱" v-model="form.mailbox"></el-input>
+      </el-form-item>
         <el-form-item>
           <el-button type="primary" plain float="right" @click="send">发送验证码</el-button>
         </el-form-item>
@@ -25,18 +25,36 @@ import qs from "qs";
 export default {
   name: "NewRegister",
   data() {
+    var checkEmail = (rule, value, callback) => {
+    const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
+    if (!value) {
+      return callback(new Error('邮箱不能为空'))
+    }
+    setTimeout(() => {
+      if (mailReg.test(value)) {
+        callback()
+      } else {
+        callback(new Error('请输入正确的邮箱格式'))
+      }
+    }, 100)
+  }    
     return {
       form: {
         mailbox: '',
         code:'',
-      }
+      },
+      rules: {
+      mailbox: [
+      { validator: checkEmail, trigger: 'change' }
+    ]
+  }
     }
   },
   methods: {
       send: function () {
       this.$axios({
         method: 'get',           
-        url: '/api/user/register/',       
+        url: '/api/user/password/',       
         params:{
           mailbox:this.form.mailbox
         }
@@ -99,10 +117,11 @@ export default {
 <style scoped>
 #login {
   font-family: 'Noto Serif SC', serif;
-  background-color: rgb(246,246,246);
-  width: 100%;
-  height: 100%;
-  position: absolute;
+  position: relative;
+  top:0;
+  left: 0;
+  height: 800px;
+  background-color: rgb(246, 246, 246);
 }
 #login >>> .el-input__inner {
   font-family: 'Noto Serif SC', serif;
@@ -129,7 +148,7 @@ export default {
   display: inline-block;
   background-color: rgba(255, 255, 255, 0.85);
   border-radius: 20px;
-  margin-top: 100px;
+  margin-top: 150px;
   box-shadow: darkgrey 1px 1px 1px 1px;
 }
 #login .btn_login {

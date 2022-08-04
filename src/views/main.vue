@@ -6,16 +6,65 @@
           <el-menu-item @click="to1" index="1">个人资料</el-menu-item>
           <el-menu-item @click="to2" index="2">我的团队</el-menu-item>
           <el-menu-item @click="to3" index="3">
-            <el-badge :value="myInvitations.length" class="item">
-              团队邀请
-            </el-badge>
+          <el-badge :value="myInvitations.length" class="item">团队邀请</el-badge>
           </el-menu-item>
         </el-menu>
       </div>
-      <div id="infoTable" v-if="mainIndex===1">
+      <div id="infoTable" v-if="mainIndex===1" style="margin-top:0;">
         <div>
+          <el-container>
+            <!--侧边栏用于展示主要的个人信息-->
+            <el-aside width="35%">
+              <div style="width:200px;height:200px;background-color:palegoldenrod;border:20px solid white;border-radius:200px;margin:200px auto 0 auto;">
+                <img src="../assets/img/moshu_head.png">
+              </div>
+              <div style="line-height:40px;margin-bottom:200px;">
+                <p>上面是头像</p>
+                <p>这里是个人信息展示栏</p>
+                <p>右边是个人信息修改栏</p>
+                <p line-height="40px">这里展示重要的个人信息</p>
+              </div>
+            </el-aside>
+            <el-main>
+              <div style="margin-left:10%;margin-top:80px;">
+                  <el-form  label-width="80px">
+                  <el-form-item label="头像"><img :src="headshot"></el-form-item>
+                  <el-form-item label="姓名">
+                    <el-input class="infoInput" :placeholder="name" v-model="input1"></el-input>
+                  </el-form-item>
+                  <el-form-item label="昵称">
+                    <el-input class="infoInput" :placeholder="username" v-model="input2"></el-input>
+                  </el-form-item>
+                  <el-form-item label="简介">
+                    <el-input class="infoInput" :placeholder="description" v-model="input4"></el-input>
+                  </el-form-item>
+                  <el-form-item label="专业">
+                    <el-input class="infoInput" :placeholder="major" v-model="input6"></el-input>
+                  </el-form-item>
+                  <el-form-item label="年级">
+                    <el-input class="infoInput" :placeholder="grade" v-model="input5"></el-input>
+                  </el-form-item>
+                  <el-form-item label="性别">
+                    <el-select class="infoInput" :placeholder="sex" v-model="input7" style="float:left;">
+                      <el-option label="男" value="男"></el-option>
+                      <el-option label="女" value="女"></el-option>
+                      <el-option label="秘密" value="秘密"></el-option>
+                    </el-select>
+                  </el-form-item>
+                    <el-form-item label="密码">
+                    <el-input class="infoInput" :placeholder="password" v-model="input8"></el-input>
+                    </el-form-item>    
+                  </el-form>
+                  <el-button type="primary" id="editFinish" @click="save">保存个人资料</el-button>    
+                </div>
+            </el-main>
+          </el-container>
+        <!---
           <el-form  label-width="80px">
-            <el-form-item label="头像"><img :src="headshot"></el-form-item>
+          <h1></h1>
+            <el-form-item label="头像">
+            <img :src="headshot">
+            </el-form-item>
             <el-form-item label="姓名">
               <el-input class="infoInput" :placeholder="name" v-model="input1"></el-input>
             </el-form-item>
@@ -24,12 +73,6 @@
             </el-form-item>
             <el-form-item label="简介">
               <el-input class="infoInput" :placeholder="description" v-model="input4"></el-input>
-            </el-form-item>
-            <el-form-item label="专业">
-              <el-input class="infoInput" :placeholder="major" v-model="input6"></el-input>
-            </el-form-item>
-            <el-form-item label="年级">
-              <el-input class="infoInput" :placeholder="grade" v-model="input5"></el-input>
             </el-form-item>
             <el-form-item label="性别">
               <el-select class="infoInput" :placeholder="sex" v-model="input7">
@@ -43,31 +86,32 @@
             </el-form-item>          
           </el-form>
           <el-button type="primary" id="editFinish" @click="save">保存个人资料</el-button>
+        -->
         </div>
       </div>
-      <div id="myTeamTable" v-if="mainIndex===2">
+            <div id="myTeamTable" v-if="mainIndex===2">
         <el-table :data="myTeams" style="width: 100%">
           <el-table-column type="index"> </el-table-column>
           <el-table-column prop="name" label="团队名"></el-table-column>
           <el-table-column prop="belong" label="发起者"></el-table-column>
           <el-table-column prop="foundedTime" label="建立时间"></el-table-column>
-          <el-table-column prop="id" label="操作">
+          <el-table-column prop="teamid" label="操作">
             <template slot-scope="scope">
-              <el-button type="primary" @click="intoTeam(scope.row.id)">进入团队</el-button>
+              <el-button type="primary" @click="intoTeam(scope.row.teamid)">进入团队</el-button>
             </template>
           </el-table-column>
         </el-table>
         <el-button type="success" class="bottomButton" @click="buildTeam">建立团队</el-button>
       </div>
-      <div id="inviteTable" v-if="mainIndex===3">
+            <div id="inviteTable" v-if="mainIndex===3">
         <el-table :data="myInvitations" style="width: 100%">
           <el-table-column type="index"> </el-table-column>
-          <el-table-column prop="teamName" label="团队"></el-table-column>
+          <el-table-column prop="teamName" label="团队名"></el-table-column>
           <el-table-column prop="invitor" label="邀请人"></el-table-column>
           <el-table-column prop="inviteTime" label="邀请时间"></el-table-column>
           <el-table-column prop="id" label="操作">
             <template slot-scope="scope">
-              <el-button type="primary" @click="accept(scope.row.teamID)">进入团队</el-button>
+              <el-button type="primary" @click="accept(scope.row.id)">进入团队</el-button>
               <el-button type="danger" @click="refuse(scope.row.id)">拒绝邀请</el-button>
             </template>
           </el-table-column>
@@ -86,39 +130,25 @@ export default {
       input2: '',
       input3: '',
       input4: '',
-      input5: '',
-      input6: '',
       input7: '',
       input8: '',
-      mainIndex:1,//不同值显示不同板块
-      name:'1',
-      username:'2',
-      description:'3',
-      grade:'4',
-      major:'5',
-      sex:'男',  
-      password:'1',
-      headshot:'',
-      invitations:2,//收到的邀请总数
-      myTeams:[
+        mainIndex:1,//不同值显示不同板块
+        name:'1',
+        username:'2',
+        description:'3',
+        sex:'男',  
+        password:'1',
+        headshot:'',
+        invitations:2,//收到的邀请总数
+        myTeams:[
         {
-          "id":1,
+          "teamid":1,
           "name":"没头发",
           "belong":"zy1",
           "foundedTime":"2020.1.1",
-          "memberNum":6,
-          "intro":"这是一个团队"
-        },
-        {
-          "id":2,
-          "name":"有头发",
-          "belong":"zy1",
-          "foundedTime":"2020.1.1",
-          "memberNum":6,
-          "intro":"这也是一个团队"
         }
       ],
-      myInvitations:[
+        myInvitations:[
         {
           "id":1,//邀请id
           "teamID":3,//发出邀请的队伍id
@@ -151,7 +181,6 @@ export default {
               this.name=res.data.name;
               this.username=res.data.username;
               this.description=res.data.description;
-              this.major=res.data.major;
               this.sex=res.data.sex;
               this.password=res.data.password;
               this.headshot=res.data.headshot;
@@ -161,10 +190,38 @@ export default {
         .catch(err => {
         console.log(err);         /* 若出现异常则在终端输出相关信息 */
       });
+      this.$axios({
+        method: 'get',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/user/invited/'     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        })
+        .then((res) => {
+          switch (res.data.errno){
+            case 0:
+              this.myInvitations=res.data.myInvitations;
+              break;
+          }
+        })
+        .catch(err => {
+        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      });
+      this.$axios({
+        method: 'get',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/user/team/'     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        })
+        .then((res) => {
+          switch (res.data.errno){
+            case 0:
+              this.myTeams=res.data.myTeams;
+              break;
+          }
+        })
+        .catch(err => {
+        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      });
       }
   }, 
   methods: {
-    save: function(){
+        save: function(){
         this.$axios({
         method: 'post',           /* 指明请求方式，可以是 get 或 post */
         url: '/api/user/info/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
@@ -172,10 +229,9 @@ export default {
             name:this.input1,
             username:this.input2,
             description:this.input4,
-            major:this.input5,
-            grade:this.input6,
             sex:this.input7,
-            password:this.input8
+            password:this.input8,
+            headshot:this.headshot,
         })
         })
         .then((res) => {
@@ -187,7 +243,7 @@ export default {
             this.major = this.input5,
             this.grade = this.input6,
             this.sex = this.input7,
-            this.password = this.input8
+            this.password = this.input8,
             this.$message.success("保存成功");
               break;
           }
@@ -196,31 +252,109 @@ export default {
         console.log(err);         /* 若出现异常则在终端输出相关信息 */
       });
     },
-    to1(){
+        to1(){
       this.mainIndex=1;
     },
     to2(){
       this.mainIndex=2;
     },
-    to3(){
+     to3(){
       this.mainIndex=3;
     },
     intoTeam(val){//进入id为val的团队主页
-
+      this.$store.state.teamid=val;
+      this.$router.push('/team');
     },
     buildTeam(){
       this.$router.push('/BuildTeam');
     },
     accept(val){//当前用户加入主键为val的队伍，身份普通成员
+        this.$axios({
+        method: 'post',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/user/invited/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        data: qs.stringify({      /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+        id:val,
+        op:0
+        })
+        })
+        .then((res) => {
+          switch (res.data.errno) {
+            case 0:
+            this.$message.success("加入成功");
+              break;
+          }
+        })
+        .catch(err => {
+        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      });
+      this.$axios({
+        method: 'get',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/user/invited/'     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        })
+        .then((res) => {
+          switch (res.data.errno){
+            case 0:
+              this.myInvitations=res.data.myInvitations;
+              break;
+          }
+        })
+        .catch(err => {
+        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      });
+       this.$axios({
+        method: 'get',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/user/team/'     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        })
+        .then((res) => {
+          switch (res.data.errno){
+            case 0:
+              this.myTeams=res.data.myTeams;
+              break;
+          }
+        })
+        .catch(err => {
+        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      });
     },
     refuse(val){//直接删除主键为val的邀请即可
+      this.$axios({
+        method: 'post',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/user/invited/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        data: qs.stringify({      /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+        id:val,
+        op:1
+        })
+        })
+        .then((res) => {
+          switch (res.data.errno) {
+            case 0:
+            this.$message.success("已拒绝邀请");
+              break;
+          }
+        })
+        .catch(err => {
+        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      });
+      this.$axios({
+        method: 'get',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/user/invited/'     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        })
+        .then((res) => {
+          switch (res.data.errno){
+            case 0:
+              this.myInvitations=res.data.myInvitations;
+              break;
+          }
+        })
+        .catch(err => {
+        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      });
     }
   }
 }
 </script>
 
 <style scoped>
-/*
 #head {
   background-color: #d4e7d9;
   color: #333;
@@ -239,10 +373,5 @@ export default {
   float: left;
   margin-top: 20px;
   margin-left: 20px;
-}
-*/
-.el-form-item {
-  width: 60%;
-  margin:25px 20%;
 }
 </style>

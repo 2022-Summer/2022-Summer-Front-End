@@ -1,10 +1,10 @@
 <template>
-  <div id="app">
+<div id="app" >
     <el-container>
-      <el-header height="100px" >
-        <img src="./assets/img/moshu_banner.png" width="300" height="100">
-        <div style="margin-top: 30px;float:right;">
-          <el-button type="primary" v-on:click="gotologin" v-if="!this.$store.state.islogin">
+      <el-header height="150px" >
+        <img src="./assets/img/moshu_banner.png" width="450px" height="150px">
+        <div style="margin-top: 55px;float:right;">
+          <el-button type="primary" v-on:click="gotologin" v-if="!$store.state.islogin">
             登录
           </el-button>
           <h1 v-if="$store.state.islogin">
@@ -13,11 +13,17 @@
           <el-button type="primary" v-on:click="logout" v-if="this.$store.state.islogin">
             退出登录
           </el-button>
-        </div>>
+        </div>
       </el-header>
-      <el-main>
-        <router-view/>
-      </el-main>
+      <el-container>
+        <el-aside width="20%">
+          我是侧边栏<br>
+          待添加内容
+        </el-aside>
+        <el-main>
+          <router-view/>
+        </el-main>
+      </el-container>
     </el-container>
   </div>
 </template>
@@ -115,8 +121,9 @@
   line-height: var(--footer-height);
   background: #42b983;
   color: #fff;
-}*/
-  .el-header {
+}
+*/
+.el-header {
     background-color: #B3C0D1;
     color: #333;
     text-align: center;

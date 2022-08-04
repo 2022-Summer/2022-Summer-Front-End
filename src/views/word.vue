@@ -85,7 +85,8 @@ export default {
             method: "get" /* 指明请求方式，可以是 get 或 post */,
             url: "/api/project/word/",
             params: {
-                wordid: this.$store.state.wordid
+                wordid: this.$store.state.wordid,
+                projectid:this.$store.state.projectid,
             }
         }).then((res) => {
             switch (res.data.errno) {
@@ -118,6 +119,7 @@ export default {
                 data: qs.stringify({
                     /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
                     wordid:this.$store.state.wordid,
+                    projectid:this.$store.state.projectid,
                     title: this.title,
                     html: this.html,
                 }),
