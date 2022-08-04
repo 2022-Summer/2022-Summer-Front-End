@@ -15,6 +15,29 @@
       <el-link icon="el-icon-paperclip" type="primary">添加需要上传的文件</el-link>
     </el-upload>
   <el-button type="primary" @click="upload">上传</el-button>
+<el-table
+            height="470"
+            :data="tableData"
+            style="width: 100%;"
+            :default-sort="{prop: 'created', order: 'descending'}"
+          >
+           
+              <template slot-scope="scope">
+ 
+                <el-link targer="_blank" :href="`${download_url}?id=${scope.row.id}`">
+                </el-link>
+                <el-button
+                  type="primary"
+                  size="mini"
+                  style="color: white"
+                  @click="downloadfile(scope.$index, scope.row)"
+                >
+                  下载
+                </el-button>
+                <br>
+                <br>
+              </template>
+          </el-table>
 </div>
 </template>
 <script>
@@ -24,9 +47,8 @@
         headers:{
           Authorization:localStorage.token
         },
-        filelist:[{
-          name:''
-        }]
+        filelist:[
+        ]
       };
     },
     created(){      
