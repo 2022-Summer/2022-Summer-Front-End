@@ -207,8 +207,9 @@ export default {
     };
   },
   created(){
-      if(!islogin){
+      if(!this.$store.state.islogin){
         this.$message.warning("请先登录");
+        this.$router.push('/login');
       }
       else{
         //获取团队信息

@@ -115,6 +115,7 @@ export default {
   created(){
       if(!this.$store.state.islogin){
         this.$message.warning("请先登录");
+        this.$router.push('/login');
       }
       else{
         this.$axios({
@@ -176,7 +177,6 @@ export default {
             description:this.input4,
             sex:this.input7,
             password:this.input8,
-            headshot:this.headshot,
         })
         })
         .then((res) => {
