@@ -66,8 +66,8 @@
       .catch(err => {
         console.log(err);         /* 若出现异常则在终端输出相关信息 */
       })
-        thisInfo.formFileList = []
-        thisInfo.uploadFormFileList = []
+      thisInfo.formFileList = []
+      thisInfo.uploadFormFileList = []
     }
     }
   }
