@@ -1,50 +1,44 @@
 <template>
-  <el-container id="publish">
-      <el-header>
-          <h1>文档编辑</h1>
+    <div style="position:relative;">
+    <el-container>
+      <el-header style="height:80px;line-height:normal;">
+        <div style="margin-top:20px;float:left;">
+          <el-button type="danger" icon="el-icon-back" @click="returnd">返回</el-button>
+        </div>
+        <div style="margin-top:23px;margin-left:80px;float:left">
+          <h1 style="display:inline;font-size:24px;">文档编辑</h1>
+        </div>
       </el-header>
-          <el-header>
-        <div type="top">
-        <span style="float:left">
-            <el-button type="danger" icon="el-icon-back" @click="returnd">返回</el-button>
-        </span>
+      <el-main style="padding:0;">
+        <div style="border: 5px outset gray;line-height:0;">
+          <div id="post">
+            <el-card>
+                <div>
+                    <div slot="header" id="postHead">  
+                        <el-input placeholder="请输入标题" v-model="title" clearable></el-input>
+                    </div>
+                </div>
+            <div style="border: 1px solid #ccc;">
+                    <Toolbar
+                        style="border-bottom: 1px solid #ccc"
+                        :editor="editor"
+                        :defaultConfig="toolbarConfig"
+                        :mode="mode"
+                    />
+                    <Editor
+                        style="height: 700px; overflow-y: hidden;"
+                        v-model="html"
+                        :defaultConfig="editorConfig"
+                        :mode="mode"
+                        @onCreated="onCreated"
+                    />
+                </div>
+            </el-card>
         </div>
-    </el-header>
-    <el-main id="main">
-        <div id="post">
-          <el-card>
-            <div>
-    <div slot="header" id="postHead">  
-                <el-input
-  placeholder="请输入标题"
-  v-model="title"
-  clearable>
-</el-input>
-            </div>
       </div>
-      <h1></h1>
-          <div style="border: 1px solid #ccc;">
-        <Toolbar
-            style="border-bottom: 1px solid #ccc"
-            :editor="editor"
-            :defaultConfig="toolbarConfig"
-            :mode="mode"
-        />
-        <Editor
-            style="height: 500px; overflow-y: hidden;"
-            v-model="html"
-            :defaultConfig="editorConfig"
-            :mode="mode"
-            @onCreated="onCreated"
-        />
-    </div>
-        </el-card>
-        </div>
-    </el-main>
-    <el-footer >
-        <el-button type="primary" @click="saveword" style="float: right">保存</el-button>
-    </el-footer>
-  </el-container>
+      </el-main>
+    </el-container>
+  </div>
 </template>
 
 <style src="@wangeditor/editor/dist/css/style.css">
