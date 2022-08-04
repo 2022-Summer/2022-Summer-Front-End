@@ -23,8 +23,8 @@
     <el-main id="mid">
       <div>
         <el-menu id="menu" mode="horizontal" active-text-color="#ffd04b">
-          <el-menu-item @click="toMembers" index="1"><i class="el-icon-user-solid"></i>成员列表</el-menu-item>
-          <el-menu-item @click="toProjects" index="2"><i class="el-icon-s-cooperation"></i>项目列表</el-menu-item>
+          <el-menu-item @click="toMembers" index="1"><i class="el-icon-user-solid" ></i>成员列表</el-menu-item>
+          <el-menu-item @click="toProjects" index="2"><i class="el-icon-s-cooperation" ></i>项目列表</el-menu-item>
           <el-menu-item @click="toRecycle" index="3"><i class="el-icon-delete-solid"></i>项目回收站</el-menu-item>
         </el-menu>
       </div>
@@ -79,9 +79,9 @@
       <div id="projectList" v-if="teamIndex === 2">
         <el-table :data="Projects" style="width: 100%">
           <el-table-column type="index"> </el-table-column>
-          <el-table-column prop="title" label="标题"></el-table-column>
-          <el-table-column prop="leader" label="负责人"></el-table-column>
-          <el-table-column prop="startTime" label="创立时间"></el-table-column>
+          <el-table-column prop="title" label="标题" width=300px></el-table-column>
+          <el-table-column prop="leader" label="负责人" width=300px></el-table-column>
+          <el-table-column prop="startTime" label="创立时间" width=300px></el-table-column>
           <el-table-column prop="id" label="操作">
             <template slot-scope="scope">
               <el-button type="primary" @click="projectDetail(scope.row.id)">查看详情</el-button>
@@ -422,6 +422,8 @@ export default {
                     case 0:
                         this.$message.success("退出成功");
                         break;
+                    case 2003:
+
                 }
             });
           //返回个人主页
@@ -436,14 +438,13 @@ export default {
       this.projectRenamed=val;
       this.renameVisible=true;
     },
-    renameSure(val){//对话框中点击确定，确认重命名
+    renameSure(){//对话框中点击确定，确认重命名
       //交互，重命名的项目id为{{this.projectRenamed}}，新名字为{{this.input}}
     this.$axios({
         method: "post" /* 指明请求方式，可以是 get 或 post */,
           url: "/api/project/rename/" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
           data: qs.stringify({
                     /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
-          teamid:this.$store.state.teamid,
           projectid:this.projectRenamed,
           newname:this.input,
           }),
@@ -454,7 +455,6 @@ export default {
                         break;
                 }
             });
-
 
       this.renameVisible=false;
       this.$message.success("重命名成功！");
