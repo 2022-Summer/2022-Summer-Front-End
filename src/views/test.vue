@@ -1,6 +1,8 @@
 <template>
-<el-upload
-  action="/api/upload/"
+<div>
+  <el-upload
+  class="upload-demo"
+  action="http://localhost:8000/api/project/upload/"
   :on-preview="handlePreview"
   :on-remove="handleRemove"
   :before-remove="beforeRemove"
@@ -8,16 +10,14 @@
   :file-list="fileList">
   <el-button size="small" type="primary">点击上传</el-button>
 </el-upload>
+</div>
 </template>
 <script>
   export default {
-    data() {
+ data() {
       return {
-        fileList: [{
-            name:'',
-            url:''
-        }
-        ] };
+        fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}]
+      };
     },
     created(){
         
