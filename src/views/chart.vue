@@ -1,7 +1,7 @@
 <template>
   <el-container id="publish">
       <el-header>
-          <h1>原型设计</h1>
+          <h1>图绘制</h1>
       </el-header>
           <el-header>
         <div type="top">
