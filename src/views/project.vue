@@ -343,7 +343,7 @@ export default {
       formData.append('file', param.file)
     	formData.append('projectid', this.$store.state.projectid)
       formData.append('email',this.$store.state.mailbox)
-      formData.append('type1',this.$store.state.type)
+      formData.append('type',this.$store.state.type)
     // 向后端发送数据
       thisInfo.$axios.post('/api/project/upload/', formData).
         then(res => {              /* res 是 response 的缩写 */
