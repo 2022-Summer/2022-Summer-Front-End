@@ -1,7 +1,6 @@
 <template>
   <el-container id="search">
     <el-header id="head">
-      项目名：{{project.name}}
     </el-header>
     <el-main id="main">
       <div>
@@ -91,7 +90,7 @@
 </div>
 </div>
           <span slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="file1InfoVisible = false">确 定</el-button>
+            <el-button type="primary" @click="file2InfoVisible = false">确 定</el-button>
           </span>
         </el-dialog>   
           <el-button type="primary" @click="newPicture" class="bottomButton" round>新建图</el-button>
@@ -162,16 +161,16 @@ export default {
   created(){
       this.$axios({
         method: 'get',           /* 指明请求方式，可以是 get 或 post */
-        url: '/api/project/name/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        url: '/api/project/file/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
         params: {
           projectid: this.$store.state.projectid,
+          type:0
         }
         })
         .then((res) => {
           switch (res.data.errno){
             case 0:
-              this.project.id=this.$store.state.projectid;
-              this.project.name=res.data.name;
+              this.File1=res.data.file;
               break;
           }
         })
