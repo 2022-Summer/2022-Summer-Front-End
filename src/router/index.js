@@ -43,10 +43,6 @@ const routes = [
     path: '/buildproject',
     name: 'BuildProject',
     component: () => import( '../views/BuildProject.vue')
-  },{
-    path: '/test',
-    name: 'test',
-    component: () => import( '../views/test.vue')
   },
   {
     path: '/chart',
@@ -58,7 +54,6 @@ const routes = [
     name: 'prototype',
     component: () => import( '../views/prototype.vue')
   },
-
 ]
 
 const router = new VueRouter({

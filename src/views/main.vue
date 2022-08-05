@@ -19,9 +19,9 @@
                 <img src="../assets/img/moshu_head.png">
               </div>
               <div style="line-height:40px;margin-bottom:200px;">
-                <p>上面是头像</p>
-                <p>这里是个人信息展示栏</p>
-                <p>右边是个人信息修改栏</p>
+                <p style="fontsize">昵称：{{username}}</p>
+                <p>个人介绍：{{description}}</p>
+                <p>性别：{{sex}}</p>
                 <p line-height="40px">这里展示重要的个人信息</p>
               </div>
             </el-aside>
@@ -38,12 +38,6 @@
                   <el-form-item label="简介">
                     <el-input class="infoInput" :placeholder="description" v-model="input4"></el-input>
                   </el-form-item>
-                  <el-form-item label="专业">
-                    <el-input class="infoInput" :placeholder="major" v-model="input6"></el-input>
-                  </el-form-item>
-                  <el-form-item label="年级">
-                    <el-input class="infoInput" :placeholder="grade" v-model="input5"></el-input>
-                  </el-form-item>
                   <el-form-item label="性别">
                     <el-select class="infoInput" :placeholder="sex" v-model="input7" style="float:left;">
                       <el-option label="男" value="男"></el-option>
@@ -59,37 +53,9 @@
                 </div>
             </el-main>
           </el-container>
-        <!---
-          <el-form  label-width="80px">
-          <h1></h1>
-            <el-form-item label="头像">
-            <img :src="headshot">
-            </el-form-item>
-            <el-form-item label="姓名">
-              <el-input class="infoInput" :placeholder="name" v-model="input1"></el-input>
-            </el-form-item>
-            <el-form-item label="昵称">
-              <el-input class="infoInput" :placeholder="username" v-model="input2"></el-input>
-            </el-form-item>
-            <el-form-item label="简介">
-              <el-input class="infoInput" :placeholder="description" v-model="input4"></el-input>
-            </el-form-item>
-            <el-form-item label="性别">
-              <el-select class="infoInput" :placeholder="sex" v-model="input7">
-                <el-option label="男" value="男"></el-option>
-                <el-option label="女" value="女"></el-option>
-                <el-option label="秘密" value="秘密"></el-option>
-              </el-select>
-            </el-form-item>
-              <el-form-item label="密码">
-              <el-input class="infoInput" :placeholder="password" v-model="input8"></el-input>
-            </el-form-item>          
-          </el-form>
-          <el-button type="primary" id="editFinish" @click="save">保存个人资料</el-button>
-        -->
         </div>
       </div>
-            <div id="myTeamTable" v-if="mainIndex===2">
+        <div id="myTeamTable" v-if="mainIndex===2">
         <el-table :data="myTeams" style="width: 100%">
           <el-table-column type="index"> </el-table-column>
           <el-table-column prop="name" label="团队名"></el-table-column>
@@ -131,14 +97,12 @@ export default {
       input3: '',
       input4: '',
       input7: '',
-      input8: '',
         mainIndex:1,//不同值显示不同板块
         name:'1',
         username:'2',
         description:'3',
         sex:'男',  
         password:'1',
-        headshot:'',
         invitations:2,//收到的邀请总数
         myTeams:[
         {
@@ -167,8 +131,9 @@ export default {
     }
   },
   created(){
-      if(!islogin){
+      if(!this.$store.state.islogin){
         this.$message.warning("请先登录");
+        this.$router.push('/login');
       }
       else{
         this.$axios({
@@ -178,12 +143,11 @@ export default {
         .then((res) => {
           switch (res.data.errno){
             case 0:
-              this.name=res.data.name;
-              this.username=res.data.username;
-              this.description=res.data.description;
-              this.sex=res.data.sex;
-              this.password=res.data.password;
-              this.headshot=res.data.headshot;
+              this.name=res.data.data.name;
+              this.username=res.data.data.username;
+              this.description=res.data.data.description;
+              this.sex=res.data.data.sex;
+              this.password=res.data.data.password;
               break;
           }
         })
@@ -231,7 +195,6 @@ export default {
             description:this.input4,
             sex:this.input7,
             password:this.input8,
-            headshot:this.headshot,
         })
         })
         .then((res) => {
@@ -240,8 +203,6 @@ export default {
             this.name = this.input1,
             this.username = this.input2,
             this.description = this.input4,
-            this.major = this.input5,
-            this.grade = this.input6,
             this.sex = this.input7,
             this.password = this.input8,
             this.$message.success("保存成功");

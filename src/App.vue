@@ -8,7 +8,7 @@
             登录
           </el-button>
           <h1 v-if="$store.state.islogin">
-            欢迎,<router-link to="/User">{{$store.state.username}}</router-link>
+            欢迎,<router-link to="/">{{$store.state.username}}</router-link>
           </h1>
           <el-button type="primary" v-on:click="logout" v-if="this.$store.state.islogin">
             退出登录

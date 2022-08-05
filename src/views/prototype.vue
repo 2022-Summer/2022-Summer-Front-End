@@ -19,11 +19,12 @@
 </template>
 
 <script>
+import qs from "qs";
 export default {
-  methods: {
-    returnd: function () {
-      this.$router.back();
+        methods: {
+        returnd: function () {
+            this.$router.back();
+        },
     },
-  },
 }
 </script>

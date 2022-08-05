@@ -89,7 +89,6 @@ export default {
             setTimeout(() => {
                 this.$router.push('/');
             }, 1000);
-            this.$store.commit('login');
             break;
           case 2002:
             this.$message.error("密码错误!");

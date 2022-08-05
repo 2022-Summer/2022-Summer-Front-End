@@ -23,8 +23,8 @@
     <el-main id="mid">
       <div>
         <el-menu id="menu" mode="horizontal" active-text-color="#ffd04b">
-          <el-menu-item @click="toMembers" index="1"><i class="el-icon-user-solid"></i>成员列表</el-menu-item>
-          <el-menu-item @click="toProjects" index="2"><i class="el-icon-s-cooperation"></i>项目列表</el-menu-item>
+          <el-menu-item @click="toMembers" index="1"><i class="el-icon-user-solid" ></i>成员列表</el-menu-item>
+          <el-menu-item @click="toProjects" index="2"><i class="el-icon-s-cooperation" ></i>项目列表</el-menu-item>
           <el-menu-item @click="toRecycle" index="3"><i class="el-icon-delete-solid"></i>项目回收站</el-menu-item>
         </el-menu>
       </div>
@@ -36,14 +36,14 @@
           <el-table-column prop="id" label="操作">
             <template slot-scope="scope">
               <el-button type="info" @click="memberInfo(scope.$index)">查看成员信息</el-button>
-              <el-button v-if="scope.row.status==='管理员'&&myStatus==='团队发起者'" type="warning" @click="delAdmin(scope.row.email)">移除管理员</el-button>
-              <el-button v-if="scope.row.status==='管理员'&&myStatus==='团队发起者'" type="danger" @click="out(scope.row.email)">移出团队</el-button>
-              <el-button v-if="scope.row.status==='普通成员'&&myStatus!=='普通成员'" type="primary" @click="addAdmin(scope.row.email)">设为管理员</el-button>
-              <el-button v-if="scope.row.status==='普通成员'&&myStatus!=='普通成员'" type="danger" @click="out(scope.row.email)">移出团队</el-button>
+              <el-button v-if="scope.row.status==='管理员'&&myStatus==='发起人'" type="warning" @click="delAdmin(scope.row.email)">移除管理员</el-button>
+              <el-button v-if="scope.row.status==='管理员'&&myStatus==='发起人'" type="danger" @click="out(scope.row.email)">移出团队</el-button>
+              <el-button v-if="scope.row.status==='普通用户'&&myStatus!=='普通用户'" type="primary" @click="addAdmin(scope.row.email)">设为管理员</el-button>
+              <el-button v-if="scope.row.status==='普通用户'&&myStatus!=='普通用户'" type="danger" @click="out(scope.row.email)">移出团队</el-button>
             </template>
           </el-table-column>
         </el-table>
-        <el-button type="success" class="bottomButton" v-if="myStatus!=='普通成员'" @click="addMember">邀请新成员</el-button>
+        <el-button type="success" class="bottomButton" v-if="myStatus!=='普通用户'" @click="addMember">邀请新成员</el-button>
         <el-dialog
           title="请输入要邀请的用户邮箱"
           :visible.sync="inviteVisible"
@@ -84,11 +84,9 @@
           <el-table-column prop="startTime" label="创立时间" width=300px></el-table-column>
           <el-table-column prop="id" label="操作">
             <template slot-scope="scope">
-              <div>
-                <el-button type="primary" @click="projectDetail(scope.row.id)" style="margin-left:10px;">查看详情</el-button>
+              <el-button type="primary" @click="projectDetail(scope.row.id)" style="margin-left:10px;">查看详情</el-button>
                 <el-button type="warning" @click="renameProject(scope.row.id)" style="margin-left:10px;">重命名项目</el-button>
                 <el-button type="danger" @click="removeProject(scope.row.id)" style="margin-left:10px;">移入回收站</el-button>
-              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -153,6 +151,7 @@
 </style>
 
 <script>
+import qs from "qs";
 export default {
   data() {
     return {
@@ -209,8 +208,9 @@ export default {
     };
   },
   created(){
-      if(!islogin){
+      if(!this.$store.state.islogin){
         this.$message.warning("请先登录");
+        this.$router.push('/login');
       }
       else{
         //获取团队信息
@@ -225,11 +225,11 @@ export default {
           switch (res.data.errno){
             case 0:
               this.team.id=this.$store.state.teamid;
-              this.team.name=res.data.teamname;
-              this.team.belong=res.data.belong;
-              this.team.foundedTime=res.data.foundedTime;
-              this.team.memberNum=res.data.memberNum;
-              this.team.intro=res.data.intro;
+              this.team.name=res.data.data.teamname;
+              this.team.belong=res.data.data.belong;
+              this.team.foundedTime=res.data.data.foundedTime;
+              this.team.memberNum=res.data.data.memberNum;
+              this.team.intro=res.data.data.intro;
               break;
           }
         })
@@ -247,8 +247,8 @@ export default {
         .then((res) => {
           switch (res.data.errno){
             case 0:
-              this.myStatus=res.data.myStatus;
-              this.Members=res.data.Member;
+              this.myStatus=res.data.MyStatus;
+              this.Members=res.data.Members;
               break;
           }
         })
@@ -266,7 +266,7 @@ export default {
         .then((res) => {
           switch (res.data.errno){
             case 0:
-              this.Projects=res.data.Projects;
+              this.Projects=res.data.projects;
               break;
           }
         })
@@ -359,7 +359,7 @@ export default {
           data: qs.stringify({
                     /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
           teamid:this.$store.state.teamid,
-          email:this.input1,
+          email:val,
           op:1
                 }),
             }).then((res) => {
@@ -369,12 +369,7 @@ export default {
                         break;
                 }
             });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消移出'
-          });          
-        });
+        })
     },
     addMember(){//邀请新成员
       this.inviteVisible=true;
@@ -427,16 +422,13 @@ export default {
                     case 0:
                         this.$message.success("退出成功");
                         break;
+                    case 2003:
+
                 }
             });
           //返回个人主页
           this.$router.push('/');
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消退出'
-          });          
-        });
+        })
     },
     projectDetail(val){//跳转项目详情页，val为项目id
         this.$store.state.projectid = val;
@@ -448,6 +440,22 @@ export default {
     },
     renameSure(){//对话框中点击确定，确认重命名
       //交互，重命名的项目id为{{this.projectRenamed}}，新名字为{{this.input}}
+    this.$axios({
+        method: "post" /* 指明请求方式，可以是 get 或 post */,
+          url: "/api/project/rename/" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+          data: qs.stringify({
+                    /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+          projectid:this.projectRenamed,
+          newname:this.input,
+          }),
+            }).then((res) => {
+                switch (res.data.errno) {
+                    case 0:
+                        this.$message.success("重命名成功");
+                        break;
+                }
+            });
+
       this.renameVisible=false;
       this.$message.success("重命名成功！");
       this.input="";
@@ -496,7 +504,7 @@ export default {
         .then((res) => {
           switch (res.data.errno){
             case 0:
-              this.Projects=res.data.Projects;
+              this.Projects=res.data.projects;
               break;
           }
         })
@@ -551,7 +559,7 @@ export default {
         .then((res) => {
           switch (res.data.errno){
             case 0:
-              this.Projects=res.data.Projects;
+              this.Projects=res.data.projects;
               break;
           }
         })
