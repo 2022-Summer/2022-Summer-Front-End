@@ -1,7 +1,6 @@
 <template>
   <el-container id="search">
     <el-header id="head">
-      项目名：{{project.name}}
     </el-header>
     <el-main id="main">
       <div>
@@ -91,7 +90,7 @@
 </div>
 </div>
           <span slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="file1InfoVisible = false">确 定</el-button>
+            <el-button type="primary" @click="file2InfoVisible = false">确 定</el-button>
           </span>
         </el-dialog>   
           <el-button type="primary" @click="newPicture" class="bottomButton" round>新建图</el-button>
@@ -213,7 +212,6 @@ export default {
         .catch(err => {
         console.log(err);         /* 若出现异常则在终端输出相关信息 */
       });
-
   }, 
   methods: {
     to1: function(){
@@ -242,7 +240,7 @@ export default {
       this.file1InfoVisible = true;
     },
     todo2: function(){
-      this.$store.state.type = 0;
+      this.$store.state.type = 1;
       this.file2InfoVisible = true;
     },
     wordDetail(val){/*查看id为val的文档详情*/
@@ -286,7 +284,7 @@ export default {
       });
     },
     Detail(val){
-      let url = 'http://localhost:8000/api/project/download?id='+val;
+      let url = 'http://localhost:8000/api/project/download?fileid='+val;
           this.$axios({
         method: 'get',           /* 指明请求方式，可以是 get 或 post */
         url: '/api/project/download/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
@@ -343,7 +341,7 @@ export default {
       formData.append('file', param.file)
     	formData.append('projectid', this.$store.state.projectid)
       formData.append('email',this.$store.state.mailbox)
-      formData.append('type1',this.$store.state.type)
+      formData.append('type',this.$store.state.type)
     // 向后端发送数据
       thisInfo.$axios.post('/api/project/upload/', formData).
         then(res => {              /* res 是 response 的缩写 */

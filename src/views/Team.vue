@@ -84,9 +84,9 @@
           <el-table-column prop="startTime" label="创立时间" width=300px></el-table-column>
           <el-table-column prop="id" label="操作">
             <template slot-scope="scope">
-              <el-button type="primary" @click="projectDetail(scope.row.id)" style="margin-left:10px;">查看详情</el-button>
-                <el-button type="warning" @click="renameProject(scope.row.id)" style="margin-left:10px;">重命名项目</el-button>
-                <el-button type="danger" @click="removeProject(scope.row.id)" style="margin-left:10px;">移入回收站</el-button>
+              <el-button type="primary" @click="projectDetail(scope.row.id)">查看详情</el-button>
+              <el-button type="warning" @click="renameProject(scope.row.id)">重命名项目</el-button>
+              <el-button type="danger" @click="removeProject(scope.row.id)">移入回收站</el-button>
             </template>
           </el-table-column>
         </el-table>

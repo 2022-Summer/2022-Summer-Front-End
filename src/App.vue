@@ -19,10 +19,9 @@
         <el-aside width="20%">
           <div style="margin:50% 10%;text-align:left;">
             <p>(◍•ᴗ•◍)我是侧边栏</p>
-            <p>该区域待开发</p>
-            <p>里面的内容，以后再来使用吧</p>
             <p style="color:darkred">Tips：为了更好的浏览体验，建议使用分辨率大于等于1600*900的设备访问本网站</p>
           </div>
+          <img src="https://badges.toozhao.com/badges/01G9NYGBKXCVD7GT0YGTKPJET9/orange.svg" />
         </el-aside>
         <el-main style="padding:20px 0 0 0;">
           <router-view/>
