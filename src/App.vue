@@ -2,7 +2,7 @@
 <div id="app">
     <el-container style="margin:-8px;">
       <el-header height="80px" >
-        <img src="./assets/img/moshu_banner.png" width="240px" height="80px" style="float:left;">
+        <img src="./assets/img/moshu_banner.png" width="240px" height="80px" style="float:left;" @click="jump">
         <div style="margin-top:20px;float:right;">
           <el-button type="primary" v-on:click="gotologin" v-if="!$store.state.islogin">
             登录
@@ -86,6 +86,9 @@
         setTimeout(() => {
                 this.$router.push('/');
             }, 1000);
+        },
+        jump(){
+          this.$router
         }
       }
     }

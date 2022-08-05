@@ -4,6 +4,7 @@
       <el-header style="height:80px;line-height:normal;">
         <div style="margin-top:20px;float:left;">
           <el-button type="danger" icon="el-icon-back" @click="returnd">返回</el-button>
+          <el-button type="primary" @click="saveword" style="float: right">保存</el-button>
         </div>
         <div style="margin-top:23px;margin-left:80px;float:left">
           <h1 style="display:inline;font-size:24px;">文档编辑</h1>
