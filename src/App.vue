@@ -1,9 +1,9 @@
 <template>
-<div id="app" >
-    <el-container>
-      <el-header height="150px" >
-        <img src="./assets/img/moshu_banner.png" width="450px" height="150px">
-        <div style="margin-top: 55px;float:right;">
+<div id="app">
+    <el-container style="margin:-8px;">
+      <el-header height="80px" >
+        <img src="./assets/img/moshu_banner.png" width="240px" height="80px" style="float:left;">
+        <div style="margin-top:20px;float:right;">
           <el-button type="primary" v-on:click="gotologin" v-if="!$store.state.islogin">
             登录
           </el-button>
