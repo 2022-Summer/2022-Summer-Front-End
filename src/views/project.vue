@@ -19,7 +19,7 @@
           <el-table-column prop="id" label="操作">
             <template slot-scope="scope">
               <el-button type="primary" @click="Detail(scope.row.id)">下载</el-button>
-              <el-button type="danger" @click="Delete1(scope.row.id)">删除</el-button>
+              <el-button type="danger" @click="Delete(scope.row.id)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -63,7 +63,7 @@
           <el-table-column prop="id" label="操作">
             <template slot-scope="scope">
               <el-button type="primary" @click="Detail(scope.row.id)">下载</el-button>
-              <el-button type="danger" @click="Delete2(scope.row.id)">删除</el-button>
+              <el-button type="danger" @click="Delete(scope.row.id)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -304,6 +304,25 @@ export default {
         console.log(err);         /* 若出现异常则在终端输出相关信息 */
       });
       window.open(url, '_blank');
+    },
+    Delete(val){
+        this.$axios({
+        method: 'post',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/project/delete/',       /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        data: qs.stringify({      /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+            fileid:val
+        })
+      })
+      .then(res => {              /* res 是 response 的缩写 */
+        switch (res.data.errno) {
+          case 0:
+            this.$message.success("删除成功！");
+            break;
+        }
+      })
+      .catch(err => {
+        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      })
     },
       handleRemove(file, fileList) {
         console.log(file, fileList);
