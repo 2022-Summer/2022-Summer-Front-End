@@ -17,11 +17,14 @@
       </el-header>
       <el-container>
         <el-aside width="20%">
-          <div style="margin:50% 10%;text-align:left;">
-            <p>(◍•ᴗ•◍)我是侧边栏</p>
-            <p style="color:darkred">Tips：为了更好的浏览体验，建议使用分辨率大于等于1600*900的设备访问本网站</p>
-          </div>
+          <p style="margin-top:150px;">(◍•ᴗ•◍)我是侧边栏</p>
+          <p>更多内容，正在开发~~</p>
+          <p style="color:darkred;width:80%;margin:auto;">Tips：为了更好的浏览体验，建议使用分辨率大于等于1600*900的设备访问本网站</p>
+          <p style="margin-top:80px;">访问统计</p>
           <img src="https://badges.toozhao.com/badges/01G9NYGBKXCVD7GT0YGTKPJET9/orange.svg" />
+          <br>
+          <p>关于我们</p>
+          <img src="./assets/img/about_nbpl.png" width="60%">
         </el-aside>
         <el-main style="padding:20px 0 0 0;">
           <router-view/>
