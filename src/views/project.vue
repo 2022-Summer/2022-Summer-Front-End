@@ -162,16 +162,16 @@ export default {
   created(){
       this.$axios({
         method: 'get',           /* 指明请求方式，可以是 get 或 post */
-        url: '/api/project/file/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        url: '/api/project/name/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
         params: {
           projectid: this.$store.state.projectid,
-          type:0
         }
         })
         .then((res) => {
           switch (res.data.errno){
             case 0:
-              this.File1=res.data.file;
+              this.project.id=this.$store.state.projectid;
+              this.project.name=res.data.name;
               break;
           }
         })
