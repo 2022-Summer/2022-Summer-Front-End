@@ -31,7 +31,7 @@
               </el-select>
             </el-form-item>
               <el-form-item label="密码">
-              <el-input class="infoInput" :placeholder="password" v-model="input8"></el-input>
+              <el-input class="infoInput" :placeholder="password" type="password" v-model="input8"></el-input>
             </el-form-item>          
           </el-form>
           <el-button type="primary" id="editFinish" @click="save">保存个人资料</el-button>

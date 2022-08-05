@@ -242,7 +242,7 @@ export default {
       this.file1InfoVisible = true;
     },
     todo2: function(){
-      this.$store.state.type = 0;
+      this.$store.state.type = 1;
       this.file2InfoVisible = true;
     },
     wordDetail(val){/*查看id为val的文档详情*/
@@ -286,7 +286,7 @@ export default {
       });
     },
     Detail(val){
-      let url = 'http://localhost:8000/api/project/download?id='+val;
+      let url = 'http://localhost:8000/api/project/download?fileid='+val;
           this.$axios({
         method: 'get',           /* 指明请求方式，可以是 get 或 post */
         url: '/api/project/download/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
