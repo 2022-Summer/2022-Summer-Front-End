@@ -112,15 +112,16 @@ export default {
 }
 </script>
 
-</script>
+
 
 <style scoped>
 #login {
   font-family: 'Noto Serif SC', serif;
-  background-color: rgb(246,246,246);
-  width: 100%;
-  height: 100%;
-  position: absolute;
+  position: relative;
+  top:0;
+  left: 0;
+  height: 800px;
+  background-color: rgb(246, 246, 246);
 }
 #login >>> .el-input__inner {
   font-family: 'Noto Serif SC', serif;
@@ -147,7 +148,7 @@ export default {
   display: inline-block;
   background-color: rgba(255, 255, 255, 0.85);
   border-radius: 20px;
-  margin-top: 100px;
+  margin-top: 150px;
   box-shadow: darkgrey 1px 1px 1px 1px;
 }
 #login .btn_login {

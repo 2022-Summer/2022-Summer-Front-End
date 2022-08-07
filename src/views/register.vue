@@ -12,7 +12,7 @@
         <el-form-item prop="mailbox">
         <el-input placeholder="邮箱" v-model="form.mailbox"></el-input>   
         </el-form-item>
-                  <el-button type="primary" plain float="right" @click="send">发送验证码</el-button>
+        <el-button type="primary" plain float="right" @click="send" style="margin-bottom:20px;">发送验证码</el-button>
         <el-form-item >
           <el-input placeholder="验证码" v-model="form.code" autocomplete="off"></el-input>
         </el-form-item>
@@ -155,9 +155,10 @@ export default {
 <style scoped>
 #login {
   font-family: 'Noto Serif SC', serif;
-  position:absolute;
-  width: 100%;
-  height: 100%;
+  position: relative;
+  top:0;
+  left: 0;
+  height: 800px;
   background-color: rgb(246, 246, 246);
 }
 #login >>> .el-input__inner {
@@ -177,7 +178,7 @@ export default {
   backface-visibility: hidden;
 }
 #login .wrap {
-  width: 350px;
+  width: 300px;
   height: auto;
   padding: 0 25px 0 25px;
   line-height: 40px;
@@ -185,7 +186,7 @@ export default {
   display: inline-block;
   background-color: rgba(255, 255, 255, 0.85);
   border-radius: 20px;
-  margin-top: 50px;
+  margin-top: 150px;
   box-shadow: darkgrey 1px 1px 1px 1px ;
 }
 #login .btn_login {

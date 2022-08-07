@@ -1,23 +1,39 @@
 <template>
-  <div id="app">
-  <el-container>
-        <el-header>
-      <h1>墨书</h1>
-    </el-header>
-   <el-header>
-     <nav class="nav1">  
-     <el-button type="primary" v-on:click="gotologin" v-if="!this.$store.state.islogin">登录</el-button>
-      <h1 v-if="$store.state.islogin">欢迎,
-      <router-link to="/">{{this.$store.state.username}}</router-link></h1>
-      </nav>
-      <nav class="nav2">
-             <el-button type="primary" v-on:click="logout" v-if="this.$store.state.islogin">退出登录</el-button>
-      </nav>
-    </el-header>
-    <el-main> 
-         <router-view/>
-    </el-main>
-  </el-container>
+<div id="app">
+    <el-container style="margin:-8px;">
+      <el-header height="80px" >
+        <img src="./assets/img/moshu_banner.png" width="240px" height="80px" style="float:left;" @click="jump">
+        <div style="margin-top:20px;float:right;">
+          <el-button type="primary" v-on:click="gotologin" v-if="!$store.state.islogin">
+            登录
+          </el-button>
+          <el-button type="primary" v-on:click="logout" v-if="this.$store.state.islogin">
+          退出登录
+        </el-button>
+<!--          <h1 v-if="$store.state.islogin">-->
+<!--            欢迎,<router-link to="/">{{$store.state.username}}</router-link>-->
+<!--          </h1>-->
+
+        </div>
+      </el-header>
+      <el-container>
+        <el-aside width="20%">
+          <p style="margin-top:100px;">(◍•ᴗ•◍)我是侧边栏</p>
+          <p>更多内容，正在开发~~</p>
+          <p style="color:darkred;width:80%;margin:auto;">Tips：为了更好的浏览体验，建议使用分辨率大于等于1600*900的设备访问本网站</p>
+          <p style="margin-top:40px;">访问统计</p>
+          <img src="https://badges.toozhao.com/badges/01G9NYGBKXCVD7GT0YGTKPJET9/orange.svg" />
+          <br>
+          <p>关于我们</p>
+          <img src="./assets/img/about_us.png" width="50%">
+          <p>项目地址</p>
+          <img src="./assets/img/about_nbpl.png" width="50%">
+        </el-aside>
+        <el-main style="padding:20px 0 0 0;">
+          <router-view/>
+        </el-main>
+      </el-container>
+    </el-container>
   </div>
 </template>
 
@@ -49,6 +65,9 @@
           })
       },
       methods:{
+        jump(){
+          this.$router.push('/');
+        },
         gotologin(){
           this.$router.push('/Login');
         },
@@ -114,4 +133,31 @@
   background: #42b983;
   color: #fff;
 }
+
+.el-header {
+    background-color: #B3C0D1;
+    color: #333;
+    text-align: center;
+  }
+  .el-aside {
+    background-color: #D3DCE6;
+    color: #333;
+    text-align: center;
+  }
+  .el-main {
+    background-color: #E9EEF3;
+    color: #333;
+    text-align: center;
+    line-height: 160px;
+  }
+  body > .el-container {
+    margin-bottom: 40px;
+  }
+  .el-container:nth-child(5) .el-aside,
+  .el-container:nth-child(6) .el-aside {
+    line-height: 260px;
+  }
+  .el-container:nth-child(7) .el-aside {
+    line-height: 320px;
+  }
 </style>

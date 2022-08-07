@@ -10,34 +10,51 @@
           </el-menu-item>
         </el-menu>
       </div>
-      <div id="infoTable" v-if="mainIndex===1">
+      <div id="infoTable" v-if="mainIndex===1" style="margin-top:0;">
         <div>
-          <el-form  label-width="80px">
-          <h1></h1>
-            <el-form-item label="姓名">
-              <el-input class="infoInput" :placeholder="name" v-model="input1"></el-input>
-            </el-form-item>
-            <el-form-item label="昵称">
-              <el-input class="infoInput" :placeholder="username" v-model="input2"></el-input>
-            </el-form-item>
-            <el-form-item label="简介">
-              <el-input class="infoInput" :placeholder="description" v-model="input4"></el-input>
-            </el-form-item>
-            <el-form-item label="性别">
-              <el-select class="infoInput" :placeholder="sex" v-model="input7">
-                <el-option label="男" value="男"></el-option>
-                <el-option label="女" value="女"></el-option>
-                <el-option label="秘密" value="秘密"></el-option>
-              </el-select>
-            </el-form-item>
-              <el-form-item label="密码">
-              <el-input class="infoInput" :placeholder="password" v-model="input8"></el-input>
-            </el-form-item>          
-          </el-form>
-          <el-button type="primary" id="editFinish" @click="save">保存个人资料</el-button>
+          <el-container>
+            <!--侧边栏用于展示主要的个人信息-->
+            <el-aside width="35%">
+              <div style="width:200px;height:200px;background-color:palegoldenrod;border:20px solid white;border-radius:200px;margin:200px auto 0 auto;">
+                <img src="../assets/img/moshu_head.png">
+              </div>
+              <div style="line-height:40px;margin-bottom:200px;">
+                <p style="fontsize:10px">昵称：{{username}}</p>
+                <p>个人介绍：{{description}}</p>
+                <p>性别：{{sex}}</p>
+                <p line-height="40px">这里展示重要的个人信息</p>
+              </div>
+            </el-aside>
+            <el-main>
+              <div style="margin-left:10%;margin-top:80px;">
+                  <el-form  label-width="80px">
+                  <el-form-item label="姓名">
+                    <el-input class="infoInput" :placeholder="name" v-model="input1"></el-input>
+                  </el-form-item>
+                  <el-form-item label="昵称">
+                    <el-input class="infoInput" :placeholder="username" v-model="input2"></el-input>
+                  </el-form-item>
+                  <el-form-item label="简介">
+                    <el-input class="infoInput" :placeholder="description" v-model="input4"></el-input>
+                  </el-form-item>
+                  <el-form-item label="性别">
+                    <el-select class="infoInput" :placeholder="sex" v-model="input7" style="float:left;">
+                      <el-option label="男" value="男"></el-option>
+                      <el-option label="女" value="女"></el-option>
+                      <el-option label="秘密" value="秘密"></el-option>
+                    </el-select>
+                  </el-form-item>
+                    <el-form-item label="密码">
+                    <el-input class="infoInput" :placeholder="password" type="password" v-model="input8"></el-input>
+                    </el-form-item>
+                  </el-form>
+                  <el-button type="primary" id="editFinish" @click="save">保存个人资料</el-button>
+                </div>
+            </el-main>
+          </el-container>
         </div>
       </div>
-            <div id="myTeamTable" v-if="mainIndex===2">
+        <div id="myTeamTable" v-if="mainIndex===2">
         <el-table :data="myTeams" style="width: 100%">
           <el-table-column type="index"> </el-table-column>
           <el-table-column prop="name" label="团队名"></el-table-column>
@@ -79,6 +96,7 @@ export default {
       input3: '',
       input4: '',
       input7: '',
+      input8: '',
         mainIndex:1,//不同值显示不同板块
         name:'1',
         username:'2',

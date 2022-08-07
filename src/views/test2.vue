@@ -20,7 +20,7 @@
   downloadFile(){
     this.$axios({
         method: 'get',           /* 指明请求方式，可以是 get 或 post */
-        url: '/api/project/upload/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        url: '/api/project/download/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
         params: {
           fileid: this.id
         }
