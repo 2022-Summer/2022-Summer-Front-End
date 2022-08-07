@@ -70,15 +70,19 @@
       </div>
 
       <div id="projectList" v-if="teamIndex === 2">
-        <el-table :data="Projects" style="width: 100%">
-          <el-table-column type="index"> </el-table-column>
-          <el-table-column prop="title" label="标题" width=300px></el-table-column>
-          <el-table-column prop="leader" label="负责人" width=300px></el-table-column>
-          <el-table-column prop="startTime" label="创立时间" width=300px></el-table-column>
+          <el-input v-model="input" placeholder="请输入标题关键词进行搜索"  @keyup.enter.native="search">
+            <template slot="append"><el-button type="primary" icon="el-icon-search" @click="search">搜索</el-button></template>
+          </el-input>
+        <el-table :data="Projects" style="width: 100%" id="projectTable" :default-sort="{prop:'startTime',order:'descending'}">
+          <el-table-column type="index"> </el-table-column> 
+          <el-table-column prop="title" label="标题" width="250px" sortable></el-table-column>
+          <el-table-column prop="leader" label="负责人" width="250px" sortable></el-table-column>
+          <el-table-column prop="startTime" label="创立时间" width="250px" sortable></el-table-column>
           <el-table-column prop="id" label="操作">
             <template slot-scope="scope">
               <el-button type="primary" @click="projectDetail(scope.row.id)">查看详情</el-button>
               <el-button type="warning" @click="renameProject(scope.row.id)">重命名项目</el-button>
+              <el-button type="success" @click="copyProject(scope.row.id)">复制项目</el-button>
               <el-button type="danger" @click="removeProject(scope.row.id)">移入回收站</el-button>
             </template>
           </el-table-column>
@@ -131,7 +135,7 @@
   margin-left: 10px;
 }
 
-#memberList,#projectList,#recycleList {
+#memberList,#projectList,#recycleList,#projectTable {
   margin-top: 20px;
 }
 
@@ -156,6 +160,7 @@ export default {
       projectRenamed:0,//选择要重命名的项目id
       input:"",
       input1:"",
+      input2:"",
       team:{
         "id":1,
         "name":"没头发",
@@ -194,7 +199,7 @@ export default {
         {
           "id":2,
           "title":"CTS",
-          "startTime":"2020.1.1",
+          "startTime":"2020.1.2",
           "leader":"zy2"
         }
       ],
@@ -280,6 +285,43 @@ export default {
         });
     },
 
+    search(){//直接复制了之前的搜索交互函数，应该可以在这个基础上改（这里搜索的输入框是input2）
+      /*
+      if (!this.$store.state.islogin) {
+        this.$message.error("请登录");
+        this.$router.push("/Login");
+      } else {
+        this.$store.state.input = this.input;
+        this.$axios({
+          method: "post"   指明请求方式，可以是 get 或 post,
+          url: "/api/post/search/"    指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由,
+          data: qs.stringify({
+            需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端
+            keyword: this.input,
+          }),
+        }).then((res) => {
+          switch (res.data.errno) {
+            case 0:
+              this.posts=res.data.posts;
+              break;
+            case 8001:
+              this.$message.error("请求方式错误");
+              break;
+            case 8002:
+              this.$message.error("请先登陆");
+              this.$router.push('/login');
+              break;
+            case 8003:
+              this.$message.error("搜索关键字不能为空");
+              break;
+          }
+        }) 
+         .catch(err => {
+        console.log(err);         若出现异常则在终端输出相关信息
+        });
+      }
+      */
+    },
     projectDetail(val){//跳转项目详情页，val为项目id
 
     },
@@ -292,6 +334,9 @@ export default {
       this.renameVisible=false;
       this.$message.success("重命名成功！");
       this.input="";
+    },
+    copyProject(val){//复制id为val的项目
+    
     },
     removeProject(val){//项目移入回收站
 
