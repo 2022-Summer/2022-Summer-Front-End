@@ -246,9 +246,6 @@ export default {
         }
       ],
       Files: [
-        {
-          label: '“没头发”团队的项目文件',
-          children: [
             {
               label: '项目1',
               children: [
@@ -285,8 +282,6 @@ export default {
                 
               ]
             },
-          ]
-        }
       ]
     };
   },
