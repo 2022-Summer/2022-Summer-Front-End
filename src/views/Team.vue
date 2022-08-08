@@ -77,15 +77,19 @@
       </div>
 
       <div id="projectList" v-if="teamIndex === 2">
-        <el-table :data="Projects" style="width: 100%">
-          <el-table-column type="index"> </el-table-column>
-          <el-table-column prop="title" label="标题" width=300px></el-table-column>
-          <el-table-column prop="leader" label="负责人" width=300px></el-table-column>
-          <el-table-column prop="startTime" label="创立时间" width=300px></el-table-column>
+          <el-input v-model="inputsearch" placeholder="请输入标题关键词进行搜索"  @keyup.enter.native="search">
+            <template slot="append"><el-button type="primary" icon="el-icon-search" @click="search">搜索</el-button></template>
+          </el-input>
+        <el-table :data="Projects" style="width: 100%" id="projectTable" :default-sort="{prop:'startTime',order:'descending'}">
+          <el-table-column type="index"> </el-table-column> 
+          <el-table-column prop="title" label="标题" width="250px" sortable></el-table-column>
+          <el-table-column prop="leader" label="负责人" width="250px" sortable></el-table-column>
+          <el-table-column prop="startTime" label="创立时间" width="250px" sortable></el-table-column>
           <el-table-column prop="id" label="操作">
             <template slot-scope="scope">
-              <el-button type="primary" @click="projectDetail(scope.row.id)">查看详情</el-button>
+              <el-button type="primary" style="margin-left: 10px" @click="projectDetail(scope.row.id)">查看详情</el-button>
               <el-button type="warning" @click="renameProject(scope.row.id)">重命名项目</el-button>
+              <el-button type="success" @click="copyProject(scope.row.id)">复制项目</el-button>
               <el-button type="danger" @click="removeProject(scope.row.id)">移入回收站</el-button>
             </template>
           </el-table-column>
@@ -165,6 +169,7 @@ export default {
       projectRenamed:0,//选择要重命名的项目id
       input:"",
       input1:"",
+      inputsearch:"",
       team:{
         "id":1,
         "name":"没头发",
@@ -567,6 +572,25 @@ export default {
         console.log(err);         /* 若出现异常则在终端输出相关信息 */
       });
     },
+    copyProject(val){//复制项目
+        this.$axios({
+        method: 'post',           
+        url: '/api/project/copy/',       
+        data: qs.stringify({      
+            projectid:val,
+        })
+      })
+      .then(res => {              /* res 是 response 的缩写 */
+        switch (res.data.errno) {
+          case 0:
+            this.$message.success("复制成功");
+            break;
+        }
+      })
+      .catch(err => {
+        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      }) 
+    },
     delProject(val){//彻底删除项目
       this.$confirm('此操作将彻底删除项目，无法恢复，是否删除?', '提示', {
           confirmButtonText: '确定',
@@ -613,6 +637,27 @@ export default {
             message: '已取消删除'
           });          
         });
+    },
+    search: function () {
+        this.$axios({
+        method: 'post',           
+        url: '/api/team/search/',       
+        data: qs.stringify({      
+            teamid:this.$store.state.teamid,
+            keyword:this.input
+        })
+      })
+      .then(res => {              /* res 是 response 的缩写 */
+        switch (res.data.errno) {
+          case 0:
+            this.Projects=res.data.projects;
+            this.$message.success("搜索成功");
+            break;
+        }
+      })
+      .catch(err => {
+        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      })  
     },
   }
 };

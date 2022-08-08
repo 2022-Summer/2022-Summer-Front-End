@@ -1,21 +1,21 @@
 <template>
-  <el-container id="publish">
-      <el-header>
-          <h1>图绘制</h1>
-      </el-header>
-          <el-header>
-        <div type="top">
-        <span style="float:left">
-            <el-button type="danger" icon="el-icon-back" @click="returnd">返回</el-button>
-        </span>
+  <div style="position:relative;">
+    <el-container>
+      <el-header style="height:80px;line-height:normal;">
+        <div style="margin-top:20px;float:left;">
+          <el-button type="danger" icon="el-icon-back" @click="returnd">返回</el-button>
         </div>
-    </el-header>
-  <el-main>
-
-
-    
-  </el-main>
-  </el-container>
+        <div style="margin-top:23px;margin-left:80px;float:left">
+          <h1 style="display:inline;font-size:24px;">图绘制</h1>
+        </div>
+      </el-header>
+      <el-main style="padding:0;">
+        <div style="border: 5px outset gray;line-height:0;">
+          <iframe src="http://120.46.200.79:8001/" height="900px" width="100%" frameborder="0"></iframe>
+        </div>
+      </el-main>
+    </el-container>
+  </div>
 </template>
 
 <script>
