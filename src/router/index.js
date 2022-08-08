@@ -39,6 +39,10 @@ const routes = [
     path: '/buildTeam',
     name: 'buildTeam',
     component: () => import( '../views/BuildTeam.vue')
+  },{
+    path: '/wordDownload',
+    name: 'wordDownload',
+    component: () => import( '../views/wordDownload.vue')
   },
 ]
 

@@ -27,6 +27,7 @@
             <template slot-scope="scope">
               <el-button type="primary" @click="wordDetail(scope.row.id)">查看文档</el-button>
               <el-button type="danger" @click="wordDelete(scope.row.id)">删除文档</el-button>
+              <el-button type="success" @click="wordDownload(scope.row.id)">下载文档</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -83,6 +84,7 @@ export default {
     },
     wordDetail(val){/*查看id为val的文档详情*/},
     wordDelete(val){/*删除id为val的文档*/},
+    wordDownload(val){/*下载id为val的文档*/},
   }
 }
 </script>

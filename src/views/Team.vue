@@ -25,6 +25,7 @@
           <el-menu-item @click="toMembers" index="1"><i class="el-icon-user-solid"></i>成员列表</el-menu-item>
           <el-menu-item @click="toProjects" index="2"><i class="el-icon-s-cooperation"></i>项目列表</el-menu-item>
           <el-menu-item @click="toRecycle" index="3"><i class="el-icon-delete-solid"></i>项目回收站</el-menu-item>
+          <el-menu-item @click="toFiles" index="4"><i class="el-icon-folder-opened"></i>文档中心</el-menu-item>
         </el-menu>
       </div>
       <div id="memberList" v-if="teamIndex === 1">
@@ -113,6 +114,31 @@
           </el-table-column>
         </el-table>
       </div>
+
+      <div id="fileCenter" v-if="teamIndex === 4">
+        <el-tree :data="Files" :expand-on-click-node="false">
+          <span class="custom-tree-node" slot-scope="{ node, data }">
+            <span>{{ node.label }}</span>
+            <span v-if="data.fileID>0">
+              <el-button
+                type="text"
+                @click="fileDetail(data.fileID)">
+                查看详情
+              </el-button>
+              <el-button
+                type="text"
+                @click="fileDelete(data.fileID)">
+                下载
+              </el-button>
+              <el-button
+                type="text"
+                @click="fileDownload(data.fileID)">
+                删除
+              </el-button>
+            </span>
+          </span>
+        </el-tree>
+      </div>
     </el-main>
   </el-container>
 </template>
@@ -144,6 +170,14 @@
   margin-top: 20px;
   margin-left: 20px;
 }
+
+.custom-tree-node {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 8px;
+  }
 </style>
 
 <script>
@@ -210,6 +244,49 @@ export default {
           "startTime":"2020.1.1",
           "leader":"zy2"
         }
+      ],
+      Files: [
+        {
+          label: '“没头发”团队的项目文件',
+          children: [
+            {
+              label: '项目1',
+              children: [
+                {
+                  fileID:1,
+                  label: '文档1'
+                },
+                {
+                  fileID:2,
+                  label: '文档2'
+                },
+                {
+                  fileID:3,
+                  label: '文档3'
+                },
+              ]
+            },
+            {
+              label: '项目2',
+              children: [
+                {
+                  fileID:4,
+                  label: '文档1'
+                },
+                {
+                  fileID:5,
+                  label: '文档2'
+                },
+              ]
+            },
+            {
+              label: '项目3',
+              children: [
+                
+              ]
+            },
+          ]
+        }
       ]
     };
   },
@@ -223,9 +300,13 @@ export default {
     toRecycle(){//跳转项目回收站
       this.teamIndex=3;
     },
+    toFiles(){//跳转文档中心
+      this.teamIndex=4;
+    },
 
     teamDetail(){//显示团队信息（发起人、建立时间、人数、简介……）
       this.teamInfoVisible=true;
+      this.$message.success(this.Files[0].children[0].children[2].id);
     },
 
     memberInfo(val){//显示成员详细信息
@@ -367,6 +448,13 @@ export default {
           });          
         });
     },
+
+    fileDetail(val){//跳转文件编辑页面，文件id为val
+    },
+    fileDelete(val){//删除文件，文件id为val
+    },
+    fileDownload(val){//下载文件，文件id为val
+    }
   }
 };
 </script>
