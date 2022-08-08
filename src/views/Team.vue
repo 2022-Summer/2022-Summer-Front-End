@@ -25,6 +25,7 @@
         <el-menu id="menu" mode="horizontal" active-text-color="#ffd04b">
           <el-menu-item @click="toMembers" index="1"><i class="el-icon-user-solid" ></i>成员列表</el-menu-item>
           <el-menu-item @click="toProjects" index="2"><i class="el-icon-s-cooperation" ></i>项目列表</el-menu-item>
+          <el-menu-item @click="toFiles" index="4"><i class="el-icon-folder-opened"></i>文档中心</el-menu-item>
           <el-menu-item @click="toRecycle" index="3"><i class="el-icon-delete-solid"></i>项目回收站</el-menu-item>
         </el-menu>
       </div>
@@ -121,6 +122,29 @@
           </el-table-column>
         </el-table>
       </div>
+
+      <div id="fileCenter" v-if="teamIndex === 4">
+        <el-tree :data="Files" :expand-on-click-node="false">
+          <span class="custom-tree-node" slot-scope="{ node, data }">
+            <span>{{ node.label }}</span>
+            <span v-if="data.fileID>0">
+            <d>&nbsp;最后编辑人:{{data.lastEditor}}</d>
+            <d>&nbsp;最后编辑时间:{{data.lastEditTime}}&nbsp;</d>
+              <el-button
+                type="text"
+                @click="fileDetail(data.fileID)">
+                查看详情
+              </el-button>
+              <el-button
+                type="text"
+                @click="fileDelete(data.fileID)">
+                删除
+              </el-button>
+            </span>
+          </span>
+        </el-tree>
+      </div>
+
     </el-main>
   </el-container>
 </template>
@@ -132,26 +156,29 @@
   text-align: center;
   line-height: 60px;
 }
-
 #mid {
   background-color: #e9eef3;
   color: #333;
   text-align: center;
 }
-
 #teamInfo {
   margin-left: 10px;
 }
-
-#memberList,#projectList,#recycleList {
+#memberList,#projectList,#recycleList,#projectTable {
   margin-top: 20px;
 }
-
 .bottomButton {
   float: left;
   margin-top: 20px;
   margin-left: 20px;
 }
+.custom-tree-node {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 8px;
+  }
 </style>
 
 <script>
@@ -209,6 +236,54 @@ export default {
           "startTime":"2020.1.1",
           "leader":"zy2"
         }
+      ],
+      Files: [
+            {
+              label: '项目1',
+              children: [
+                {
+                  fileID:1,
+                  label: '文档1',
+                  lastEditTime:'2002.1.1',
+                  lastEditor:'k'
+                },
+                {
+                  fileID:2,
+                  label: '文档2',
+                  lastEditTime:'2002.2.2',
+                  lastEditor:'x'
+                },
+                {
+                  fileID:3,
+                  label: '文档3',
+                  lastEditTime:'2002.3.3',
+                  lastEditor:'k'
+                },
+              ]
+            },
+            {
+              label: '项目2',
+              children: [
+                {
+                  fileID:4,
+                  label: '文档1',
+                  lastEditTime:'2002.2.2',
+                  lastEditor:'w'
+                },
+                {
+                  fileID:5,
+                  label: '文档2',
+                  lastEditTime:'2002.2.2',
+                  lastEditor:'w'
+                },
+              ]
+            },
+            {
+              label: '项目3',
+              children: [
+                
+              ]
+            },
       ]
     };
   },
@@ -296,6 +371,24 @@ export default {
         .catch(err => {
         console.log(err);         /* 若出现异常则在终端输出相关信息 */
       });
+      //获取文件中心信息
+        this.$axios({
+        method: 'get',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/team/wordcenter/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        params: {
+          teamid: this.$store.state.teamid
+        }
+        })
+        .then((res) => {
+          switch (res.data.errno){
+            case 0:
+              this.Files=res.data.Files;
+              break;
+          }
+        })
+        .catch(err => {
+        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      }); 
       }
   }, 
   methods:{
@@ -308,12 +401,38 @@ export default {
     toRecycle(){//跳转项目回收站
       this.teamIndex = 3;
     },
+    toFiles(){
+      this.teamIndex = 4;
+    },
     teamDetail(){//显示团队信息（发起人、建立时间、人数、简介……）
       this.teamInfoVisible=true;
     },
     memberInfo(val){//显示成员详细信息
       this.memberSelected=val;
       this.memberInfoVisible=true;
+    },
+    fileDetail(val){
+      this.$store.state.wordid = val;
+      this.$router.push('/word');
+    },
+    fileDelete(val){
+        this.$axios({
+        method: 'post',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/project/deword/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        data: qs.stringify({      /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+          wordid: val
+        })
+      })
+          .then((res) => {
+            switch (res.data.errno) {
+              case 0:
+                this.$message.success("删除成功");
+                break;
+            }
+          })
+          .catch(err => {
+            console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      });
     },
     addAdmin(val){//增加管理员
     this.$axios({
