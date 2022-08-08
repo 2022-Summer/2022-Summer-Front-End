@@ -114,7 +114,7 @@ export default {
       else {
         var self = this
         console.log('支持Websocket')
-        var socketUrl = "http://localhost:8080/word/" + this.$store.state.wordid
+        var socketUrl = "http://localhost:8000/word/" + this.$store.state.wordid
         socketUrl = socketUrl.replace("https", "ws").replace("http", "ws")//这个没看明白
         console.log(socketUrl)
         if(socket!==null){
