@@ -38,10 +38,10 @@
               prefix-icon="el-icon-s-check" clearable style="float:left;width:60%;"
               @click="getVerifyCode">
             </el-input>
-            <el-button class="el_btn2" @click="getVerifyCode">发送</el-button>
+            <el-button class="el_btn2" @click="sendCode">发送</el-button>
           </el-form-item> 
           <el-form-item>
-            <el-button class="el_btn1" @click="findBack">
+            <el-button class="el_btn1" @click="checkCode">
               找回密码
             </el-button>
           </el-form-item>
@@ -114,7 +114,7 @@ export default{
             const history_pth = localStorage.getItem('preRoute');
             /* 若保存的路由为空或为注册路由，则跳转首页；否则跳转前路由（setTimeout表示1000ms后执行） */
             setTimeout(() => {
-                this.$router.push('/');
+                this.$router.push('/home');
             }, 1000);
             break;
           case 2002:
@@ -129,10 +129,71 @@ export default{
         console.log(err);         /* 若出现异常则在终端输出相关信息 */
       })
     },
-    toRegister: function () {
+    toRegister: function() {
       // 跳转注册的路由
       this.$router.push('/register');
     },
+    sendCode: function() {//发送验证码
+      if (this.form.mailbox === '') {
+        this.$message.warning("请输入邮箱!");
+        return;
+      }
+      this.$axios({
+        method: 'get',           
+        url: '/api/user/password/',       
+        params:{
+          mailbox:this.form.mailbox
+        }
+      })
+      .then(res => {
+        switch (res.data.errno) {
+          case 0:
+            this.$message.success("发送成功");
+            break;
+          case 3001:
+            this.$message.error("请求方式错误!");
+            break;
+          case 3002:
+            this.$message.error("用户不存在!");
+            break;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    },
+    checkCode: function(){//验证验证码是否正确，正确就输出用户密码
+      if(this.form.mailbox === '' || this.form.code === ''){
+        this.$message.warning("请填写完整信息!");
+      }
+      this.$axios({
+        method: 'post',           
+        url: '/api/user/password/',       
+        data: qs.stringify({ 
+          mailbox: this.form.mailbox,
+          code: this.form.code
+        })
+      })
+      .then(res => {
+          switch (res.data.errno) {
+          case 0:
+            this.$message.success("密码为:"+res.data.password);
+            setTimeout(() => {
+                this.$router.push('/login');
+            }, 1000);
+            break;
+          case 4002:
+            this.$message.error("验证码错误!");
+            break;
+          case 4003:
+            this.$message.error("用户不存在!");
+            break;
+        }
+      })
+      .catch(err => {
+        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      })
+    }
   }
 }
 </script>

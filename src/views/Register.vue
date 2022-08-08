@@ -8,17 +8,17 @@
     <el-form class="form">
       <!--待添加rules-->
       <el-form-item>
-        <el-input class="el_in" placeholder="请输入邮箱" v-model="form.email"
+        <el-input class="el_in" placeholder="请输入邮箱" v-model="form.mailbox"
           prefix-icon="el-icon-postcard" clearable>
         </el-input>
       </el-form-item>
       <el-form-item>
-        <el-input class="el_in" placeholder="请输入昵称" v-model="form.nickname"
+        <el-input class="el_in" placeholder="请输入昵称" v-model="form.username"
           prefix-icon="el-icon-user" clearable>
         </el-input>
       </el-form-item>
       <el-form-item>
-        <el-input class="el_in" placeholder="请输入用户名" v-model="form.username"
+        <el-input class="el_in" placeholder="请输入用户名" v-model="form.name"
           prefix-icon="el-icon-user-solid" clearable>
         </el-input>
       </el-form-item> 
@@ -33,15 +33,15 @@
         </el-input>
       </el-form-item>
       <el-form-item>
-        <el-input class="el_in" placeholder="请输入验证码" v-model="form.verifyCode"
+        <el-input class="el_in" placeholder="请输入验证码" v-model="form.code"
           prefix-icon="el-icon-s-check" clearable style="float:left;width:60%;"
           @click="getVerifyCode">
         </el-input>
-        <el-button class="el_btn2" @click="getVerifyCode">发送</el-button>
+        <el-button class="el_btn2" @click="send">发送</el-button>
       </el-form-item> 
       <el-form-item>
-        <el-button class="el_btn1" @click="gotoMainPage">
-          登&nbsp;&nbsp;录
+        <el-button class="el_btn1" @click="register">
+          注册账号
         </el-button>
       </el-form-item>
     </el-form>
@@ -51,16 +51,35 @@
 </template>
 
 <script>
+import qs from "qs";
 export default{
   data() {
+    var checkEmail = (rule, value, callback) => {
+      const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
+      if (!value) {
+        return callback(new Error('邮箱不能为空'))
+      }
+      setTimeout(() => {
+        if (mailReg.test(value)) {
+          callback()
+        } else {
+          callback(new Error('请输入正确的邮箱格式'))
+        }
+      }, 100)
+    }
     return{
       form: {
-        email:'',
-        nickname:'',
+        mailbox:'',
+        name:'',
         username:'',
         password1:'',
         password1:'',
-        verifyCode:''
+        code:''
+      },
+      rules: {
+        mailbox: [
+          { validator: checkEmail, trigger: 'change' }
+        ]
       }
     }
   },
@@ -68,14 +87,80 @@ export default{
     gotoWelcome(){
       this.$router.push('/')
     },
-    gotoMainPage(){
-
-    },
-    getVerifyCode(){
-
-    },
     gotoLogin(){
       this.$router.push("/login")
+    },
+    register: function () {
+      // 检查表单是否有填写内容
+      if (this.form.password1 === ''|| this.form.password2 === '' || this.form.username === ''
+          || this.form.name === '' || this.form.mailbox === '' || this.form.code === '') {
+        this.$message.warning("请填写完整信息!");
+        return;
+      }
+      this.$axios({
+        method: 'post',           
+        url: '/api/user/register/',       
+        data: qs.stringify({
+          name: this.form.name,
+          username: this.form.username,
+          mailbox: this.form.mailbox,
+          code:this.form.code,
+          password_1: this.form.password1,
+          password_2: this.form.password2,
+
+        })
+      })
+      .then(res => {              /* res 是 response 的缩写 */
+        switch (res.data.errno) {
+          case 0:
+            this.$message.success("注册成功！");
+            setTimeout(() => {
+                this.$router.push('/login');
+            }, 1000);
+            break;
+          case 1002:
+            this.$message.error("该邮箱已被注册!");
+            break;
+          case 1003:
+            this.$message.error("两次输入的密码不一致!");
+            break;
+          case 1004: 
+            this.$message.error("验证码错误");
+            break;
+        }
+      })
+      .catch(err => {
+        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      })
+    },
+    send: function () {
+      if(this.form.mailbox === ''){
+        this.$message.error("邮箱不能为空");
+        return;
+      }
+      this.$axios({
+        method: 'get',           
+        url: '/api/user/register/',       
+        params:{
+          mailbox:this.form.mailbox
+        }
+      })
+      .then(res => {              /* res 是 response 的缩写 */
+        switch (res.data.errno) {
+          case 0:
+            this.$message.success("发送成功");
+            break;
+          case 1001:
+            this.$message.error("请求方式错误!");
+            break;
+          case 1002:
+            this.$message.error("邮箱格式错误!");
+            break;
+        }
+      })
+      .catch(err => {
+        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      })
     }
   }
 }
