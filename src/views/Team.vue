@@ -127,17 +127,17 @@
         <el-tree :data="Files" :expand-on-click-node="false">
           <span class="custom-tree-node" slot-scope="{ node, data }">
             <span>{{ node.label }}</span>
-            <span v-if="data.fileID>0">
+            <span v-if="data.wordID>0">
             <d>&nbsp;最后编辑人:{{data.lastEditor}}</d>
             <d>&nbsp;最后编辑时间:{{data.lastEditTime}}&nbsp;</d>
               <el-button
                 type="text"
-                @click="fileDetail(data.fileID)">
+                @click="fileDetail(data.wordID)">
                 查看详情
               </el-button>
               <el-button
                 type="text"
-                @click="fileDelete(data.fileID)">
+                @click="fileDelete(data.wordID)">
                 删除
               </el-button>
             </span>
@@ -239,22 +239,23 @@ export default {
       ],
       Files: [
             {
+              projectid:'1',
               label: '项目1',
               children: [
                 {
-                  fileID:1,
+                  wordID:1,
                   label: '文档1',
                   lastEditTime:'2002.1.1',
                   lastEditor:'k'
                 },
                 {
-                  fileID:2,
+                  wordID:2,
                   label: '文档2',
                   lastEditTime:'2002.2.2',
                   lastEditor:'x'
                 },
                 {
-                  fileID:3,
+                  wordID:3,
                   label: '文档3',
                   lastEditTime:'2002.3.3',
                   lastEditor:'k'
@@ -265,13 +266,13 @@ export default {
               label: '项目2',
               children: [
                 {
-                  fileID:4,
+                  wordID:4,
                   label: '文档1',
                   lastEditTime:'2002.2.2',
                   lastEditor:'w'
                 },
                 {
-                  fileID:5,
+                  wordID:5,
                   label: '文档2',
                   lastEditTime:'2002.2.2',
                   lastEditor:'w'
