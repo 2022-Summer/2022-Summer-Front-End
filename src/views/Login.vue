@@ -1,13 +1,13 @@
 <template>
 <div id="login">
   <div @click="gotoWelcome" style="cursor:pointer;">
-      <img src="../assets/img/moshu_top.png" style="width:500px;margin-top:40px;">
+      <img src="../assets/img/characters/moshu_top.png" style="width:500px;margin-top:40px;">
   </div>
   <div class="form_box">
     <el-tabs v-model="paneName">
       <el-tab-pane label="邮箱登录" name="first">
         <el-form class="form">
-          <!--待添加rules-->
+          <!--待添加rules，用于限定邮箱和密码格式-->
           <el-form-item>
             <el-input class="el_in" placeholder="请输入邮箱" v-model="form.mailbox"
               prefix-icon="el-icon-postcard" clearable>
@@ -35,8 +35,7 @@
           </el-form-item>
           <el-form-item>
             <el-input class="el_in" placeholder="请输入验证码" v-model="form.code"
-              prefix-icon="el-icon-s-check" clearable style="float:left;width:60%;"
-              @click="getVerifyCode">
+              prefix-icon="el-icon-s-check" clearable style="float:left;width:60%;">
             </el-input>
             <el-button class="el_btn2" @click="sendCode">发送</el-button>
           </el-form-item> 
@@ -48,151 +47,50 @@
         </el-form>
       </el-tab-pane>
     </el-tabs>
-    <div class="form_btm" @click="toRegister">没有账号？马上注册</div>
+    <div class="form_btm" @click="gotoRegister">没有账号？马上注册</div>
   </div>
 </div>
 </template>
 
 <script>
-import qs from "qs";
 export default{
-  data() {
-    var checkEmail = (rule, value, callback) => {
-      const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
-      if (!value) {
-        return callback(new Error('邮箱不能为空'))
-      }
-      setTimeout(() => {
-        if (mailReg.test(value)) {
-          callback()
-        } else {
-          callback(new Error('请输入正确的邮箱格式'))
-        }
-      }, 100)
-    }
-    return {
-      paneName:'first',
-      form: {
-        password: '',
-        mailbox:'',
-        code:''
-      },
-      rules: {
-        mailbox: [
-          { validator: checkEmail, trigger: 'change' }
-        ]
+  data(){
+    return{
+      paneName:'first', //初始选中第一个窗口（也就是登录窗口）
+      form:{
+        mailbox:'', //邮箱
+        password:'', //密码
+        code:'' //验证码
       }
     }
   },
   methods: {
-    gotoWelcome: function(){
+    gotoWelcome(){
       this.$router.push('/');
     },
-    login: function () {
-      // 检查表单是否有填写内容      
-      if (this.form.mailbox === '' || this.form.password === '') {
-        this.$message.warning("请输入邮箱和密码!");
-        return;
-      }
-      this.$axios({
-        method: 'post',           /* 指明请求方式，可以是 get 或 post */
-        url: '/api/user/login/',       /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
-        data: qs.stringify({      /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
-          mailbox: this.form.mailbox,
-          password: this.form.password
-        })
-      })
-      .then(res => {              /* res 是 response 的缩写 */
-        switch (res.data.errno) {
-          case 0:
-            this.$message.success("登录成功！");
-            /* 将后端返回的 user 信息使用 vuex 存储起来 */
-            this.$store.state.mailbox=res.data.mailbox;
-            this.$store.state.username=res.data.username;
-            this.$store.commit('login');
-            /* 从 localStorage 中读取 preRoute 键对应的值 */
-            const history_pth = localStorage.getItem('preRoute');
-            /* 若保存的路由为空或为注册路由，则跳转首页；否则跳转前路由（setTimeout表示1000ms后执行） */
-            setTimeout(() => {
-                this.$router.push('/home');
-            }, 1000);
-            break;
-          case 2002:
-            this.$message.error("密码错误!");
-            break;
-          case 2003:
-            this.$message.error("用户不存在!");
-            break;
-        }
-      })
-      .catch(err => {
-        console.log(err);         /* 若出现异常则在终端输出相关信息 */
-      })
-    },
-    toRegister: function() {
-      // 跳转注册的路由
+    gotoRegister(){
       this.$router.push('/register');
     },
-    sendCode: function() {//发送验证码
-      if (this.form.mailbox === '') {
-        this.$message.warning("请输入邮箱!");
-        return;
-      }
-      this.$axios({
-        method: 'get',           
-        url: '/api/user/password/',       
-        params:{
-          mailbox:this.form.mailbox
-        }
-      })
-      .then(res => {
-        switch (res.data.errno) {
-          case 0:
-            this.$message.success("发送成功");
-            break;
-          case 3001:
-            this.$message.error("请求方式错误!");
-            break;
-          case 3002:
-            this.$message.error("用户不存在!");
-            break;
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    login(){ //登录账号，需要和后端交互
+      
+      //需要添加内容
+
+      this.$message.success("登录成功，前往主界面");
+      setTimeout(() => {
+        this.$router.push('/teamlist');
+      }, 1000);
     },
-    checkCode: function(){//验证验证码是否正确，正确就输出用户密码
-      if(this.form.mailbox === '' || this.form.code === ''){
-        this.$message.warning("请填写完整信息!");
-      }
-      this.$axios({
-        method: 'post',           
-        url: '/api/user/password/',       
-        data: qs.stringify({ 
-          mailbox: this.form.mailbox,
-          code: this.form.code
-        })
-      })
-      .then(res => {
-          switch (res.data.errno) {
-          case 0:
-            this.$message.success("密码为:"+res.data.password);
-            setTimeout(() => {
-                this.$router.push('/login');
-            }, 1000);
-            break;
-          case 4002:
-            this.$message.error("验证码错误!");
-            break;
-          case 4003:
-            this.$message.error("用户不存在!");
-            break;
-        }
-      })
-      .catch(err => {
-        console.log(err);         /* 若出现异常则在终端输出相关信息 */
-      })
+    sendCode(){ //发送验证码，需要和后端交互
+      
+      //内容待添加
+      
+      this.$message.success("验证码已发送，请注意接收");
+    },
+    checkCode(){ //校验验证码，需要和后端交互
+      
+      //内容待添加
+      
+      this.$message.success("验证成功，您的密码为：" + "password");
     }
   }
 }
@@ -282,7 +180,7 @@ export default{
 }
 
 @keyframes appear_effect{
-  from{transform: translate(-50%,20%);}
+  from{transform: translate(-50%,0);}
   to{}
 }
 </style>

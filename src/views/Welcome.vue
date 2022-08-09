@@ -1,12 +1,14 @@
 <template>
 <div>
   <div id="top_banner">
-    <img src="../assets/img/moshu_top.png" style="float:left;height:72px;">
+    <div class="top_left">
+      <img src="../assets/img/characters/moshu_top.png" style="float:left;height:72px;">
+    </div>
     <!--如果读取到登录信息就显示登录后的情况-->
-    <ul id="top_left">
+    <div class="top_right">
       <div class="div_btn1" style="float:left" @click="gotoLogin">登录</div>
       <div class="div_btn1" style="float:left" @click="gotoRegister">注册</div>
-    </ul>
+    </div>
   </div>
 
   <div style="height:100px;"></div>
@@ -91,9 +93,8 @@
       </div>
       <div class="info_img" style="width:240px;">
         <p style="margin-bottom:20px;font-size:18px;">访问统计</p>
-        <img src="https://badges.toozhao.com/badges/01G9NYGBKXCVD7GT0YGTKPJET9/blue.svg" style="width:72%;margin:auto;" alt="连接异常">
-        <p style="margin:10px;font-size:18px;">访客统计</p>
-        <img src="https://s01.flagcounter.com/count2/T6vQ/bg_FFFFFF/txt_000000/border_CCCCCC/columns_2/maxflags_4/viewers_0/labels_1/pageviews_1/flags_0/percent_0/" alt="连接异常">
+        <img src="https://badges.toozhao.com/badges/01G9NYGBKXCVD7GT0YGTKPJET9/blue.svg"
+            style="width:100%;margin:auto;" alt="连接异常">
       </div>
     </div>
 
@@ -102,14 +103,11 @@
 
 <script>
 export default {
-  created(){//在localStorage读取登录信息
-
-  },
   methods: {
-    gotoLogin(){
+    gotoLogin(){//跳转到登录界面
         this.$router.push("/login")
     },
-    gotoRegister(){
+    gotoRegister(){//跳转到注册界面
         this.$router.push("/register")
     }
   }
@@ -125,10 +123,16 @@ export default {
   background-color: rgba(255, 255, 255, 0.5);
   z-index: 1;
   box-shadow: 10rpx 10rpx 10rpx rgb(0 0 0 / 18%);
-  overflow: auto;
+  overflow: hidden;
 }
 
-#top_left {
+.top_left {
+  float:left;
+}
+.top_left:hover {
+  cursor: pointer;
+}
+.top_right {
   float:right;
   margin-right:40px;
   font-size: 30px;
