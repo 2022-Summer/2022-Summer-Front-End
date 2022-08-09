@@ -10,7 +10,7 @@
             @click="forward"></el-button>
       </el-button-group>
     </div>
-    <div class="side_top">
+    <div class="side_top" @click="backPage">
       <img src="../../assets/img/characters/team.png" width="140px">
     </div>
     <el-menu background-color="#C2E8E4" text-color="#909399" active-text-color="#446D67"
@@ -73,6 +73,9 @@ export default {
     forward(){
       this.$router.forward()
     },
+    backPage(){//后退一整个界面
+      this.$router.push('/teamlist')
+    },
     clickMenu(item) {
       this.$router.push(item.name);
     }
@@ -110,6 +113,7 @@ export default {
 }
 .side_top:hover {
   padding:55px 0 0 0;
+  cursor: pointer;
 }
 
 .el-menu {

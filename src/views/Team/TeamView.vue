@@ -5,7 +5,7 @@
     <el-aside width="240px" style="overflow:hidden">
       <TeamAside/>
     </el-aside>
-    <el-main>
+    <el-main style="padding:0;">
       <router-view></router-view>
     </el-main>
   </el-container>

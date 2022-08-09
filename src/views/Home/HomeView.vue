@@ -5,7 +5,7 @@
     <el-aside width="240px" style="overflow:hidden">
       <HomeAside/>
     </el-aside>
-    <el-main>
+    <el-main class="el_main" style="padding:0;">
       <!--Home的页面组件-->
       <router-view></router-view>
     </el-main>
