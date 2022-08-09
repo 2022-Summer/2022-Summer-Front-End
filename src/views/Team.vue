@@ -763,7 +763,7 @@ export default {
         url: '/api/team/search/',       
         data: qs.stringify({      
             teamid:this.$store.state.teamid,
-            keyword:this.input
+            keyword:this.inputsearch
         })
       })
       .then(res => {              /* res 是 response 的缩写 */
