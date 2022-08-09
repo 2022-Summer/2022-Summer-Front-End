@@ -129,7 +129,8 @@ export default {
         socket.onopen = function() {
           const msg = JSON.stringify({
             type: 'login',
-            message: ''
+            message: '',
+            wordid:this.$store.state.wordid
           })
           socket.send(msg)
           console.log("websocket打开")
@@ -140,7 +141,7 @@ export default {
         const msg2 = JSON.parse(msg.data)
         console.log('接收数据')
         console.log(msg2.type==='message')
-        if(msg2.type==='message')
+        if(msg2.type==='message' && msg2.wordid === this.$store.state.wordid)
         {
           console.log(JSON.parse(msg2.message))
           let rcv = JSON.parse(msg2.message)
@@ -152,7 +153,8 @@ export default {
       socket.close = function () {
         const msg = JSON.stringify({
           type: 'logout',
-          message: ''
+          message: '',
+          wordid:this.$store.state.wordid
         })
         socket.send(msg)
         console.log("websocket断开")
@@ -186,7 +188,7 @@ export default {
   },
   onChange(editor) {
       console.log("onChange", editor.getHtml()); // onChange 时获取编辑器最新内容
-      let sendData = {html: editor.getHtml(),title:this.title,mailbox:this.$store.state.mailbox}
+      let sendData = {html: editor.getHtml(),title:this.title,mailbox:this.$store.state.mailbox,wordid:this.$store.state.wordid}
       const msg = JSON.stringify({
         type: 'message',
         message: JSON.stringify(sendData)
