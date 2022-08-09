@@ -1,3 +1,4 @@
+import store from '@/store'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/main.vue'
@@ -43,6 +44,11 @@ const routes = [
     path: '/wordDownload',
     name: 'wordDownload',
     component: () => import( '../views/wordDownload.vue')
+  },
+  {
+    path: '/preview',
+    name: 'preview',
+    component: () => import( '../views/preview.vue')
   },
 ]
 
