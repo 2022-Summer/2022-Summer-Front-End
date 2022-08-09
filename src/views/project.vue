@@ -33,7 +33,7 @@
         style="display: inline"
         drag
         :headers="headers"
-        action="http://120.46.200.79:8080/api/project/upload/"
+        action="http://127.0.0.1:8000/api/project/upload/"
         :on-preview="handlePreview"
         :http-request="handleUploadForm"
         :auto-upload="false"
@@ -76,7 +76,7 @@
                 style="display: inline"
                 drag
                 :headers="headers"
-                action="http://120.46.200.79:8080/api/project/upload/"
+                action="http://127.0.0.1:8000/api/project/upload/"
                 :on-preview="handlePreview"
                 :http-request="handleUploadForm"
                 :auto-upload="false"
@@ -106,9 +106,25 @@
             <template slot-scope="scope">
               <el-button type="primary" @click="wordDetail(scope.row.id)">查看文档</el-button>
               <el-button type="danger" @click="wordDelete(scope.row.id)">删除文档</el-button>
+              <el-button type="danger" @click="showdownloadword(scope.row.id)">下载文档</el-button>
             </template>
           </el-table-column>
         </el-table>
+        <el-dialog
+          :visible.sync="wordInfoVisible"
+          width="30%"
+          :before-close="handleClose">
+          <div>
+          <el-radio-group v-model="filetype">
+                    <el-radio label="0">Word</el-radio>
+                    <el-radio label="1">PDF</el-radio>
+                    <el-radio label="2">Markdown</el-radio>
+                </el-radio-group>
+          </div>
+          <span slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="downloadword">确 定</el-button>
+          </span>
+        </el-dialog>
         <el-button type="primary" @click="newword" class="bottomButton" round>新建文档</el-button>
       </div>
     </el-main>
@@ -123,6 +139,9 @@ export default {
       projectIndex: 3,//不同值显示不同板块
       file1InfoVisible: false,
       file2InfoVisible: false,
+      wordInfoVisible:false,
+      wordID:0,
+      filetype:'',
       project: {
         id: "1",
         name: "test"
@@ -223,6 +242,31 @@ export default {
     to3: function () {
       this.projectIndex = 3;
     },
+    showdownloadword(val){
+        this.wordInfoVisible = true;
+        this.wordID = val;
+    },
+    downloadword:function(){
+      let url = 'http://127.0.0.1:8000/api/project/downloadword/?wordid=' + this.wordID + '&type=' + this.filetype;
+      this.$axios({
+        method: 'get',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/project/downloadword/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        params: {
+          wordid: this.wordID,
+          filetype:this.filetype
+        }
+      })
+      .then((res) => {
+      switch (res.data.errno) {
+              case 0:
+                break;
+            }
+          })
+          .catch(err => {
+            console.log(err);         /* 若出现异常则在终端输出相关信息 */
+          });
+      window.open(url, '_blank');
+    },
     newPrototype() {/*新建原型*/
       this.$store.state.prototypeid = 0;
       this.$router.push('/prototype');
@@ -284,7 +328,7 @@ export default {
           });
     },
     Detail(val) {
-      let url = 'http://120.46.200.79:8080/api/project/download/?fileid=' + val;
+      let url = 'http://127.0.0.1:8000/api/project/download/?fileid=' + val;
       this.$axios({
         method: 'get',           /* 指明请求方式，可以是 get 或 post */
         url: '/api/project/download/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
