@@ -129,8 +129,8 @@ export default {
         socket.onopen = function() {
           const msg = JSON.stringify({
             type: 'login',
+            wordid:this.$store.state.wordid,
             message: '',
-            wordid:this.$store.state.wordid
           })
           socket.send(msg)
           console.log("websocket打开")
@@ -188,9 +188,10 @@ export default {
   },
   onChange(editor) {
       console.log("onChange", editor.getHtml()); // onChange 时获取编辑器最新内容
-      let sendData = {html: editor.getHtml(),title:this.title,mailbox:this.$store.state.mailbox,wordid:this.$store.state.wordid}
+      let sendData = {html: editor.getHtml(),title:this.title,mailbox:this.$store.state.mailbox}
       const msg = JSON.stringify({
         type: 'message',
+        wordid:this.$store.state.wordid,
         message: JSON.stringify(sendData)
       })
       //sendData.fromUser = this.curUser
