@@ -114,7 +114,7 @@ export default {
       else {
         var self = this
         console.log('支持Websocket')
-        var socketUrl = "http://localhost:8000/word/" + this.$store.state.wordid
+        var socketUrl = "http://localhost:8000/word/"
         socketUrl = socketUrl.replace("https", "ws").replace("http", "ws")//这个没看明白
         console.log(socketUrl)
         if(socket!==null){
@@ -129,7 +129,7 @@ export default {
         socket.onopen = function() {
           const msg = JSON.stringify({
             type: 'login',
-            wordid:this.$store.state.wordid,
+            wordid:self.$store.state.wordid,
             message: '',
           })
           socket.send(msg)
@@ -141,7 +141,7 @@ export default {
         const msg2 = JSON.parse(msg.data)
         console.log('接收数据')
         console.log(msg2.type==='message')
-        if(msg2.type==='message' && msg2.wordid === this.$store.state.wordid)
+        if(msg2.type==='message' && msg2.wordid === self.$store.state.wordid)
         {
           console.log(JSON.parse(msg2.message))
           let rcv = JSON.parse(msg2.message)
@@ -154,7 +154,7 @@ export default {
         const msg = JSON.stringify({
           type: 'logout',
           message: '',
-          wordid:this.$store.state.wordid
+          wordid:self.$store.state.wordid
         })
         socket.send(msg)
         console.log("websocket断开")
