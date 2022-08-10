@@ -54,13 +54,13 @@
       </div>
     </div>
     <div class="intro_img">
-      <img src="../assets/img/test_img.jpg">
+      <img src="../assets/img/pic3.png">
     </div>
   </div>
 
   <div class="div_intro1">
     <div class="intro_img">
-      <img src="../assets/img/img_test.jpg">
+      <img src="../assets/img/pic2.png">
     </div>
     <div class="intro_text">
       <div class="text_head">
@@ -83,7 +83,7 @@
         <div class="div_btn2" style="margin:auto;margin-top:40px;" @click="gotoRegister">立即使用</div>
       </div>
       <div class="intro_img">
-        <img src="../assets/img/img_test.jpg">
+        <img src="../assets/img/test_img.jpg">
       </div>
     </div>
 
