@@ -4,7 +4,7 @@
     <div>
       <div slot="header" id="postHead">
         <el-input placeholder="请输入标题" v-model="title" clearable>
-        <el-button slot="append" icon="el-icon-document">
+        <el-button slot="append" icon="el-icon-document" @click="saveword">
           保存文档
         </el-button>
         </el-input>
@@ -81,8 +81,6 @@ export default {
       } else {
         var self = this
         console.log('支持Websocket')
-        //var socketUrl = "http://localhost:8000/word/" + this.$store.state.wordid
-        //socketUrl = socketUrl.replace("https", "ws").replace("http", "ws")//这个没看明白
         var socketUrl = "http://localhost:8008/"
         socketUrl = socketUrl.replace("https", "ws").replace("http", "ws")//这个没看明白
         console.log(socketUrl)

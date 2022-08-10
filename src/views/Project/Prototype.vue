@@ -1,71 +1,73 @@
 <template>
-<div id="prototype">
-  <div class="invite_box">
-    <!--需要v-if特殊判断没有邀请的情况，没有邀请也需要做样式-->
-    <div v-if="File1.length==0">
-      <p style="font-size:21px;weight:600;">暂无原型，赶紧去创建/上传吧</p>
-    </div>
+  <div id="prototype">
     <el-dialog
-          :visible.sync="info"
-          width="30%"
-          :before-close="handleClose">
-<div>
-      <el-input v-model="inputname" placeholder="请输入原型名称"></el-input>
-<div>
-</div>
-</div>
-          <span slot="footer" class="dialog-footer">
+        :visible.sync="info"
+        width="30%"
+        :before-close="handleClose">
+      <div>
+        <el-input v-model="inputname" placeholder="请输入原型名称"></el-input>
+        <div>
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
             <el-button type="primary" @click="newaxure">新建</el-button>
           </span>
-        </el-dialog>
-    <div v-for="file in File1" :key="file.id" class="el_card">
-      <el-card class="box-card" shadow="hover">
-        <div slot="header" class="clearfix">
-          <span><b>设计原型</b></span>
-          <el-button style="float:right;margin:5px;color:darksalmon;" type="text" @click="del(file.id)">
-            <b>删除</b>
-          </el-button>
-          <el-button style="float:right;margin:5px;color:green;" type="text" @click="open(file.id,file.title)">
-            <b>打开</b>
-          </el-button>
-        </div>
-        <div class="box_text">
-          <p><b>文档名称：</b>{{file.title}}</p>
-          <p><b>编辑时间：</b>{{file.lastEditTime}}</p>
-        </div>
-      </el-card>
+    </el-dialog>
+    <div class="invite_box">
+      <!--需要v-if特殊判断没有邀请的情况，没有邀请也需要做样式-->
+      <div v-if="File1.length==0">
+        <p style="font-size:21px;weight:600;">暂无原型，赶紧去创建/上传吧</p>
+      </div>
+      <div v-for="file in File1" :key="file.id" class="el_card">
+        <el-card class="box-card" shadow="hover">
+          <div slot="header" class="clearfix">
+            <span><b>设计原型</b></span>
+            <el-button style="float:right;margin:5px;color:darksalmon;" type="text" @click="del(file.id)">
+              <b>删除</b>
+            </el-button>
+            <el-button style="float:right;margin:5px;color:green;" type="text" @click="open(file.id,file.title)">
+              <b>打开</b>
+            </el-button>
+          </div>
+          <div class="box_text">
+            <p><b>文档名称：</b>{{ file.title }}</p>
+            <p><b>编辑时间：</b>{{ file.lastEditTime }}</p>
+          </div>
+        </el-card>
+      </div>
+      <br>
+      <el-button class="el_btn1" @click="buildProject">
+        新建原型
+      </el-button>
     </div>
-    <br>
-    <el-button class="el_btn1" @click="buildProject">
-      新建原型
-    </el-button>
   </div>
-</div>
 </template>
 
 <script>
+import qs from "qs";
+
 export default {
   data() {
     return {
-      inputname:"",
-      info:false,
+      inputname: "",
+      info: false,
       File1: [
         {
-        id: 1,
-        title: 'xx.txt',
-        lastEditTime: '2020.1.1'
+          id: 1,
+          title: 'xx.txt',
+          lastEditTime: '2020.1.1'
         }
       ],
     }
   },
   created() {
-      this.$axios({
-        method: 'get',           /* 指明请求方式，可以是 get 或 post */
-        url: '/api/project/view/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
-        params: {
-          projectid: this.$store.state.projectid,
-        }
-        })
+    this.$axios({
+      method: 'get',           /* 指明请求方式，可以是 get 或 post */
+      url: '/api/project/view/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+      params: {
+        projectid: this.$store.state.projectid,
+      }
+    })
         .then((res) => {
           switch (res.data.errno) {
             case 0:
@@ -78,8 +80,8 @@ export default {
         });
   },
   methods: {
-    del(val){
-        this.$axios({
+    del(val) {
+      this.$axios({
         method: 'post',           /* 指明请求方式，可以是 get 或 post */
         url: '/api/project/deleteaxure/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
         data: qs.stringify({      /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
@@ -97,17 +99,17 @@ export default {
             console.log(err);         /* 若出现异常则在终端输出相关信息 */
           });
     },
-    open(val1,val2){
-      this.$store.state.prototypeid=val1;
-      this.$store.state.axurename=val2;
-      this.$router.push('/prototypepage');
+    open(val1, val2) {
+      this.$store.state.prototypeid = val1;
+      this.$store.state.axurename = val2;
+      this.$router.push('/design');
     },
-    buildProject(){
+    buildProject() {
       this.info = true;
       this.$store.state.prototypeid = 0;
     },
-    newaxure(){
-      this.$store.state.axurename=this.inputname;
+    newaxure() {
+      this.$store.state.axurename = this.inputname;
       this.$router.push('/design');
     }
   }
@@ -119,29 +121,33 @@ export default {
 #prototype {
   min-height: calc(100vh - 72px);
   background-image: url("../../assets/img/backgrounds/3.png");
-  background-repeat:no-repeat;
+  background-repeat: no-repeat;
   background-size: 30%;
-  background-position:right top;
+  background-position: right top;
 }
 
 .box_text {
   font-size: 16px;
   line-height: 40px;
 }
+
 .clearfix:before,
 .clearfix:after {
   display: table;
   content: "";
 }
+
 .clearfix:after {
   clear: both
 }
+
 .box-card {
   width: 320px;
   background-color: rgba(194, 232, 228, 0.5);
   border-radius: 20px;
   transition: 0.8s;
 }
+
 .box-card:hover {
   background-color: rgba(119, 171, 164, 0.5);
 }
@@ -154,40 +160,45 @@ export default {
   border-radius: 40px;
   line-height: 50px;
   position: absolute;
-  top: 50%;  left: calc(50% + 120px);  
-	transform: translate(-50%,-50%);
+  top: 50%;
+  left: calc(50% + 120px);
+  transform: translate(-50%, -50%);
   transition: 1.0s;
   background-color: rgba(255, 255, 255, 0.5);
-  box-shadow: 0 12px 18px 0 rgba(0,0,0,0.24),0 16px 40px 0 rgba(0,0,0,0.19);
+  box-shadow: 0 12px 18px 0 rgba(0, 0, 0, 0.24), 0 16px 40px 0 rgba(0, 0, 0, 0.19);
   animation: appear_effect 1.5s;
 }
-.el_card{
+
+.el_card {
   display: inline-block;
-  margin:20px;
+  margin: 20px;
 }
 
 .el_btn1 {
   width: 40%;
-  font-size:18px;
-  color:white;
+  font-size: 18px;
+  color: white;
   background-color: #89C7BF;
-  border-radius:20px;
+  border-radius: 20px;
   border: 1px solid rgba(150, 169, 183, 0.413);
   padding: 10px;
   transition: 0.2s;
 }
+
 .el_btn1:hover {
-  width:48%;
-  box-shadow: 0 4px 6px 0 rgba(0,0,0,0.25),0 8px 16px 0 rgba(0,0,0,0.20);
+  width: 48%;
+  box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.25), 0 8px 16px 0 rgba(0, 0, 0, 0.20);
 }
+
 .el_btn1:active {
   background-color: #dff6f4;
 }
 
-@keyframes appear_effect{
-  from{
-    transform: translate(-50%,-25%);
+@keyframes appear_effect {
+  from {
+    transform: translate(-50%, -25%);
   }
-  to{}
+  to {
+  }
 }
 </style>

@@ -45,6 +45,8 @@
 </template>
 
 <script>
+import qs from "qs";
+
 export default {
   data() {
     return {
@@ -93,19 +95,20 @@ export default {
     },
     showdownloadword(val){
         this.info = true;
-        this.wordID = val;
+        this.wordid = val;
     },
     downloadword:function(){
-      let url = 'http://120.46.200.79:8080/api/project/downloadword/?wordid=' + this.wordid + '&type=' + this.filetype;
+      let url = 'http://localhost:8080/api/project/downloadword/?wordid=' + this.wordid + '&type=' + this.filetype;
       this.$axios({
         method: 'get',           /* 指明请求方式，可以是 get 或 post */
         url: '/api/project/downloadword/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
         params: {
           wordid: this.wordid,
-          filetype:this.filetype
+          type:this.filetype
         }
       })
       .then((res) => {
+        this.$message.success(this.wordid)
       switch (res.data.errno) {
               case 0:
                 break;
@@ -154,7 +157,7 @@ export default {
     },
     wordDetail(val) {/*查看id为val的文档详情*/
       this.$store.state.wordid = val;
-      this.$router.push('/word');
+      this.$router.push('/wordpage');
     },
   }
 }

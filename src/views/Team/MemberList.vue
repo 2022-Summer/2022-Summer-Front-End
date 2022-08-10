@@ -1,6 +1,5 @@
 <template>
   <div id="memberlist">
-    <a href="/word">To Project</a>
     <div class="member_box">
       <!--需要v-if特殊判断没有邀请的情况，没有邀请也需要做样式-->
       <div v-if="Members.length == 0">
@@ -46,6 +45,8 @@
 </template>
 
 <script>
+import qs from "qs";
+
 export default {
   data() {
     return {

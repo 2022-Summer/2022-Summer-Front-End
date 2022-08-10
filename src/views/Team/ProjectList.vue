@@ -5,6 +5,11 @@
       <div v-if="Projects.length==0">
         <p style="font-size:21px;weight:600;">当前团队还没有项目呢，赶快去创建吧</p>
       </div>
+      <el-input v-model="inputsearch" placeholder="请输入标题关键词进行搜索" @keyup.enter.native="search">
+        <template slot="append">
+          <el-button type="primary" icon="el-icon-search" @click="search">搜索</el-button>
+        </template>
+      </el-input>
       <div v-for="proj in Projects" :key="proj.id" class="el_card">
         <el-card class="box-card" shadow="hover">
           <div slot="header" class="clearfix">
@@ -47,6 +52,7 @@ import qs from "qs";
 export default{
   data(){
     return{
+      inputsearch:'',
       renameVisible:false,
       projectRenamed:0,
       input:'',
@@ -98,6 +104,27 @@ export default{
     }
   },
   methods: {
+    search() {
+      this.$axios({
+        method: 'post',
+        url: '/api/team/search/',
+        data: qs.stringify({
+          teamid: this.$store.state.teamid,
+          keyword: this.inputsearch
+        })
+      })
+        .then(res => {              /* res 是 response 的缩写 */
+          switch (res.data.errno) {
+            case 0:
+              this.Projects = res.data.projects;
+              this.$message.success("搜索成功");
+              break;
+          }
+        })
+        .catch(err => {
+          console.log(err);         /* 若出现异常则在终端输出相关信息 */
+        })
+    },
     projectDetail(val) {//跳转项目详情页，val为项目id
       this.$store.state.projectid = val;
       this.$router.push('/word');

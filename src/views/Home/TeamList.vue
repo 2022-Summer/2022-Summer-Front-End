@@ -1,6 +1,5 @@
 <template>
 <div id="teamlist">
-  <a href="/memberlist">goto /memberlist</a><br>
   <div class="invite_box">
     <!--需要v-if特殊判断没有团队，没有团队也需要做样式-->
     <div v-if="myTeams.length==0">

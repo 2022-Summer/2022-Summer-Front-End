@@ -110,7 +110,7 @@ export default{
               this.$message.error("请求方式错误!");
               break;
             case 1002:
-              this.$message.error("邮箱格式错误!");
+              this.$message.error("邮箱已注册!");
               break;
           }
         })
