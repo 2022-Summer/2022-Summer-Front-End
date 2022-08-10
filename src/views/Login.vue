@@ -53,14 +53,33 @@
 </template>
 
 <script>
+import qs from "qs";
 export default{
   data(){
+    var checkEmail = (rule, value, callback) => {
+      const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
+      if (!value) {
+        return callback(new Error('邮箱不能为空'))
+      }
+      setTimeout(() => {
+        if (mailReg.test(value)) {
+          callback()
+        } else {
+          callback(new Error('请输入正确的邮箱格式'))
+        }
+      }, 100)
+    }
     return{
       paneName:'first', //初始选中第一个窗口（也就是登录窗口）
       form:{
         mailbox:'', //邮箱
         password:'', //密码
         code:'' //验证码
+      },
+      rules: {
+        mailbox: [
+          { validator: checkEmail, trigger: 'change' }
+        ]
       }
     }
   },
@@ -72,25 +91,102 @@ export default{
       this.$router.push('/register');
     },
     login(){ //登录账号，需要和后端交互
-      
-      //需要添加内容
-
-      this.$message.success("登录成功，前往主界面");
-      setTimeout(() => {
-        this.$router.push('/teamlist');
-      }, 1000);
+      // 检查表单是否有填写内容      
+      if (this.form.mailbox === '' || this.form.password === '') {
+        this.$message.warning("请输入邮箱和密码!");
+        return;
+      }
+      this.$axios({
+        method: 'post',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/user/login/',       /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        data: qs.stringify({      /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+          mailbox: this.form.mailbox,
+          password: this.form.password
+        })
+      })
+        .then(res => {              /* res 是 response 的缩写 */
+          switch (res.data.errno) {
+            case 0:
+              this.$message.success("登录成功！");
+              /* 将后端返回的 user 信息使用 vuex 存储起来 */
+              this.$store.state.mailbox = res.data.mailbox;
+              this.$store.state.username = res.data.username;
+              this.$store.commit('login');
+              /* 从 localStorage 中读取 preRoute 键对应的值 */
+              const history_pth = localStorage.getItem('preRoute');
+              /* 若保存的路由为空或为注册路由，则跳转首页；否则跳转前路由（setTimeout表示1000ms后执行） */
+              setTimeout(() => {
+                this.$router.push('/teamlist');
+              }, 1000);
+              break;
+            case 2002:
+              this.$message.error("密码错误!");
+              break;
+            case 2003:
+              this.$message.error("用户不存在!");
+              break;
+          }
+        })
+        .catch(err => {
+          console.log(err);         /* 若出现异常则在终端输出相关信息 */
+        })
     },
     sendCode(){ //发送验证码，需要和后端交互
-      
-      //内容待添加
-      
-      this.$message.success("验证码已发送，请注意接收");
+      this.$axios({
+        method: 'get',
+        url: '/api/user/password/',
+        params: {
+          mailbox: this.form.mailbox
+        }
+      })
+        .then(res => {              /* res 是 response 的缩写 */
+          switch (res.data.errno) {
+            case 0:
+              this.$message.success("验证码已发送，请注意接收");
+              break;
+            case 3001:
+              this.$message.error("请求方式错误!");
+              break;
+            case 3002:
+              this.$message.error("用户不存在!");
+              break;
+          }
+        })
+        .catch(err => {
+          console.log(err);         /* 若出现异常则在终端输出相关信息 */
+        })
     },
-    checkCode(){ //校验验证码，需要和后端交互
-      
-      //内容待添加
-      
-      this.$message.success("验证成功，您的密码为：" + "password");
+    checkCode() { //校验验证码，需要和后端交互
+      if (this.form.mailbox === '' || this.form.code === '') {
+        this.$message.warning("请填写完整信息");
+      }
+      this.$axios({
+        method: 'post',
+        url: '/api/user/password/',
+        data: qs.stringify({
+          mailbox: this.form.mailbox,
+          code: this.form.code
+        })
+      })
+        .then(res => {
+          switch (res.data.errno) {
+            case 0:
+              this.$message.success("验证成功，您的密码为：" + res.data.password);
+              setTimeout(() => {
+                this.$router.push('/Login');
+              }, 1000);
+              break;
+            case 4002:
+              this.$message.error("验证码错误!");
+              break;
+            case 4003:
+              this.$message.error("用户不存在!");
+              break;
+          }
+        })
+        .catch(err => {
+          console.log(err);         /* 若出现异常则在终端输出相关信息 */
+        })
     }
   }
 }

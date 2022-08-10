@@ -56,21 +56,29 @@ export default {
             "invitor":"zy2",
             "inviteTime":"2020.1.1"
           },
-          {
-            "id":3,//邀请id
-            "teamID":3,//发出邀请的队伍id
-            "teamName":"没头发",
-            "invitor":"zy1",//发出邀请者
-            "inviteTime":"2020.1.1"
-          },
-          {
-            "id":4,
-            "teamID":4,
-            "teamName":"有头发",
-            "invitor":"zy2",
-            "inviteTime":"2020.1.1"
-          }
         ]
+    }
+  },
+  created() {
+    if (!this.$store.state.islogin) {
+      this.$message.warning("请先登录");
+      this.$router.push('/login');
+    }
+    else {
+      this.$axios({
+        method: 'get',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/user/invited/'     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+      })
+        .then((res) => {
+          switch (res.data.errno) {
+            case 0:
+              this.myInvitations = res.data.myInvitations;
+              break;
+          }
+        })
+        .catch(err => {
+          console.log(err);         /* 若出现异常则在终端输出相关信息 */
+        });
     }
   }
 }
