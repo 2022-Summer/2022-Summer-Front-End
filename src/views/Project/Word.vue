@@ -30,8 +30,9 @@
         新建文档
       </el-button>
     </div>
-    <el-dialog :visible.sync="info" width="30%" :before-close="handleClose">
-      <div>
+    <el-dialog :visible.sync="info" width="30%" :before-close="handleClose"
+        style="border-radius:20px;">
+      <div style="border-radius:20px;">
         <el-radio-group v-model="filetype">
           <el-radio label="1">PDF</el-radio>
           <el-radio label="2">Markdown</el-radio>

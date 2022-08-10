@@ -3,7 +3,7 @@
     <div class="form_box2">
       <img src="../../assets/img/characters/filecenter.png">
         <el-tree :data="Files" :expand-on-click-node="false" class="el_tree">
-        <span class="custom-tree-node" slot-scope="{ node, data }">
+        <span class="custom-tree-node" slot-scope="{ node, data }" style="line-height:100px;">
           <span>{{ node.label }}</span>
             <span v-if="data.wordid > 0">
               <d>&nbsp;最后编辑人:{{ data.lastEditor }}</d>
@@ -60,6 +60,7 @@
 .el_tree{
   font-size: 24px;
   font-weight: 600;
+  line-height: 50px;
   padding: 20px;
   background-color: #EBFDFB;
 }
