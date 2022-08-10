@@ -115,9 +115,6 @@ export default {
       if(res.data.errno===0) {
         self.$store.state.prototypeid = res.data.axureID;
         self.content = res.data.axureContent
-        //console.log(res.data.axureContent)
-        //console.log('content:',res.data.data.axureContent)
-        //console.log(JSON.parse(res.data.axureContent))
         if(self.content)
         window.topology.open(res.data.axureContent)
       }
@@ -129,22 +126,12 @@ export default {
     if (window.registerTools) {
       window.registerTools();
       if (window.topologyTools) {
-        this.materials.system[0].list = window.topologyTools;
+        self.materials.system[0].list = window.topologyTools;
       }
-      //确保从预览页面返回是时清空存储
-      const json = sessionStorage.getItem('topologyData');
-      if (!this.$route.query.id && json) {
-        this.data = JSON.parse(json);
-        setTimeout(() => {
-          // 读到后清除对应 session
-          sessionStorage.removeItem('topologyData');
-        }, 200);
-      }
-     // console.log('mounted')
-        window.topology.open(this.axurecontent)
+        window.topology.open(self.content)
     }
-    this.settimer()
-    this.init()
+    self.settimer()
+    self.init()
   },
   beforeDestroy() {
     if (this.timer !== null)
@@ -186,8 +173,6 @@ export default {
           if(socket.readyState===1){
             socket.send(msg)}
           // console.log("websocket打开")
-          // socket.send("客户端消息: 用户" + this.userId + location.href + new Date())
-          // socket.send('用户登录')
         }
         console.log('set onopen',socket)
       }
@@ -251,6 +236,7 @@ export default {
       let data = new FormData()
       data.append('mailbox',this.$store.state.mailbox)
       data.append('axurename',this.$store.state.axurename)
+      data.append('projectid',this.$store.state.projectid)
       data.append('axureID',this.$store.state.prototypeid)
       data.append('axureData',JSON.stringify(window.topology.data))
       let self = this
@@ -322,12 +308,6 @@ export default {
           break;
         case 'preview':
           // 点击工具栏“预览”
-          // 点击工具栏“预览”
-          // 保存当前编辑数据到sessionStorage
-          sessionStorage.setItem(
-              'topologyData',
-              JSON.stringify(window.topology.pureData())
-          );
           this.$router.push({
             path: '/preview',
             query: {id: '114', r: '1'}
