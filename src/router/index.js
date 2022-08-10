@@ -55,6 +55,11 @@ const routes = [
     component: designTool,
   
   }, 
+  {
+    path: '/preview',
+    name: 'preview',
+    component: () => import( '../views/preview.vue')
+  },
 ]
 
 const router = new VueRouter({

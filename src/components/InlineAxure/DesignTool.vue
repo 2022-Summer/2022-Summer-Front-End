@@ -110,7 +110,7 @@ export default {
     let self = this
     this.$axios({
       method: 'post',
-      url: '/project/viewaxure/',
+      url: '/api/project/viewaxure/',
       data: data
     }).then(res => {
       if(res.data.errno===0) {
@@ -182,11 +182,9 @@ export default {
         if(msg2.type==='message' && msg2.axureID === self.$store.state.prototypeid)
         {
           let rcv = JSON.parse(msg2.message)
-          if(rcv.axureID === self.axureid){
             window.topology.open(rcv.content)
             self.content=JSON.stringify(window.topology.pureData())
             self.preContent=self.content
-          }
         }
       }
       // 关闭
