@@ -29,6 +29,11 @@ const routes = [
         name: 'teamlist',
         component: () => import('../views/Home/TeamList.vue')
       },
+      {//“新建团队”页面
+        path: '/buildteam',
+        name: 'buildteam',
+        component: () => import('../views/Home/BuildTeam.vue')
+      },
       {//“组队邀请”页面
         path: '/invitation',
         name: 'invitation',
@@ -70,6 +75,11 @@ const routes = [
         path: '/teamInfo',
         name: 'teaminfo',
         component: () => import('../views/Team/TeamInfo.vue')
+      },
+      {//“新建项目”页面
+        path: '/buildproject',
+        name: 'buildproject',
+        component: () => import('../views/Team/BuildProject.vue')
       }
     ]
   },
@@ -92,6 +102,16 @@ const routes = [
         path: '/draw',
         name: 'draw',
         component: () => import('../views/Project/Draw.vue')
+      },
+      {//“编辑文档”编辑页面
+        path: '/wordpage',
+        name: 'wordpage',
+        component: () => import('../views/Project/WordPage.vue')
+      },
+      {//“原型设计”编辑页面
+        path: '/prototypepage',
+        name: 'prototypepage',
+        component: () => import('../views/Project/PrototypePage.vue')
       },
       {//“图绘制”编辑页面
         path: '/drawpage',

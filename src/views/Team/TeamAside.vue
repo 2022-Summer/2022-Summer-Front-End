@@ -60,6 +60,12 @@ export default {
           label: "团队信息",
           icon: "s-custom",
         },
+        {
+          index: "6",
+          name: "buildproject",
+          label: "新建项目",
+          icon: "s-opportunity",
+        }
       ],
     };
   },

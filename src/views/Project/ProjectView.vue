@@ -16,9 +16,6 @@
 import PageHeader from "../../components/PageHeader.vue"
 import ProjectAside from "./ProjectAside.vue"
 export default {
-  created(){
-    this.$router.push('/word')
-  },
   components: { PageHeader, ProjectAside }
 }
 </script>

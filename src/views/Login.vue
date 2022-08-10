@@ -56,7 +56,7 @@
 import qs from "qs";
 export default{
   data(){
-    var checkEmail = (rule, value, callback) => {
+    var checkEmail = (rule, value, callback) => {//这部分目前还没有用上
       const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
       if (!value) {
         return callback(new Error('邮箱不能为空'))
@@ -83,6 +83,14 @@ export default{
       }
     }
   },
+  created(){
+    if(this.$store.state.islogin){
+    //  this.$message.success("您已经登录，将跳转到主页")
+      setTimeout(() => {
+        this.$router.push('/teamlist')
+      }, 1000)
+    }
+  },
   methods: {
     gotoWelcome(){
       this.$router.push('/');
@@ -90,46 +98,45 @@ export default{
     gotoRegister(){
       this.$router.push('/register');
     },
-    login(){ //登录账号，需要和后端交互
-      // 检查表单是否有填写内容      
+    login() { 
       if (this.form.mailbox === '' || this.form.password === '') {
         this.$message.warning("请输入邮箱和密码!");
         return;
       }
       this.$axios({
-        method: 'post',           /* 指明请求方式，可以是 get 或 post */
-        url: '/api/user/login/',       /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
-        data: qs.stringify({      /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+        method: 'post', 
+        url: '/api/user/login/',
+        data: qs.stringify({
           mailbox: this.form.mailbox,
           password: this.form.password
         })
       })
-        .then(res => {              /* res 是 response 的缩写 */
-          switch (res.data.errno) {
-            case 0:
-              this.$message.success("登录成功！");
-              /* 将后端返回的 user 信息使用 vuex 存储起来 */
-              this.$store.state.mailbox = res.data.mailbox;
-              this.$store.state.username = res.data.username;
-              this.$store.commit('login');
-              /* 从 localStorage 中读取 preRoute 键对应的值 */
-              const history_pth = localStorage.getItem('preRoute');
-              /* 若保存的路由为空或为注册路由，则跳转首页；否则跳转前路由（setTimeout表示1000ms后执行） */
-              setTimeout(() => {
-                this.$router.push('/teamlist');
-              }, 1000);
-              break;
-            case 2002:
-              this.$message.error("密码错误!");
-              break;
-            case 2003:
-              this.$message.error("用户不存在!");
-              break;
-          }
-        })
-        .catch(err => {
-          console.log(err);         /* 若出现异常则在终端输出相关信息 */
-        })
+      .then(res => {
+        switch (res.data.errno) {
+          case 0:
+            this.$message.success("登录成功！");
+            /* 将后端返回的 user 信息使用 vuex 存储起来 */
+            this.$store.state.mailbox = res.data.mailbox;
+            this.$store.state.username = res.data.username;
+            this.$store.commit('login');
+            /* 从 localStorage 中读取 preRoute 键对应的值 */
+            //const history_pth = localStorage.getItem('preRoute');
+            /* 若保存的路由为空或为注册路由，则跳转首页；否则跳转前路由（setTimeout表示1000ms后执行） */
+            setTimeout(() => {
+              this.$router.push('/teamlist');
+            }, 1000);
+            break;
+          case 2002:
+            this.$message.error("密码错误!");
+            break;
+          case 2003:
+            this.$message.error("用户不存在!");
+            break;
+        }
+      })
+      .catch(err => {
+        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      })
     },
     sendCode(){ //发送验证码，需要和后端交互
       this.$axios({

@@ -9,8 +9,12 @@
       <el-card class="box-card" shadow="hover">
         <div slot="header" class="clearfix">
           <span><b>邀请您加入团队</b></span>
-          <el-button style="float:right;margin:5px;color:darksalmon;" type="text"><b>拒绝</b></el-button>
-          <el-button style="float:right;margin:5px;" type="text"><b>同意</b></el-button>
+          <el-button style="float:right;margin:5px;color:darksalmon;" type="text" @click="refuse(inv.id)">
+            <b>拒绝</b>
+          </el-button>
+          <el-button style="float:right;margin:5px;" type="text" @click="accept(inv.id)">
+            <b>同意</b>
+          </el-button>
         </div>
         <div class="box_text">
           <p><b>邀请人：</b>{{inv.invitor}}</p>
@@ -27,58 +31,132 @@
 export default {
   data() {
     return {
-        myInvitations:[
-          {
-            "id":1,//邀请id
-            "teamID":3,//发出邀请的队伍id
-            "teamName":"没头发",
-            "invitor":"zy1",//发出邀请者
-            "inviteTime":"2020.1.1"
-          },
-          {
-            "id":2,
-            "teamID":4,
-            "teamName":"有头发",
-            "invitor":"zy2",
-            "inviteTime":"2020.1.1"
-          },
-          {
-            "id":3,//邀请id
-            "teamID":3,//发出邀请的队伍id
-            "teamName":"没头发",
-            "invitor":"zy1",//发出邀请者
-            "inviteTime":"2020.1.1"
-          },
-          {
-            "id":4,
-            "teamID":4,
-            "teamName":"有头发",
-            "invitor":"zy2",
-            "inviteTime":"2020.1.1"
-          },
-        ]
+      myInvitations:[
+        {
+          "id":1,//邀请id
+          "teamID":3,//发出邀请的队伍id
+          "teamName":"没头发",
+          "invitor":"zy1",//发出邀请者
+          "inviteTime":"2020.1.1"
+        },
+        {
+          "id":2,
+          "teamID":4,
+          "teamName":"有头发",
+          "invitor":"zy2",
+          "inviteTime":"2020.1.1"
+        }
+      ]
     }
   },
   created() {
+    console.log("invitation页面创建")
     if (!this.$store.state.islogin) {
-      this.$message.warning("请先登录");
+      this.$message.warning("From /invitation: 请先登录");
       this.$router.push('/login');
     }
     else {
       this.$axios({
+        method: 'get', 
+        url: '/api/user/invited/' 
+      })
+      .then((res) => {
+        switch (res.data.errno) {
+          case 0:
+            this.myInvitations = res.data.myInvitations;
+            break;
+        }
+      })
+      .catch(err => {
+        this.$message.error("连接失败，获取邀请信息失败！")
+        console.log(err);
+      });
+    }
+  },
+  methods: {
+    accept(val){//当前用户加入主键为val的队伍，身份普通成员
+      this.$axios({
+        method: 'post',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/user/invited/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        data: qs.stringify({      /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+          id: val,
+          op: 0
+        })
+      })
+      .then((res) => {
+        switch (res.data.errno) {
+          case 0:
+            this.$message.success("加入成功");
+            break;
+        }
+      })
+      .catch(err => {
+        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      });
+      this.$axios({
         method: 'get',           /* 指明请求方式，可以是 get 或 post */
         url: '/api/user/invited/'     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
       })
-        .then((res) => {
-          switch (res.data.errno) {
-            case 0:
-              this.myInvitations = res.data.myInvitations;
-              break;
-          }
+      .then((res) => {
+        switch (res.data.errno) {
+          case 0:
+            this.myInvitations = res.data.myInvitations;
+            break;
+        }
+      })
+      .catch(err => {
+        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      });
+      /*更新团队列表
+      this.$axios({
+        method: 'get',           
+        url: '/api/user/team/'    
+      })
+      .then((res) => {
+        switch (res.data.errno) {
+          case 0:
+            this.myTeams = res.data.myTeams;
+            break;
+        }
+      })
+      .catch(err => {
+        console.log(err);        
+      });
+      */
+    },
+    refuse(val){//直接删除主键为val的邀请即可
+      this.$axios({
+        method: 'post',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/user/invited/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        data: qs.stringify({      /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+          id: val,
+          op: 1
         })
-        .catch(err => {
-          console.log(err);         /* 若出现异常则在终端输出相关信息 */
-        });
+      })
+      .then((res) => {
+        switch (res.data.errno) {
+          case 0:
+            this.$message.success("已拒绝邀请");
+            break;
+        }
+      })
+      .catch(err => {
+        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      });
+      this.$axios({
+        method: 'get',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/user/invited/'     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+      })
+      .then((res) => {
+        switch (res.data.errno) {
+          case 0:
+            this.myInvitations = res.data.myInvitations;
+            break;
+        }
+      })
+      .catch(err => {
+        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+      });
     }
   }
 }

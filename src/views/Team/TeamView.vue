@@ -16,9 +16,6 @@
 import PageHeader from "../../components/PageHeader.vue"
 import TeamAside from "./TeamAside.vue"
 export default {
-  created(){
-    this.$router.push('/memberlist')
-  },
   components: { PageHeader, TeamAside }
 }
 </script>

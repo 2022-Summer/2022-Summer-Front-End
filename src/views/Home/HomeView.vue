@@ -17,9 +17,6 @@
 import PageHeader from "../../components/PageHeader.vue"
 import HomeAside from "./HomeAside.vue"
 export default {
-  created(){ //Home界面默认进入“我的团队”页面
-    this.$router.push('/teamlist')
-  },
   components: { PageHeader, HomeAside }
 }
 </script>

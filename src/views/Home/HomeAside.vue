@@ -47,6 +47,12 @@ export default {
           name: "profile",
           label: "个人资料",
           icon: "s-custom",
+        },
+        {
+          index: "4",
+          name: "buildteam",
+          label: "新建团队",
+          icon: "menu",
         }
       ],
     };

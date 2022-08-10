@@ -11,7 +11,7 @@
     <div class="head_box" @click="gotoProfile">
       <img src="../assets/img/heads/1.png">
     </div>
-    <div class="div_btn1">登出</div> 
+    <div class="div_btn1" @click="logout">登出</div> 
   </div>
 </div>
 </template>
@@ -20,10 +20,17 @@
 export default {
   methods: {
     backMain() {
-      this.$router.push("/");
+      this.$router.push("/")
     },
     gotoProfile(){
-      this.$router.push("/profile");
+      this.$router.push("/profile")
+    },
+    logout(){
+      this.$store.commit('logout')
+      this.$message.warning("您已注销登录");
+      setTimeout(() => {
+        this.$router.push('/');
+      }, 1000);
     }
   }
 }
