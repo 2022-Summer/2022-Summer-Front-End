@@ -17,42 +17,25 @@
           <el-table-column prop="lastEditTime" label="最后编辑时间"></el-table-column>
           <el-table-column prop="id" label="操作">
             <template slot-scope="scope">
-              <el-button type="primary" @click="Detail(scope.row.id)">下载</el-button>
-              <el-button type="danger" @click="Delete(scope.row.id)">删除</el-button>
+              <el-button type="primary" @click="Detailaxure(scope.row.id,scope.row.title)">打开</el-button>
+              <el-button type="danger" @click="Deleteaxure(scope.row.id)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
-
           <el-dialog
-          :visible.sync="file1InfoVisible"
+          :visible.sync="nameInfoVisible"
           width="30%"
           :before-close="handleClose">
 <div>
-      <el-upload
-        ref="upload"
-        style="display: inline"
-        drag
-        :headers="headers"
-        action="http://120.46.200.79:8080/api/project/upload/"
-        :on-preview="handlePreview"
-        :http-request="handleUploadForm"
-        :auto-upload="false"
-        :on-remove="handleRemove"
-        :before-remove="beforeRemove"
-        multiple>
-      <el-link icon="el-icon-paperclip" type="primary">添加需要上传的文件</el-link>
-    </el-upload>
+      <el-input v-model="inputname" placeholder="请输入原型名称"></el-input>
 <div>
-    <el-button type="primary" @click="upload()">上传</el-button>
 </div>
 </div>
           <span slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="file1InfoVisible = false">确 定</el-button>
+            <el-button type="primary" @click="newaxure">新建</el-button>
           </span>
         </el-dialog>
-
         <el-button type="primary" @click="newPrototype" class="bottomButton" round>新建原型</el-button>
-        <el-button type="primary" @click="todo1" class="bottomButton" round>上传原型</el-button>
       </div>
       <div id="infoTable" v-if="projectIndex===2">
           <el-table :data="File2" style="width: 100%">
@@ -66,6 +49,33 @@
             </template>
           </el-table-column>
         </el-table>
+                <el-dialog
+            :visible.sync="file2InfoVisible"
+            width="30%"
+            :before-close="handleClose">
+          <div>
+            <el-upload
+                ref="upload"
+                style="display: inline"
+                drag
+                :headers="headers"
+                action="http://120.46.200.79:8080/api/project/upload/"
+                :on-preview="handlePreview"
+                :http-request="handleUploadForm"
+                :auto-upload="false"
+                :on-remove="handleRemove"
+                :before-remove="beforeRemove"
+                multiple>
+              <el-link icon="el-icon-paperclip" type="primary">添加需要上传的文件</el-link>
+            </el-upload>
+            <div>
+              <el-button type="primary" @click="upload()">上传</el-button>
+            </div>
+          </div>
+          <span slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="file2InfoVisible = false">确 定</el-button>
+          </span>
+        </el-dialog>
         <el-dialog
             :visible.sync="file2InfoVisible"
             width="30%"
@@ -140,8 +150,10 @@ export default {
       file1InfoVisible: false,
       file2InfoVisible: false,
       wordInfoVisible:false,
+      nameInfoVisible:false,
       wordID:0,
       filetype:'',
+      inputname:'',
       project: {
         id: "1",
         name: "test"
@@ -179,10 +191,9 @@ export default {
   created(){
       this.$axios({
         method: 'get',           /* 指明请求方式，可以是 get 或 post */
-        url: '/api/project/file/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        url: '/api/project/view/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
         params: {
           projectid: this.$store.state.projectid,
-          type:0
         }
         })
         .then((res) => {
@@ -269,7 +280,7 @@ export default {
     },
     newPrototype() {/*新建原型*/
       this.$store.state.prototypeid = 0;
-      this.$router.push('/prototype');
+      this.nameInfoVisible = true;
     },
     newPicture() {/*新建图*/
       this.$store.state.chartid = 0;
@@ -278,6 +289,34 @@ export default {
     newword: function () {
       this.$store.state.wordid = 0;
       this.$router.push('/word');
+    },
+    newaxure:function(){
+      this.$store.state.axurename=this.inputname;
+      this.$router.push('/design');
+    },
+    Detailaxure(val1,val2){
+      this.$store.state.prototypeid=val1;
+      this.$store.state.axurename=val2;
+      this.$router.push('/design');
+    },
+    Deleteaxure(val){
+      this.$axios({
+        method: 'post',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/project/deleteaxure/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        data: qs.stringify({      /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+          id: val
+        })
+      })
+          .then((res) => {
+            switch (res.data.errno) {
+              case 0:
+                this.$message.success("删除成功");
+                break;
+            }
+          })
+          .catch(err => {
+            console.log(err);         /* 若出现异常则在终端输出相关信息 */
+          });
     },
     todo1: function () {
       this.$store.state.type = 0;

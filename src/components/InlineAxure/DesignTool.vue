@@ -93,8 +93,7 @@ export default {
   },
   activated() {
     let data = new FormData()
-    data.append('username',localStorage.getItem('username'))
-    data.append('authorization',localStorage.getItem('authorization'))
+    data.append('mailbox',this.$store.state.mailbox)
     data.append('axureID',this.$route.params.axureID)
     let self = this
     this.$axios({
@@ -163,12 +162,14 @@ export default {
     saveAxure() {
       let data = new FormData()
       data.append('mailbox',this.$store.state.mailbox)
+      data.append('axurename',this.$store.state.axurename)
       data.append('axureID',this.$store.state.prototypeid)
+      
       data.append('axureData',JSON.stringify(window.topology.data))
       let self = this
       this.$axios({
         method: 'post',
-        url: '/project/axureSave/',
+        url: '/project/axuresave/',
         data: data
       }).then(res => {
         console.log(res)
