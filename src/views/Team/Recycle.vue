@@ -42,11 +42,33 @@ export default{
       ]
     }
   },
-  created(){
-    
+  created() {
+    if (!this.$store.state.islogin) {
+      this.$message.warning("请先登录");
+      this.$router.push('/login');
+    }
+    else {
+      this.$axios({
+        method: 'get',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/team/recycle/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        params: {
+          teamid: this.$store.state.teamid
+        }
+      })
+        .then((res) => {
+          switch (res.data.errno) {
+            case 0:
+              this.Recycle = res.data.Recycle;
+              break;
+          }
+        })
+        .catch(err => {
+          console.log(err);         /* 若出现异常则在终端输出相关信息 */
+        });
+    }
   },
   methods: {
-    recoverProject(val){//恢复项目
+    recoverProject(val) {//恢复项目
       this.$axios({
         method: "post" /* 指明请求方式，可以是 get 或 post */,
         url: "/api/team/recycle/" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
@@ -74,23 +96,6 @@ export default{
           switch (res.data.errno) {
             case 0:
               this.Recycle = res.data.Recycle;
-              break;
-          }
-        })
-        .catch(err => {
-          console.log(err);         /* 若出现异常则在终端输出相关信息 */
-        });
-      this.$axios({
-        method: 'get',           /* 指明请求方式，可以是 get 或 post */
-        url: '/api/team/project/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
-        params: {
-          teamid: this.$store.state.teamid
-        }
-      })
-        .then((res) => {
-          switch (res.data.errno) {
-            case 0:
-              this.Projects = res.data.projects;
               break;
           }
         })

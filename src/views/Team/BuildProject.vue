@@ -42,11 +42,24 @@ export default{
       团队简介：this.input3
       应该还要传一个当前日期
       */
-      
+      this.$axios({
+        method: "post" /* 指明请求方式，可以是 get 或 post */,
+        url: "/api/project/new/" /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */,
+        data: qs.stringify({
+          /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+          teamid: this.$store.state.teamid,
+          email: this.$store.state.mailbox,
+          title: this.input1,
+          Description: this.input3
+        }),
+      }).then((res) => {
+        switch (res.data.errno) {
+          case 0:
+            this.$message.success("创建成功");
+            break;
+        }
+      });
     },
-    cancel() {
-      this.$router.push('/');
-    }
   }
 }
 </script>
