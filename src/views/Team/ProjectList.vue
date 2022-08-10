@@ -10,7 +10,7 @@
   min-height: calc(100vh - 72px);
   background-image: url("../../assets/img/backgrounds/2.png");
   background-repeat:no-repeat;
-  background-size: 25%;
+  background-size: 30%;
   background-position:left top;
 }
 </style>>

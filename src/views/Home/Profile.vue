@@ -61,10 +61,10 @@ export default{
 <style scoped>
 #profile {
   min-height: calc(100vh - 72px);
-  background-image: url("../../assets/img/backgrounds/5.png");
+  background-image: url("../../assets/img/backgrounds/1.png");
   background-repeat:no-repeat;
-  background-size: 20%;
-  background-position:right bottom;
+  background-size: 33%;
+  background-position:right top;
 }
 
 .form_box1 {
@@ -75,7 +75,7 @@ export default{
   border-radius: 40px;
   line-height: 50px;
   position: absolute;
-  top: 50%;  left: 40%;  
+  top: 50%;  left: calc(38% + 120px);  
 	transform: translate(-50%,-50%);
   transition: 1.0s;
   background-color: rgba(255, 255, 255, 0.5);
@@ -94,7 +94,7 @@ export default{
   border-radius: 40px;
   line-height: 50px;
   position: absolute;
-  top: 50%;  left: 62%;  
+  top: 50%;  left: calc(62% + 120px);  
 	transform: translate(-50%,-50%);
   transition: 1.0s;
   background-color: rgba(255, 255, 255, 0.5);
