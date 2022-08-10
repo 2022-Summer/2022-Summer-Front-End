@@ -10,7 +10,7 @@ Vue.use(ElementUI);
 import Axios from 'axios';//后台交互
 Vue.prototype.$axios=Axios;
 //defaults 设置全局默认路径
-Axios.defaults.baseURL="http://120.46.200.79:8080";
+Axios.defaults.baseURL="http://localhost:8080";
 
 import VueSession from 'vue-session'
 Vue.use(VueSession)
@@ -20,7 +20,7 @@ Vue.use(VueCookies);
 
 Axios.defaults.withCredentials=true;
 
-Vue.config.productionTip = false;
+Vue.config.productionTip = false
 
 new Vue({
   router,

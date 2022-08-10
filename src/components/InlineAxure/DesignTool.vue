@@ -46,7 +46,7 @@ export default {
       newContent: '',
       timer: null,
       refleshKey: false,
-      content: '{"pens":[{"imageRatio":true,"points":[],"manualAnchors":[],"animateDuration":0,"animateFrames":[],"animateFrame":0,"name":"atlassian.x","tags":[],"visible":true,"rect":{"x":87,"y":23,"width":100,"height":100,"center":{"x":137,"y":73},"ex":187,"ey":123},"fontStyle":"normal","fontWeight":"normal","textBackground":"","textDecoration":"","textDecorationDash":0,"textDecorationColor":"","events":[],"dash":0,"lineDashOffset":0,"lineWidth":1,"strokeStyle":"#222222","fillStyle":"","globalAlpha":1,"rotate":0,"offsetRotate":0,"textMaxLine":0,"textOffsetX":0,"textOffsetY":0,"animatePos":0,"id":"65d339cb","zRotate":0,"borderRadius":0,"imageAlign":"center","gradientAngle":0,"gradientRadius":0.01,"paddingTop":0,"paddingBottom":0,"paddingLeft":0,"paddingRight":0,"children":[],"type":0,"animateType":"","paddingLeftNum":0,"paddingRightNum":0,"paddingTopNum":0,"paddingBottomNum":0,"textRect":{"x":87,"y":98,"width":100,"height":25,"center":{"x":137,"y":110.5},"ex":187,"ey":123},"fullTextRect":{"x":87,"y":23,"width":100,"height":100,"center":{"x":137,"y":73},"ex":187,"ey":123},"iconRect":{"x":87,"y":23,"width":100,"height":75,"center":{"x":137,"y":60.5},"ex":187,"ey":98},"fullIconRect":{"x":87,"y":23,"width":100,"height":100,"center":{"x":137,"y":73},"ex":187,"ey":123},"fontColor":"#222222","fontFamily":"\\"Hiragino Sans GB\\", \\"Microsoft YaHei\\", \\"Helvetica Neue\\", Helvetica, Arial","fontSize":12,"lineHeight":1.5,"textAlign":"center","textBaseline":"middle","tmp":null,"whiteSpace":"","evs":{"x":550,"y":138}},{"imageRatio":true,"points":[],"manualAnchors":[],"animateDuration":0,"animateFrames":[],"animateFrame":0,"name":"atlassian.x","tags":[],"visible":true,"rect":{"x":392,"y":23,"width":100,"height":100,"center":{"x":442,"y":73},"ex":492,"ey":123},"fontStyle":"normal","fontWeight":"normal","textBackground":"","textDecoration":"","textDecorationDash":0,"textDecorationColor":"","events":[],"dash":0,"lineDashOffset":0,"lineWidth":1,"strokeStyle":"#222222","fillStyle":"","globalAlpha":1,"rotate":0,"offsetRotate":0,"textMaxLine":0,"textOffsetX":0,"textOffsetY":0,"animatePos":0,"id":"aa8414a","zRotate":0,"borderRadius":0,"imageAlign":"center","gradientAngle":0,"gradientRadius":0.01,"paddingTop":0,"paddingBottom":0,"paddingLeft":0,"paddingRight":0,"children":[],"type":0,"animateType":"","paddingLeftNum":0,"paddingRightNum":0,"paddingTopNum":0,"paddingBottomNum":0,"textRect":{"x":392,"y":98,"width":100,"height":25,"center":{"x":442,"y":110.5},"ex":492,"ey":123},"fullTextRect":{"x":392,"y":23,"width":100,"height":100,"center":{"x":442,"y":73},"ex":492,"ey":123},"iconRect":{"x":392,"y":23,"width":100,"height":75,"center":{"x":442,"y":60.5},"ex":492,"ey":98},"fullIconRect":{"x":392,"y":23,"width":100,"height":100,"center":{"x":442,"y":73},"ex":492,"ey":123},"fontColor":"#222222","fontFamily":"\\"Hiragino Sans GB\\", \\"Microsoft YaHei\\", \\"Helvetica Neue\\", Helvetica, Arial","fontSize":12,"lineHeight":1.5,"textAlign":"center","textBaseline":"middle","tmp":null,"whiteSpace":"","evs":{"x":854,"y":157}}],"lineName":"curve","fromArrow":"","toArrow":"triangleSolid","scale":1,"locked":0,"x":0,"y":0,"websocket":"","mqttUrl":"","mqttOptions":{"clientId":"c719732"}}',
+      content: '',
       topologyConfigs: {
         license: {
           key: 'le5le',
@@ -106,7 +106,7 @@ export default {
     let data = new FormData()
     data.append('mailbox',this.$store.state.mailbox)
     data.append('axureID',this.$store.state.prototypeid)
-    data.append('axureID',this.$store.state.projectid)
+    data.append('projectid',this.$store.state.projectid)
     let self = this
     this.$axios({
       method: 'post',
@@ -123,14 +123,16 @@ export default {
         self.$message.error(res.data.msg)
       }
     })
-    // 请确保 7777777(类似数字).js 和 rg.js已下载，正确加载
+    //this.$message.error("uuuu")
+    //请确保 7777777(类似数字).js 和 rg.js已下载，正确加载
     if (window.registerTools) {
       window.registerTools();
       if (window.topologyTools) {
         self.materials.system[0].list = window.topologyTools;
       }
-        window.topology.open(self.content)
+        //window.topology.open(self.content)
     }
+
     self.settimer()
     self.init()
   },
@@ -152,7 +154,7 @@ export default {
       }
       else {
         console.log('支持Websocket')
-        var socketUrl = "http://localhost:8000/project/viewaxure"
+        var socketUrl = "http://localhost:8009/"
         socketUrl = socketUrl.replace("https", "ws").replace("http", "ws")
         console.log(socketUrl)
         if(socket!==null){
@@ -168,6 +170,7 @@ export default {
         socket.onopen = function() {
           const msg = JSON.stringify({
             type: 'login',
+            mailbox: self.$store.state.mailbox,
             axureID:self.$store.state.prototypeid,
             message: ''
           })
@@ -179,7 +182,7 @@ export default {
       }
       socket.onmessage = function(msg){
         const msg2 = JSON.parse(msg.data)
-        if(msg2.type==='message' && msg2.axureID === self.$store.state.prototypeid)
+        if(msg2.type==='message' && msg2.axureID === self.$store.state.prototypeid && msg2.mailbox !== self.$store.state.mailbox)
         {
           let rcv = JSON.parse(msg2.message)
             window.topology.open(rcv.content)
@@ -191,6 +194,7 @@ export default {
       socket.close = function () {
         const msg = JSON.stringify({
           type: 'logout',
+          mailbox: self.$store.state.mailbox,
           axureID:self.$store.state.prototypeid,
           message: ''
         })
@@ -218,6 +222,7 @@ export default {
         let sendData = {content: this.newContent,mailbox:this.$store.state.mailbox,axureID: this.$store.state.prototypeid}
         const msg = JSON.stringify({
           type: 'message',
+          mailbox: this.$store.state.mailbox,
           axureID:this.$store.state.prototypeid,
           message: JSON.stringify(sendData)
         })

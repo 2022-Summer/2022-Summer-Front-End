@@ -1,99 +1,25 @@
 <template>
-<div id="app">
-    <el-container style="margin:-8px;">
-      <el-header height="80px" >
-        <img src="./assets/img/moshu_banner.png" width="240px" height="80px" style="float:left;" @click="jump">
-        <div style="margin-top:20px;float:right;">
-          <el-button type="primary" v-on:click="gotologin" v-if="!$store.state.islogin">
-            登录
-          </el-button>
-          <el-button type="primary" v-on:click="logout" v-if="this.$store.state.islogin">
-          退出登录
-        </el-button>
-<!--          <h1 v-if="$store.state.islogin">-->
-<!--            欢迎,<router-link to="/">{{$store.state.username}}</router-link>-->
-<!--          </h1>-->
-
-        </div>
-      </el-header>
-      <el-container>
-        <el-aside width="20%">
-          <p style="margin-top:100px;">(◍•ᴗ•◍)我是侧边栏</p>
-          <p>更多内容，正在开发~~</p>
-          <p style="color:darkred;width:80%;margin:auto;">Tips：为了更好的浏览体验，建议使用分辨率大于等于1600*900的设备访问本网站</p>
-          <p style="margin-top:40px;">访问统计</p>
-          <img src="https://badges.toozhao.com/badges/01G9NYGBKXCVD7GT0YGTKPJET9/orange.svg" />
-          <br>
-          <p>关于我们</p>
-          <img src="./assets/img/about_us.png" width="50%">
-          <p>项目地址</p>
-          <img src="./assets/img/about_nbpl.png" width="50%">
-        </el-aside>
-        <el-main style="padding:20px 0 0 0;">
-          <router-view/>
-        </el-main>
-      </el-container>
-    </el-container>
+  <div id="app">
+    <router-view></router-view>
   </div>
 </template>
-
 <script>
-    export default{
-  data() {
-    return {
-        AddSubmenuData:{
-          id:"",
-          pid:"",
-          funType:1,
-          name:"",
-          sort:"",
-          SystemCoding:"",
-          remarks:"",
-          imageUrl: ''
-        },
+
+export default{
+  created() {
+    //在页面加载时读取sessionStorage里的状态信息
+    if (sessionStorage.getItem('storeState')) {
+      //replaceState，替换store的根状态
+      this.$store.replaceState(Object.assign({}, this.$store.state, JSON.parse(sessionStorage.getItem('storeState'))))
     }
+    //在页面刷新时将vuex里的信息保存到sessionStorage里
+    window.addEventListener('beforeunload', () => {
+      sessionStorage.setItem('storeState', JSON.stringify(this.$store.state))
+    })
   },
-  created(){
-      //在页面加载时读取sessionStorage里的状态信息
-      if(sessionStorage.getItem('storeState')){
-          //replaceState，替换store的根状态
-          this.$store.replaceState(Object.assign({},this.$store.state,JSON.parse(sessionStorage.getItem('storeState'))))
-      }
-  //在页面刷新时将vuex里的信息保存到sessionStorage里
-         window.addEventListener('beforeunload',()=>{
-         sessionStorage.setItem('storeState',JSON.stringify(this.$store.state))
-          })
-      },
-      methods:{
-        jump(){
-          this.$router.push('/');
-        },
-        gotologin(){
-          this.$router.push('/Login');
-        },
-        logout(){
-        this.$axios({
-        method: 'post',           /* 指明请求方式，可以是 get 或 post */
-        url: '/api/user/logout/'       /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
-      })
-      .then(res => {              /* res 是 response 的缩写 */
-        switch (res.data.errno) {
-          case 0:
-            break;
-        }
-      })
-      .catch(err => {
-        console.log(err);         /* 若出现异常则在终端输出相关信息 */
-      });
-      this.$store.commit('logout');
-      this.$message.success("退出登录成功");
-        setTimeout(() => {
-                this.$router.push('/');
-            }, 1000);
-        }
-      }
-    }
+}
 </script>
+>
 
 <style>
 #app {
@@ -103,60 +29,8 @@
   text-align: center;
   color: #2c3e50;
 }
-.nav1{
-  font-weight: bold;
-  color: #000000;
-  float:right;
+* {
+  margin: 0;
+  padding: 0;
 }
-.nav2{
-  font-weight: bold;
-  float:left;
-}
- a.router-link-exact-active {
-  color: #000000;
-}
-#app .wrap {
-  width: 60%;
-  height: 0%;
-  padding: 0 25px 0 25px;
-  line-height: 40px;
-  position: relative;
-  display: inline-block;
-  background-color: rgba(255, 255, 255, 0.85);
-  border-radius: 20px;
-}
-.footer{
-  position: fixed;
-  bottom: 0;
-  width: 100px;
-  line-height: var(--footer-height);
-  background: #42b983;
-  color: #fff;
-}
-
-.el-header {
-    background-color: #B3C0D1;
-    color: #333;
-    text-align: center;
-  }
-  .el-aside {
-    background-color: #D3DCE6;
-    color: #333;
-    text-align: center;
-  }
-  .el-main {
-    background-color: #E9EEF3;
-    color: #333;
-    text-align: center;
-  }
-  body > .el-container {
-    margin-bottom: 40px;
-  }
-  .el-container:nth-child(5) .el-aside,
-  .el-container:nth-child(6) .el-aside {
-    line-height: 260px;
-  }
-  .el-container:nth-child(7) .el-aside {
-    line-height: 320px;
-  }
 </style>

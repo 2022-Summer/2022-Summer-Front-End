@@ -1,93 +1,129 @@
 <template>
-  <div id="login" class="login">
-    <div class="wrap">
-      <h1>登 录</h1>
-      <el-form :model="form" ref="form" :rules="rules" class="form">
-      <el-form-item  prop="mailbox">
-        <el-input placeholder="邮箱" v-model="form.mailbox"></el-input>
-      </el-form-item>
-        <el-form-item id="password" prop="password">
-          <el-input
-              placeholder="密码"
-              show-password
-              type="password"
-              v-model="form.password"
-              autocomplete="off"
-              @keyup.enter.native="login"
-          ></el-input>
-        </el-form-item>
-        <el-form-item class="btn_login">
-          <el-button type="primary" @click="login">登&nbsp;&nbsp;录</el-button>
-        </el-form-item>
-      </el-form>
-      <div class="suffix">
-        <p @click="toRegister">注册帐号</p>
-      </div>
-      <div class="suff">
-        <p @click="tofind">找回密码</p>
-      </div>
-    </div>
+<div id="login">
+  <div @click="gotoWelcome" style="cursor:pointer;">
+      <img src="../assets/img/characters/moshu_top.png" style="width:500px;margin-top:40px;">
   </div>
+  <div class="form_box">
+    <el-tabs v-model="paneName">
+      <el-tab-pane label="邮箱登录" name="first">
+        <el-form class="form">
+          <!--待添加rules，用于限定邮箱和密码格式-->
+          <el-form-item>
+            <el-input class="el_in" placeholder="请输入邮箱" v-model="form.mailbox"
+              prefix-icon="el-icon-postcard" clearable>
+            </el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-input class="el_in" placeholder="请输入密码" v-model="form.password"
+              prefix-icon="el-icon-lock" show-password clearable>
+            </el-input>
+          </el-form-item> 
+          <el-form-item>
+            <el-button class="el_btn1" @click="login">
+              登&nbsp;&nbsp;录
+            </el-button>
+          </el-form-item>
+        </el-form>
+      </el-tab-pane>
+      <el-tab-pane label="找回密码" name="second">
+        <el-form class="form">
+          <!--待添加rules-->
+          <el-form-item>
+            <el-input class="el_in" placeholder="请输入邮箱" v-model="form.mailbox"
+              prefix-icon="el-icon-postcard" clearable>
+            </el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-input class="el_in" placeholder="请输入验证码" v-model="form.code"
+              prefix-icon="el-icon-s-check" clearable style="float:left;width:60%;">
+            </el-input>
+            <el-button class="el_btn2" @click="sendCode">发送</el-button>
+          </el-form-item> 
+          <el-form-item>
+            <el-button class="el_btn1" @click="checkCode">
+              找回密码
+            </el-button>
+          </el-form-item>
+        </el-form>
+      </el-tab-pane>
+    </el-tabs>
+    <div class="form_btm" @click="gotoRegister">没有账号？马上注册</div>
+  </div>
+</div>
 </template>
 
 <script>
 import qs from "qs";
-export default {
-  name: "main",
-  data() {
-    var checkEmail = (rule, value, callback) => {
-    const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
-    if (!value) {
-      return callback(new Error('邮箱不能为空'))
-    }
-    setTimeout(() => {
-      if (mailReg.test(value)) {
-        callback()
-      } else {
-        callback(new Error('请输入正确的邮箱格式'))
+export default{
+  data(){
+    var checkEmail = (rule, value, callback) => {//这部分目前还没有用上
+      const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
+      if (!value) {
+        return callback(new Error('邮箱不能为空'))
       }
-    }, 100)
-  }
- return {
-      form: {
-        password: '',
-        mailbox:'',
+      setTimeout(() => {
+        if (mailReg.test(value)) {
+          callback()
+        } else {
+          callback(new Error('请输入正确的邮箱格式'))
+        }
+      }, 100)
+    }
+    return{
+      paneName:'first', //初始选中第一个窗口（也就是登录窗口）
+      form:{
+        mailbox:'', //邮箱
+        password:'', //密码
+        code:'' //验证码
       },
       rules: {
-      mailbox: [
-      { validator: checkEmail, trigger: 'change' }
-    ]
-  }
+        mailbox: [
+          { validator: checkEmail, trigger: 'change' }
+        ]
+      }
+    }
+  },
+  created(){
+    if(this.$store.state.islogin){
+    //  this.$message.success("您已经登录，将跳转到主页")
+      setTimeout(() => {
+        this.$router.push('/teamlist')
+      }, 1000)
     }
   },
   methods: {
-    login: function () {
-      // 检查表单是否有填写内容      
+    gotoWelcome(){
+      this.$router.push('/');
+    },
+    gotoRegister(){
+      this.$router.push('/register');
+    },
+    login() { 
       if (this.form.mailbox === '' || this.form.password === '') {
         this.$message.warning("请输入邮箱和密码!");
         return;
       }
       this.$axios({
-        method: 'post',           /* 指明请求方式，可以是 get 或 post */
-        url: '/api/user/login/',       /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
-        data: qs.stringify({      /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+        method: 'post', 
+        url: '/api/user/login/',
+        data: qs.stringify({
           mailbox: this.form.mailbox,
           password: this.form.password
         })
       })
-      .then(res => {              /* res 是 response 的缩写 */
+      .then(res => {
         switch (res.data.errno) {
           case 0:
             this.$message.success("登录成功！");
             /* 将后端返回的 user 信息使用 vuex 存储起来 */
-            this.$store.state.mailbox=res.data.mailbox;
-            this.$store.state.username=res.data.username;
+            this.$store.state.mailbox = res.data.mailbox;
+            this.$store.state.username = res.data.username;
             this.$store.commit('login');
             /* 从 localStorage 中读取 preRoute 键对应的值 */
-            const history_pth = localStorage.getItem('preRoute');
+            //const history_pth = localStorage.getItem('preRoute');
             /* 若保存的路由为空或为注册路由，则跳转首页；否则跳转前路由（setTimeout表示1000ms后执行） */
             setTimeout(() => {
-                this.$router.push('/');
+              this.$router.push('/teamlist');
             }, 1000);
             break;
           case 2002:
@@ -102,77 +138,152 @@ export default {
         console.log(err);         /* 若出现异常则在终端输出相关信息 */
       })
     },
-    toRegister: function () {
-      // 跳转注册的路由
-      this.$router.push('/register');
+    sendCode(){ //发送验证码，需要和后端交互
+      this.$axios({
+        method: 'get',
+        url: '/api/user/password/',
+        params: {
+          mailbox: this.form.mailbox
+        }
+      })
+        .then(res => {              /* res 是 response 的缩写 */
+          switch (res.data.errno) {
+            case 0:
+              this.$message.success("验证码已发送，请注意接收");
+              break;
+            case 3001:
+              this.$message.error("请求方式错误!");
+              break;
+            case 3002:
+              this.$message.error("用户不存在!");
+              break;
+          }
+        })
+        .catch(err => {
+          console.log(err);         /* 若出现异常则在终端输出相关信息 */
+        })
     },
-    tofind: function (){
-      this.$router.push('/findback');
-    },
-    
+    checkCode() { //校验验证码，需要和后端交互
+      if (this.form.mailbox === '' || this.form.code === '') {
+        this.$message.warning("请填写完整信息");
+      }
+      this.$axios({
+        method: 'post',
+        url: '/api/user/password/',
+        data: qs.stringify({
+          mailbox: this.form.mailbox,
+          code: this.form.code
+        })
+      })
+        .then(res => {
+          switch (res.data.errno) {
+            case 0:
+              this.$message.success("验证成功，您的密码为：" + res.data.password);
+              setTimeout(() => {
+                this.$router.push('/Login');
+              }, 1000);
+              break;
+            case 4002:
+              this.$message.error("验证码错误!");
+              break;
+            case 4003:
+              this.$message.error("用户不存在!");
+              break;
+          }
+        })
+        .catch(err => {
+          console.log(err);         /* 若出现异常则在终端输出相关信息 */
+        })
+    }
   }
 }
 </script>
 
 <style scoped>
 #login {
-  font-family: 'Noto Serif SC', serif;
-  position: relative;
-  top:0;
-  left: 0;
-  height: 800px;
-  background-color: rgb(246, 246, 246);
+  min-height: 100vh;
+  background-image: url("../assets/img/background.png");
+  background-size: 100%;
 }
-#login >>> .el-input__inner {
-  font-family: 'Noto Serif SC', serif;
-}
-#login .bgbox {
-  display: block;
-  opacity: 1;
-  z-index: -3;
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: opacity 1s,transform .25s,filter .25s;
-  backface-visibility: hidden;
-}
-#login .wrap {
+
+.form_box {
   width: 300px;
-  height: 315px;
-  padding: 0 25px 0 25px;
-  line-height: 40px;
-  position: relative;
-  display: inline-block;
-  background-color: rgba(255, 255, 255, 0.85);
-  border-radius: 20px;
-  margin-top: 250px;
-  box-shadow: darkgrey 1px 1px 1px 1px ;
+  height: auto;
+  padding: 25px;
+  margin: auto;
+  border-radius: 40px;
+  line-height: 50px;
+  position: absolute;
+  top: 50%;  left: 50%;  
+	transform: translate(-50%,-50%);
+  transition: 1.0s;
+  background-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 12px 18px 0 rgba(0,0,0,0.24),0 16px 40px 0 rgba(0,0,0,0.19);
+  animation: appear_effect 1.5s;
 }
-#login .btn_login {
-  margin-top: 25px;
-  text-align: center;
+.form_box:hover{
+  width:360px;
+  padding:36px;
 }
-#login .btn_login button{
-  line-height: 10px;
-  font-family: 'Noto Serif SC', serif;
-  width: 100%;
-  height: 38px;
+
+.el_in{
+  font-size: 16px;
+  margin-top: 10px;
 }
-#login .suffix {
-  font-size:14px;
-  line-height:10px;
-  color:#999;
+
+.el_btn1 {
+  width: 86%;
+  font-size:18px;
+  color:white;
+  background-color: #89C7BF;
+  border-radius:20px;
+  border: 1px solid rgba(150, 169, 183, 0.413);
+  margin-top:10px;
+  padding: 10px;
+  transition: 0.2s;
+}
+.el_btn1:hover {
+  width:94%;
+  box-shadow: 0 4px 6px 0 rgba(0,0,0,0.25),0 8px 16px 0 rgba(0,0,0,0.20);
+}
+.el_btn1:active {
+  background-color: #dff6f4;
+}
+
+.el_btn2 {
+  width:26%;
+  font-size:16px;
+  color:white;
+  background-color: #89C7BF;
+  border-radius:10px;
+  border: 1px solid rgba(150, 169, 183, 0.413);
+  margin-top:10px;
+  transition: 0.2s;
+}
+.el_btn2:hover {
+  width:32%;
+  box-shadow: 0 4px 6px 0 rgba(0,0,0,0.25),0 8px 16px 0 rgba(0,0,0,0.20);
+}
+.el_btn2:active {
+  background-color: #dff6f4;
+}
+
+.form_btm {
+  font-size: 12px;
+  float: right;
+  color: #999;
   cursor: pointer;
-  float:left;
+  transition: 1.0s;
+  line-height:32px;
 }
-#login .suff {
-  font-size:14px;
-  line-height:10px;
-  color:#999;
-  cursor: pointer;
-  float:right;
+.form_btm:hover {
+  color: rgb(145, 171, 203);
+  font-size: 15px;
+  padding:10px;
+}
+
+@keyframes appear_effect{
+  from{transform: translate(-50%,0);}
+  to{}
 }
 </style>

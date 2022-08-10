@@ -1,85 +1,126 @@
 <template>
-  <div id="login" class="login">
-    <div class="wrap">
-      <h1>注 册</h1>
-      <el-form :model="form" ref="form" :rules="rules" class="form">
-        <el-form-item prop="name">
-          <el-input placeholder="姓名" v-model="form.name" autocomplete="off"></el-input>
-        </el-form-item>
-         <el-form-item prop="username">
-          <el-input placeholder="昵称" v-model="form.username" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item prop="mailbox">
-        <el-input placeholder="邮箱" v-model="form.mailbox"></el-input>   
-        </el-form-item>
-        <el-button type="primary" plain float="right" @click="send" style="margin-bottom:20px;">发送验证码</el-button>
-        <el-form-item >
-          <el-input placeholder="验证码" v-model="form.code" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item id="password" prop="password">
-          <el-input
-              placeholder="密码"
-              show-password
-              type="password"
-              v-model="form.password1"
-              autocomplete="off"
-          ></el-input>
-        </el-form-item>
-        <el-form-item id="password" prop="password">
-          <el-input
-              placeholder="确认密码"
-              show-password
-              type="password"
-              v-model="form.password2"
-              autocomplete="off"
-          ></el-input>
-        </el-form-item>
-        <el-form-item class="btn_login">
-          <el-button type="primary" @click="register">注&nbsp;&nbsp;册</el-button>
-        </el-form-item>
-      </el-form>
-    </div>
+<div id="register">
+  <div @click="gotoWelcome" style="cursor:pointer;">
+      <img src="../assets/img/characters/moshu_top.png" style="width:500px;margin-top:40px;">
   </div>
+  <div class="form_box">
+    <img src="../assets/img/characters/register_banner.png">
+    <el-form ref="form">
+      <!--待添加rules-->
+      <el-form-item>
+        <el-input class="el_in" placeholder="请输入邮箱" v-model="form.mailbox"
+          prefix-icon="el-icon-postcard" clearable>
+        </el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input class="el_in" placeholder="请输入昵称" v-model="form.username"
+          prefix-icon="el-icon-user" clearable>
+        </el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input class="el_in" placeholder="请输入用户名" v-model="form.name"
+          prefix-icon="el-icon-user-solid" clearable>
+        </el-input>
+      </el-form-item> 
+      <el-form-item>
+        <el-input class="el_in" placeholder="请输入密码" v-model="form.password1"
+          prefix-icon="el-icon-lock" show-password clearable>
+        </el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input class="el_in" placeholder="请确认密码" v-model="form.password2"
+          prefix-icon="el-icon-lock" show-password clearable>
+        </el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input class="el_in" placeholder="请输入验证码" v-model="form.code"
+          prefix-icon="el-icon-s-check" clearable style="float:left;width:60%;">
+        </el-input>
+        <el-button class="el_btn2" @click="send">发送</el-button>
+      </el-form-item> 
+      <el-form-item>
+        <el-button class="el_btn1" @click="register">
+          注册账号
+        </el-button>
+      </el-form-item>
+    </el-form>
+    <div class="form_btm" @click="gotoLogin">已有账号？马上登录</div>
+  </div>
+</div>
 </template>
 
 <script>
 import qs from "qs";
-export default {
-  name: "NewRegister",
+export default{
   data() {
-     var checkEmail = (rule, value, callback) => {
-    const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
-    if (!value) {
-      return callback(new Error('邮箱不能为空'))
-    }
-    setTimeout(() => {
-      if (mailReg.test(value)) {
-        callback()
-      } else {
-        callback(new Error('请输入正确的邮箱格式'))
+    var checkEmail = (rule, value, callback) => {
+      const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
+      if (!value) {
+        return callback(new Error('邮箱不能为空'))
       }
-    }, 100)
-  }
-    return {
+      setTimeout(() => {
+        if (mailReg.test(value)) {
+          callback()
+        } else {
+          callback(new Error('请输入正确的邮箱格式'))
+        }
+      }, 100)
+    }
+    return{
       form: {
-        name: '',
-        username: '',
-        password1: '',
-        password2: '',
-        mailbox:'',
-        code:'',
+        mailbox:'', //邮箱
+        username:'', //昵称
+        name:'',  //用户名
+        password1:'', //密码
+        password1:'', //重复密码
+        code:'' //验证码
       },
       rules: {
-      mailbox: [
-      { validator: checkEmail, trigger: 'change' }
-    ]
-  }
+        mailbox: [
+          { validator: checkEmail, trigger: 'change' }
+        ]
+      }
     }
   },
   methods: {
-    register: function () {
-      // 检查表单是否有填写内容
-      if (this.form.password1 === ''|| this.form.password2 === '' || this.form.username === '' || this.form.name === '' || this.form.mailbox === '' || this.form.code === '') {
+    gotoWelcome(){
+      this.$router.push('/')
+    },
+    gotoLogin(){
+      this.$router.push("/login")
+    },
+    send() { //发送验证码
+      if (this.form.mailbox === '') {
+        this.$message.error("邮箱不能为空");
+        return;
+      }
+      this.$axios({
+        method: 'get',
+        url: '/api/user/register/',
+        params: {
+          mailbox: this.form.mailbox
+        }
+        })
+        .then(res => {              /* res 是 response 的缩写 */
+          switch (res.data.errno) {
+            case 0:
+              this.$message.success("发送成功");
+              break;
+            case 1001:
+              this.$message.error("请求方式错误!");
+              break;
+            case 1002:
+              this.$message.error("邮箱已注册!");
+              break;
+          }
+        })
+        .catch(err => {
+          console.log(err);         /* 若出现异常则在终端输出相关信息 */
+        })
+    },
+    register(){//注册账号，需要交互
+      if (this.form.password1 === ''|| this.form.password2 === '' || this.form.username === '' ||
+          this.form.name === '' || this.form.mailbox === '' || this.form.code === '') {
         this.$message.warning("请填写完整信息!");
         return;
       }
@@ -93,15 +134,14 @@ export default {
           code:this.form.code,
           password_1: this.form.password1,
           password_2: this.form.password2,
-
         })
       })
-      .then(res => {              /* res 是 response 的缩写 */
+      .then(res => { 
         switch (res.data.errno) {
           case 0:
             this.$message.success("注册成功！");
             setTimeout(() => {
-                this.$router.push('/Login');
+                this.$router.push('/login');
             }, 1000);
             break;
           case 1002:
@@ -116,36 +156,7 @@ export default {
         }
       })
       .catch(err => {
-        console.log(err);         /* 若出现异常则在终端输出相关信息 */
-      })
-    },
-    send: function () {
-      if(this.form.mailbox === ''){
-        this.$message.error("邮箱不能为空");
-        return;
-      }
-      this.$axios({
-        method: 'get',           
-        url: '/api/user/register/',       
-        params:{
-          mailbox:this.form.mailbox
-        }
-      })
-      .then(res => {              /* res 是 response 的缩写 */
-        switch (res.data.errno) {
-          case 0:
-            this.$message.success("发送成功");
-            break;
-          case 1001:
-            this.$message.error("请求方式错误!");
-            break;
-          case 1002:
-            this.$message.error("邮箱格式错误!");
-            break;
-        }
-      })
-      .catch(err => {
-        console.log(err);         /* 若出现异常则在终端输出相关信息 */
+        console.log(err);  
       })
     }
   }
@@ -153,50 +164,89 @@ export default {
 </script>
 
 <style scoped>
-#login {
-  font-family: 'Noto Serif SC', serif;
-  position: relative;
-  top:0;
-  left: 0;
-  height: 800px;
-  background-color: rgb(246, 246, 246);
+#register {
+  min-height: 100vh;
+  background-image: url("../assets/img/background.png");
+  background-size: 100%;
 }
-#login >>> .el-input__inner {
-  font-family: 'Noto Serif SC', serif;
-}
-#login .bgbox {
-  display: block;
-  opacity: 1;
-  z-index: -3;
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: opacity 1s,transform .25s,filter .25s;
-  backface-visibility: hidden;
-}
-#login .wrap {
-  width: 300px;
+
+.form_box {
+  width: 340px;
   height: auto;
-  padding: 0 25px 0 25px;
-  line-height: 40px;
-  position: relative;
-  display: inline-block;
-  background-color: rgba(255, 255, 255, 0.85);
-  border-radius: 20px;
-  margin-top: 150px;
-  box-shadow: darkgrey 1px 1px 1px 1px ;
+  padding: 10px 25px;
+  margin: auto;
+  border-radius: 40px;
+  line-height: 50px;
+  position: absolute;
+  top: 50%;  left: 50%;  
+	transform: translate(-50%,-50%);
+  transition: 1.0s;
+  background-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 12px 18px 0 rgba(0,0,0,0.24),0 16px 40px 0 rgba(0,0,0,0.19);
+  animation: appear_effect 1.5s;
 }
-#login .btn_login {
-  margin-top: 25px;
-  text-align: center;
+.form_box:hover{
+  width:400px;
+  padding:20px 40px;
 }
-#login .btn_login button{
-  line-height: 10px;
-  font-family: 'Noto Serif SC', serif;
-  width: 100%;
-  height: 38px;
+
+.el_in{
+  font-size: 16px;
+}
+
+.el_btn1 {
+  width: 86%;
+  font-size:18px;
+  color:white;
+  background-color: #89C7BF;
+  border-radius:20px;
+  border: 1px solid rgba(150, 169, 183, 0.413);
+  padding: 10px;
+  transition: 0.2s;
+}
+.el_btn1:hover {
+  width:94%;
+  box-shadow: 0 4px 6px 0 rgba(0,0,0,0.25),0 8px 16px 0 rgba(0,0,0,0.20);
+}
+.el_btn1:active {
+  background-color: #dff6f4;
+}
+
+.el_btn2 {
+  width:26%;
+  font-size:16px;
+  color:white;
+  background-color: #89C7BF;
+  border-radius:10px;
+  border: 1px solid rgba(150, 169, 183, 0.413);
+  transition: 0.2s;
+}
+.el_btn2:hover {
+  width:32%;
+  box-shadow: 0 4px 6px 0 rgba(0,0,0,0.25),0 8px 16px 0 rgba(0,0,0,0.20);
+}
+.el_btn2:active {
+  background-color: #dff6f4;
+}
+
+.form_btm {
+  font-size: 12px;
+  float: right;
+  color: #999;
+  cursor: pointer;
+  transition: 1.0s;
+  line-height:32px;
+}
+.form_btm:hover {
+  color: rgb(145, 171, 203);
+  font-size: 15px;
+  padding:10px;
+}
+
+@keyframes appear_effect{
+  from{
+    transform: translate(-50%,-25%);
+  }
+  to{}
 }
 </style>

@@ -5,17 +5,17 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    islogin:true,
-    username:'xxx',
-    mailbox:'',//邮箱
-    name:'xx',//真实姓名
+    islogin:false,
+    username:'',
+    mailbox:'',
+    name:'',
     projectid:0,
     wordid:0,
     prototypeid:0,
     chartid:0,
     teamid:'',
     type:0,
-    axurename:''
+    axurname:''
   },
   getters: {
   },
@@ -25,7 +25,7 @@ export default new Vuex.Store({
     },
     logout(state){
       state.islogin = false
-    },
+    }
   },
   actions: {
   },

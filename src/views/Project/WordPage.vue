@@ -1,67 +1,35 @@
 <template>
-  <div style="position:relative;">
-    <el-container>
-      <el-header style="height:80px;line-height:normal;">
-        <div style="margin-top:20px;float:left;">
-          <el-button type="danger" icon="el-icon-back" @click="returnd">返回</el-button>
-          <el-button type="primary" @click="saveword" style="float: right">保存</el-button>
-        </div>
-        <div style="margin-top:23px;margin-left:80px;float:left">
-          <h1 style="display:inline;font-size:24px;">文档编辑</h1>
-        </div>
-      </el-header>
-      <el-main style="padding:0;">
-        <div style="border: 5px outset gray;line-height:0;">
-          <div id="post">
-            <el-card>
-              <div>
-                <div slot="header" id="postHead">
-                  <el-input placeholder="请输入标题" v-model="title" clearable></el-input>
-                </div>
-              </div>
-              <div style="border: 1px solid #ccc;">
-                <Toolbar
-                    style="border-bottom: 1px solid #ccc"
-                    :editor="editor"
-                    :defaultConfig="toolbarConfig"
-                    :mode="mode"
-                />
-                <Editor
-                    style="height: 700px; overflow-y: hidden;"
-                    v-model="html"
-                    :defaultConfig="editorConfig"
-                    :mode="mode"
-                    @onChange="onChange"
-                    @onCreated="onCreated"
-                />
-              </div>
-            </el-card>
-          </div>
-        </div>
-      </el-main>
-    </el-container>
-  </div>
+<div>
+  <el-card>
+    <div>
+      <div slot="header" id="postHead">
+        <el-input placeholder="请输入标题" v-model="title" clearable>
+        <el-button slot="append" icon="el-icon-document" @click="saveword">
+          保存文档
+        </el-button>
+        </el-input>
+      </div>
+    </div>
+    <div style="border: 1px solid #ccc;">
+      <Toolbar
+          style="border-bottom: 1px solid #ccc"
+          :editor="editor"
+          :defaultConfig="toolbarConfig"
+          :mode="mode"
+      />
+      <Editor
+          style="height:calc(100vh - 125px);"
+          v-model="html"
+          :defaultConfig="editorConfig"
+          :mode="mode"
+          @onChange="onChange"
+          @onCreated="onCreated"
+      />
+    </div>
+  </el-card>
+</div>
 </template>
 
-<style src="@wangeditor/editor/dist/css/style.css">
-#search {
-  font-family: 'Noto Serif SC', serif;
-  margin-top: 20px;
-}
-
-#head {
-  background-color: #d4e7d9;
-  color: #333;
-  text-align: center;
-  line-height: 60px;
-}
-
-#main {
-  background-color: #e9eef3;
-  color: #333;
-  text-align: center;
-}
-</style>
 <script>
 let socket = null
 import qs from "qs";
@@ -91,7 +59,7 @@ export default {
     }).then((res) => {
       switch (res.data.errno) {
         case 0:
-          if (this.$store.state.wordid == 0) {
+          if (this.$store.state.wordid === 0) {
             this.$message.success("新建文档成功");
           } else {
             this.$message.success("打开文档成功");
@@ -103,30 +71,29 @@ export default {
       }
     });
   },
-  mounted(){
-      this.openSocket()
+  mounted() {
+    this.openSocket()
   },
   methods: {
-      openSocket() {
-      if(typeof(WebSocket) == 'undefined') {
+    openSocket() {
+      if (typeof (WebSocket) == 'undefined') {
         console.log('不支持Websocket')
-      }
-      else {
+      } else {
         var self = this
         console.log('支持Websocket')
-        var socketUrl = "http://localhost:8000/word/"
+        var socketUrl = "http://localhost:8008/"
         socketUrl = socketUrl.replace("https", "ws").replace("http", "ws")//这个没看明白
         console.log(socketUrl)
-        if(socket!==null){
+        if (socket !== null) {
           console.log(socket)
-          socket=null
+          socket = null
         }
-        try{
+        try {
           socket = new WebSocket(socketUrl)
         } catch (e) {
-          console.log('error:',e)
+          console.log('error:', e)
         }
-        socket.onopen = function() {
+        socket.onopen = function () {
           const msg = JSON.stringify({
             type: 'login',
             wordid:self.$store.state.wordid,
@@ -135,9 +102,9 @@ export default {
           socket.send(msg)
           console.log("websocket打开")
         }
-        console.log('set onopen',socket)
+        console.log('set onopen', socket)
       }
-      socket.onmessage = function(msg){//用于监听服务器的数据
+      socket.onmessage = function (msg) {//用于监听服务器的数据
         const msg2 = JSON.parse(msg.data)
         console.log('接收数据')
         console.log(msg2.type==='message')
@@ -145,8 +112,8 @@ export default {
         {
           console.log(JSON.parse(msg2.message))
           let rcv = JSON.parse(msg2.message)
-            self.html = rcv.html
-            self.title = rcv.title
+          self.html = rcv.html
+          self.title = rcv.title
         }
       }
       // 关闭
@@ -154,7 +121,7 @@ export default {
         const msg = JSON.stringify({
           type: 'logout',
           message: '',
-          wordid:self.$store.state.wordid
+          wordid:this.$store.state.wordid
         })
         socket.send(msg)
         console.log("websocket断开")
@@ -184,9 +151,8 @@ export default {
             break;
         }
       });
-    }
-  },
-  onChange(editor) {
+    },
+    onChange(editor) {
       console.log("onChange", editor.getHtml()); // onChange 时获取编辑器最新内容
       let sendData = {html: editor.getHtml(),title:this.title,mailbox:this.$store.state.mailbox}
       const msg = JSON.stringify({
@@ -195,13 +161,18 @@ export default {
         message: JSON.stringify(sendData)
       })
       //sendData.fromUser = this.curUser
-      if(socket.readyState===1)
-      socket.send(msg)
-  },
-  beforeDestroy() {
-    const editor = this.editor
-    if (editor == null) return
-    editor.destroy() // 组件销毁时，及时销毁编辑器
+      if (socket.readyState === 1)
+        socket.send(msg)
+    },
+    beforeDestroy() {
+      const editor = this.editor
+      if (editor == null) return
+      editor.destroy() // 组件销毁时，及时销毁编辑器
+    },
   },
 }
 </script>
+
+<style src="@wangeditor/editor/dist/css/style.css">
+
+</style>
