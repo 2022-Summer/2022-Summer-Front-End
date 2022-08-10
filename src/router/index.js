@@ -54,11 +54,7 @@ const routes = [
     path: "/design",
     component: designTool,
   
-  },  {
-    path: '/test',
-    name: 'test',
-    component: () => import( '../views/test.vue')
-  },
+  }, 
 ]
 
 const router = new VueRouter({
