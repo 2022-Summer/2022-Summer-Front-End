@@ -23,7 +23,7 @@
 }
 
 .form_box1 {
-  width: 22%;
+  width: 28%;
   height: auto;
   padding: 10px 25px;
   margin: auto;

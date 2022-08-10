@@ -206,7 +206,7 @@ export default {
 }
 
 .invite_box {
-  width: 1100px;
+  width: 74%;
   height: auto;
   padding: 10px 25px;
   margin: auto;
