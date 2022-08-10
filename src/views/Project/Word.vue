@@ -9,13 +9,13 @@
         <el-card class="box-card" shadow="hover">
           <div slot="header" class="clearfix">
             <span><b>文字类文档</b></span>
-            <el-button style="float:right;margin:5px;color:darksalmon;" type="text">
+            <el-button style="float:right;margin:5px;color:darksalmon;" type="text" @click="wordDelete(word.id)">
               <b>删除</b>
             </el-button>
-            <el-button style="float:right;margin:5px;color:green;" type="text">
+            <el-button style="float:right;margin:5px;color:green;" type="text" @click="showdownloadword(word.id)">
               <b>下载</b>
             </el-button>
-            <el-button style="float:right;margin:5px;" type="text">
+            <el-button style="float:right;margin:5px;" type="text" @click="wordDetail(word.id)">
               <b>查看</b>
             </el-button>
           </div>
@@ -30,11 +30,9 @@
         新建文档
       </el-button>
     </div>
-<!--
-    <el-dialog :visible.sync="wordInfoVisible" width="30%" :before-close="handleClose">
+    <el-dialog :visible.sync="info" width="30%" :before-close="handleClose">
       <div>
         <el-radio-group v-model="filetype">
-          <el-radio label="0">Word</el-radio>
           <el-radio label="1">PDF</el-radio>
           <el-radio label="2">Markdown</el-radio>
         </el-radio-group>
@@ -43,7 +41,6 @@
         <el-button type="primary" @click="downloadword">确 定</el-button>
       </span>
     </el-dialog>
--->
   </div>
 </template>
 
@@ -51,6 +48,9 @@
 export default {
   data() {
     return {
+      info:false,
+      wordid:0,
+      filetype:1,
       words: [
         {
           id: 1,
@@ -68,12 +68,93 @@ export default {
     }
   },
   created() {
-    
+    this.$axios({
+      method: 'get',           /* 指明请求方式，可以是 get 或 post */
+      url: '/api/project/doc/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+      params: {
+        projectid: this.$store.state.projectid,
+      }
+    })
+        .then((res) => {
+          switch (res.data.errno) {
+            case 0:
+              this.words = res.data.word;
+              break;
+          }
+        })
+        .catch(err => {
+          console.log(err);         /* 若出现异常则在终端输出相关信息 */
+        });
   },
   methods: {
     newWord: function () {
       this.$store.state.wordid = 0;
       this.$router.push('/wordpage');
+    },
+    showdownloadword(val){
+        this.info = true;
+        this.wordID = val;
+    },
+    downloadword:function(){
+      let url = 'http://120.46.200.79:8080/api/project/downloadword/?wordid=' + this.wordid + '&type=' + this.filetype;
+      this.$axios({
+        method: 'get',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/project/downloadword/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        params: {
+          wordid: this.wordid,
+          filetype:this.filetype
+        }
+      })
+      .then((res) => {
+      switch (res.data.errno) {
+              case 0:
+                break;
+            }
+          })
+          .catch(err => {
+            console.log(err);         /* 若出现异常则在终端输出相关信息 */
+          });
+      window.open(url, '_blank');
+    },
+    wordDelete(val) {/*删除id为val的文档*/
+      this.$axios({
+        method: 'post',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/project/deword/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        data: qs.stringify({      /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+          wordid: val
+        })
+      })
+          .then((res) => {
+            switch (res.data.errno) {
+              case 0:
+                this.$message.success("删除成功");
+                break;
+            }
+          })
+          .catch(err => {
+            console.log(err);         /* 若出现异常则在终端输出相关信息 */
+          });
+      this.$axios({
+        method: 'get',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/project/doc/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        params: {
+          projectid: this.$store.state.projectid,
+        }
+      })
+          .then((res) => {
+            switch (res.data.errno) {
+              case 0:
+                this.words = res.data.word;
+                break;
+            }
+          })
+          .catch(err => {
+            console.log(err);         /* 若出现异常则在终端输出相关信息 */
+          });
+    },
+    wordDetail(val) {/*查看id为val的文档详情*/
+      this.$store.state.wordid = val;
+      this.$router.push('/word');
     },
   }
 }

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import designTool from "@/components/InlineAxure/DesignTool";
 
 Vue.use(VueRouter)
 
@@ -108,11 +109,11 @@ const routes = [
         name: 'wordpage',
         component: () => import('../views/Project/WordPage.vue')
       },
-      {//“原型设计”编辑页面
-        path: '/prototypepage',
-        name: 'prototypepage',
-        component: () => import('../views/Project/PrototypePage.vue')
-      },
+      {
+        //"原型设计"编辑界面
+        path: "/design",
+        component: designTool,
+      }, 
       {//“图绘制”编辑页面
         path: '/drawpage',
         name: 'drawpage',

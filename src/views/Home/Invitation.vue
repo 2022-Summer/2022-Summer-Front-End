@@ -107,22 +107,6 @@ export default {
       .catch(err => {
         console.log(err);         /* 若出现异常则在终端输出相关信息 */
       });
-      /*更新团队列表
-      this.$axios({
-        method: 'get',           
-        url: '/api/user/team/'    
-      })
-      .then((res) => {
-        switch (res.data.errno) {
-          case 0:
-            this.myTeams = res.data.myTeams;
-            break;
-        }
-      })
-      .catch(err => {
-        console.log(err);        
-      });
-      */
     },
     refuse(val){//直接删除主键为val的邀请即可
       this.$axios({

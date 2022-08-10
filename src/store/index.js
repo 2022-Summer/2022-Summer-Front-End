@@ -14,7 +14,8 @@ export default new Vuex.Store({
     prototypeid:0,
     chartid:0,
     teamid:'',
-    type:0
+    type:0,
+    axurname:''
   },
   getters: {
   },

@@ -3,7 +3,6 @@
   <div class="form_box2">
     <img src="../../assets/img/characters/buildteam.png">
     <el-form class="form_box" label-width="80px">
-      <!--需要修改！！！！！！！！！！！-->
       <el-form-item label="团队名">
         <el-input class="infoInput" placeholder="请输入团队名" v-model="input1"></el-input>
       </el-form-item>
@@ -55,7 +54,7 @@ export default{
           switch (res.data.errno) {
             case 0:
               this.$store.state.teamid = res.data.teamid;
-              this.$router.push('/');
+              this.$router.push('/teamlist');
               break;
           }
         })

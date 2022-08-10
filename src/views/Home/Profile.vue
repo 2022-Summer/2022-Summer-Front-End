@@ -14,7 +14,6 @@
   <div class="form_box2">
     <img src="../../assets/img/characters/editprofile.png">
     <el-form class="form" label-width="40px">
-      <!--需要修改！！！！！！！！！！！-->
       <el-form-item label="昵称">
         <el-input class="infoInput" :placeholder="username" v-model="form.username"></el-input>
       </el-form-item>
@@ -65,7 +64,7 @@ export default{
     }
   },
   created(){
-    console.log("profile页面创建")
+    //console.log("profile页面创建")
     if (!this.$store.state.islogin) {
       this.$message.warning("From /profile: 请先登录");
       this.$router.push('/login');
@@ -87,7 +86,6 @@ export default{
         }
       })
       .catch(err => {
-        this.$message.error("连接失败，获取个人信息失败！")
         console.log(err); 
       });
     }

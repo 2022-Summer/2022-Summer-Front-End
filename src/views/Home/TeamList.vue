@@ -55,7 +55,6 @@ export default {
     }
   },
   created(){
-    console.log("mailbox:",this.$store.state.mailbox)
     if(!this.$store.state.islogin){
       this.$message.warning("From /teamlist: 请先登录");
       this.$router.push('/login');

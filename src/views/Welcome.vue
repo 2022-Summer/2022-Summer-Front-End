@@ -31,10 +31,10 @@
     </div>
     <div class="intro_text">
       <div class="text_head">
-        大难不死的男孩
+        水墨风清新风格界面
       </div>
       <div class="text_detail">
-        家住女贞路四号的德思礼夫妇总是得意地说他们是非常规矩的人家。拜托，拜托了。他们从来跟神秘古怪的事不沾边，因为他们根本不相信那些邪门歪道。
+        水墨风清新风格界面，带给你不一样的使用体验
       </div>
     </div>
   </div>
@@ -42,10 +42,10 @@
   <div class="div_intro2">
     <div class="intro_text">
       <div class="text_head">
-        悄悄消失的玻璃
+        高效的图形绘制
       </div>
       <div class="text_detail">
-        自从德思礼夫妇一觉醒来在大门口台阶上发现他们的外甥以来，快十年过去了，女贞路却几乎没有变化。
+        内置强大的作图工具，支持多人实时在线协作，可用于原型图、UML等多种图形绘制
       </div>
     </div>
     <div class="intro_img">
@@ -59,10 +59,10 @@
     </div>
     <div class="intro_text">
       <div class="text_head">
-        猫头鹰传书
+        多人协作云端存储
       </div>
       <div class="text_detail">
-        巴西巨蟒的脱逃使哈利受到了平生为期最长的一次惩罚。当他获准走出碗柜时，暑假已经开始了。
+        多人绘制，多端同步，实时存储，历史版本可回溯，文件安全有保障
       </div>
     </div>
   </div>
