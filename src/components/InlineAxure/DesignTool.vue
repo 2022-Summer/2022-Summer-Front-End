@@ -106,6 +106,7 @@ export default {
     let data = new FormData()
     data.append('mailbox',this.$store.state.mailbox)
     data.append('axureID',this.$store.state.prototypeid)
+    data.append('axureID',this.$store.state.projectid)
     let self = this
     this.$axios({
       method: 'post',
@@ -242,7 +243,7 @@ export default {
       let self = this
       this.$axios({
         method: 'post',
-        url: '/project/axuresave/',
+        url: 'api/project/axuresave/',
         data: data
       }).then(res => {
         console.log(res)
