@@ -68,6 +68,7 @@
 <script>
 import qs from "qs";
 export default {
+  inject:['reload'],
   data(){
     return{
       Files: [
@@ -168,6 +169,7 @@ export default {
         .catch(err => {
           console.log(err);         /* 若出现异常则在终端输出相关信息 */
         });
+      this.reload()
     },
   }
 }

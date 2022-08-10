@@ -50,6 +50,7 @@
 <script>
 import qs from "qs";
 export default{
+  inject:['reload'],
   data(){
     return{
       inputsearch:'',
@@ -153,6 +154,7 @@ export default{
       this.renameVisible = false;
       this.$message.success("重命名成功！");
       this.input = "";
+      this.reload()
     },
     removeProject(val) {//项目移入回收站
       this.$axios({
@@ -188,6 +190,7 @@ export default{
         .catch(err => {
           console.log(err);         /* 若出现异常则在终端输出相关信息 */
         });
+      this.reload()
     },
     copyProject(val){//复制项目
         this.$axios({
@@ -207,6 +210,7 @@ export default{
       .catch(err => {
         console.log(err);         /* 若出现异常则在终端输出相关信息 */
       })
+      this.reload()
     },
     addProject() {//新建项目
       this.$router.push('/buildproject');

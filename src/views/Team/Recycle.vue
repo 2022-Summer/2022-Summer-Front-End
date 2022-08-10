@@ -30,6 +30,7 @@
 <script>
 import qs from "qs";
 export default{
+  inject:['reload'],
   data(){
     return{
       Recycle:[//回收站项目列表
@@ -102,6 +103,7 @@ export default{
         .catch(err => {
           console.log(err);         /* 若出现异常则在终端输出相关信息 */
         });
+      this.reload()
     },
     delProject(val) {//彻底删除项目
       this.$confirm('此操作将彻底删除项目，无法恢复，是否删除?', '提示', {
@@ -149,6 +151,7 @@ export default{
           message: '已取消删除'
         });
       });
+      this.reload()
     },
   }
 }

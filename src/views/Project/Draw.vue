@@ -54,6 +54,7 @@
 import qs from "qs";
 
 export default {
+  inject:['reload'],
   data() {
     return {
       info:false,
@@ -105,6 +106,7 @@ export default {
     },
     upload() {
       this.$refs.upload.submit();
+      this.reload()
     }, 
     del(val){
       this.$axios({
@@ -124,6 +126,7 @@ export default {
           .catch(err => {
             console.log(err);         /* 若出现异常则在终端输出相关信息 */
           })
+      this.reload()
     },
     download(val){
       let url = 'http://localhost:8080/api/project/download/?fileid=' + val;

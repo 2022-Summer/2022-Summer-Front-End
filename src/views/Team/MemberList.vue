@@ -48,6 +48,7 @@
 import qs from "qs";
 
 export default {
+  inject:['reload'],
   data() {
     return {
       myStatus: "发起人",
@@ -151,6 +152,7 @@ export default {
             break;
         }
       });
+      this.reload()
     },
     delAdmin(val) {//删除管理员
       this.$axios({
@@ -169,6 +171,7 @@ export default {
             break;
         }
       });
+      this.reload()
     },
     out(val) {//移出团队
       this.$confirm('确认将该成员移出本团队?', '提示', {
@@ -194,6 +197,7 @@ export default {
           }
         });
       })
+      this.reload()
     },
     addMember() {//邀请新成员
       this.inviteVisible = true;
