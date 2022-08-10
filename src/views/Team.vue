@@ -239,6 +239,7 @@ export default {
       ],
       Files: [
             {
+              projectid:'1',
               label: '项目1',
               children: [
                 {
@@ -380,7 +381,6 @@ export default {
         }
         })
         .then((res) => {
-          this.$message.success(res.data.Files)
           switch (res.data.errno){
             case 0:
               this.Files=res.data.Files;
@@ -772,7 +772,6 @@ export default {
           case 0:
             this.Projects=res.data.projects;
             this.$message.success("搜索成功");
-            this.$message.success(res.data.projects);
             break;
         }
       })

@@ -1,0 +1,17 @@
+{
+  "name": "topology-vue",
+  "version": "0.5.38",
+  "private": false,
+  "main": "topology-vue.umd.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "start": "vue-cli-service serve --host local.le5le.com --open --copy",
+    "dev": "vue-cli-service serve --mode dev",
+    "build": "vue-cli-service build",
+    "lib": "vue-cli-service build --target lib --name topology-vue ./src/components/index.ts",
+    "lint": "vue-cli-service lint"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

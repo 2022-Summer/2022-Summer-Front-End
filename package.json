@@ -7,11 +7,13 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@topology/core": "^1.1.32",
     "@wangeditor/editor": "^5.1.14",
     "@wangeditor/editor-for-vue": "^1.0.2",
     "axios": "^0.27.2",
     "core-js": "^3.8.3",
     "element-ui": "^2.15.9",
+    "nodejs-websocket": "^1.7.2",
     "vue": "^2.6.14",
     "vue-cookies": "^1.8.1",
     "vue-router": "^3.5.1",
@@ -23,6 +25,8 @@
     "@vue/cli-plugin-router": "~5.0.0",
     "@vue/cli-plugin-vuex": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
+    "node-sass": "^7.0.1",
+    "sass-loader": "^13.0.2",
     "vue-template-compiler": "^2.6.14"
   }
 }

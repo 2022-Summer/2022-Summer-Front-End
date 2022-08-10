@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/main.vue'
+import designTool from "@/components/InlineAxure/DesignTool";
 
 Vue.use(VueRouter)
 
@@ -50,9 +51,14 @@ const routes = [
     component: () => import( '../views/chart.vue')
   },
   {
-    path: '/prototype',
-    name: 'prototype',
-    component: () => import( '../views/prototype.vue')
+    path: "/design",
+    component: designTool,
+
+  },
+  {
+    path: '/preview',
+    name: 'preview',
+    component: () => import( '../views/preview.vue')
   },
 ]
 
