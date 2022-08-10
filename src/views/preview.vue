@@ -409,7 +409,7 @@ export default {
     let data = new FormData()
     this.pid=this.$route.query.projectid
     this.axureid = this.$route.query.axureid
-    data.append('axureID',this.axureid)
+    data.append('axureid',this.axureid)
     data.append('projectid',this.pid)
     this.$axios({
       method: 'post',

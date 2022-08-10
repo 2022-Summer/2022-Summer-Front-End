@@ -28,7 +28,7 @@
             <el-button style="float:right;margin:5px;color:green;" type="text" @click="open(file.id,file.title)">
               <b>打开</b>
             </el-button>
-            <el-button style="float:right;margin:5px;color:green;" type="text" @click="showpre(file.id)">
+            <el-button style="float:right;margin:5px;color:green;" type="text" v-if="preinfo" @click="showpre(file.id)">
               <b>预览地址</b>
             </el-button>
           </div>
@@ -42,8 +42,8 @@
       <el-button class="el_btn1" @click="buildProject">
         新建原型
       </el-button>
-      <el-button v-if="!preinfo" @click="closepreview">关闭预览</el-button>
-      <el-button v-if="preinfo" @click="openpreview">开启预览</el-button>
+      <el-button v-if="preinfo" @click="closepreview">关闭预览</el-button>
+      <el-button v-if="!preinfo" @click="openpreview">开启预览</el-button>
           <el-dialog :visible.sync="preinfo2" width="30%" :before-close="handleClose">
       <div>
         <p>{{this.preurl}}</p>
@@ -91,6 +91,23 @@ export default {
         .catch(err => {
           console.log(err);         /* 若出现异常则在终端输出相关信息 */
         });
+      this.$axios({
+      method: 'get',           /* 指明请求方式，可以是 get 或 post */
+      url: '/api/project/previewstate/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+      params: {
+        projectid: this.$store.state.projectid,
+      }
+    })
+        .then((res) => {
+          switch (res.data.errno) {
+            case 0:
+              this.preinfo = res.data.state;
+              break;
+          }
+        })
+        .catch(err => {
+          console.log(err);         /* 若出现异常则在终端输出相关信息 */
+        });
   },
   methods: {
     del(val) {
@@ -126,6 +143,7 @@ export default {
       this.$router.push('/design');
     },
     closepreview(){
+      this.preinfo = false;
         this.$axios({
         method: 'post',           /* 指明请求方式，可以是 get 或 post */
         url: '/api/project/change/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
@@ -146,12 +164,13 @@ export default {
           });      
     },
     openpreview(){
+      this.preinfo = true;
         this.$axios({
         method: 'post',           /* 指明请求方式，可以是 get 或 post */
         url: '/api/project/change/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
         data: qs.stringify({      /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
           projectid:this.$store.state.projectid,
-          op:1
+          op:0
         })
       })
           .then((res) => {
@@ -166,8 +185,8 @@ export default {
           }); 
     },
     showpre(val){
-        this.preid="http://localhost:8080/preview?projectid="+this.$store.state.projectid+"&axureid="+val;
-        preinfo2 = true;
+        this.preurl="http://localhost:8080/preview?projectid="+this.$store.state.projectid+"&axureid="+val;
+        this.preinfo2 = true;
     }
   }
 }
