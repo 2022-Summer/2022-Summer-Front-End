@@ -207,7 +207,7 @@ export default{
 }
 
 .form_box {
-  width: 300px;
+  width: 24%;
   height: auto;
   padding: 25px;
   margin: auto;
@@ -222,7 +222,7 @@ export default{
   animation: appear_effect 1.5s;
 }
 .form_box:hover{
-  width:360px;
+  width:30%;
   padding:36px;
 }
 

@@ -6,8 +6,13 @@
     </div>
     <!--如果读取到登录信息就显示登录后的情况-->
     <div class="top_right">
+      <div v-if="this.$store.state.islogin===false">
       <div class="div_btn1" style="float:left" @click="gotoLogin">登录</div>
       <div class="div_btn1" style="float:left" @click="gotoRegister">注册</div>
+      </div>
+      <div v-if="this.$store.state.islogin===true" class="head_box" @click="gotoProfile">
+        <img src="../assets/img/heads/1.png">
+      </div>
     </div>
   </div>
 
@@ -49,13 +54,13 @@
       </div>
     </div>
     <div class="intro_img">
-      <img src="../assets/img/test_img.jpg">
+      <img src="../assets/img/pic3.png">
     </div>
   </div>
 
   <div class="div_intro1">
     <div class="intro_img">
-      <img src="../assets/img/img_test.jpg">
+      <img src="../assets/img/pic2.png">
     </div>
     <div class="intro_text">
       <div class="text_head">
@@ -78,7 +83,7 @@
         <div class="div_btn2" style="margin:auto;margin-top:40px;" @click="gotoRegister">立即使用</div>
       </div>
       <div class="intro_img">
-        <img src="../assets/img/img_test.jpg">
+        <img src="../assets/img/test_img.jpg">
       </div>
     </div>
 
@@ -109,6 +114,9 @@ export default {
     },
     gotoRegister(){//跳转到注册界面
         this.$router.push("/register")
+    },
+    gotoProfile(){//跳转到注册界面
+        this.$router.push("/profile")
     }
   }
 }
@@ -161,12 +169,13 @@ export default {
   border-radius: 10px;
   margin: 10px;
   padding: 15px 34px;
-  width: 100px;
+  width: 200px;
   transition: 1.0s;
 }
 .div_btn2:hover {
   cursor: pointer;
   padding: 20px 48px;
+  width:240px;
   box-shadow: 0 10px 16px 0 rgba(0,0,0,0.24),0 14px 36px 0 rgba(0,0,0,0.19);
 }
 
@@ -228,7 +237,25 @@ export default {
   width:100%;
   display: block;
 }
-
+.head_box {
+  width: 66px;
+  height: 66px;
+  border:1px solid;
+  border-radius: 20px;
+  float:left;
+  margin-top:2px;
+  margin-right:20px;
+}
+.head_box:hover {
+  margin-top:0;
+  border:3px solid;
+  cursor: pointer;
+}
+.head_box img{
+  width: 66px;
+  height: 66px;
+  border-radius: 20px;
+}
 @keyframes resize_effect{
   from{width:45%;}
   to{}

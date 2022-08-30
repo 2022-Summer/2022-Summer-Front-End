@@ -135,7 +135,7 @@ export default{
 }
 
 .form_box1 {
-  width: 18%;
+  width: 22%;
   height: auto;
   padding: 10px 25px;
   margin: auto;
@@ -150,11 +150,11 @@ export default{
   animation: appear_effect 1.5s;
 }
 .form_box1:hover{
-  width:20%;
+  width:24%;
   padding:20px 40px;
 }
 .form_box2 {
-  width: 18%;
+  width: 22%;
   height: auto;
   padding: 10px 25px;
   margin: auto;
@@ -169,7 +169,7 @@ export default{
   animation: appear_effect 1.5s;
 }
 .form_box2:hover{
-  width:20%;
+  width:24%;
   padding:20px 40px;
 }
 

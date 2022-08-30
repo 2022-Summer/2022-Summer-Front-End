@@ -25,9 +25,22 @@ export default {
     gotoProfile(){
       this.$router.push("/profile")
     },
-    logout(){
-      this.$store.commit('logout')
-      this.$message.warning("您已注销登录");
+        logout() {
+      this.$axios({
+        method: 'post',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/user/logout/'       /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+      })
+        .then(res => {              /* res 是 response 的缩写 */
+          switch (res.data.errno) {
+            case 0:
+              break;
+          }
+        })
+        .catch(err => {
+          console.log(err);         /* 若出现异常则在终端输出相关信息 */
+        });
+      this.$store.commit('logout');
+      this.$message.success("退出登录成功");
       setTimeout(() => {
         this.$router.push('/');
       }, 1000);

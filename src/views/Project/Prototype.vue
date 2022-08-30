@@ -10,13 +10,13 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="newaxure">新建</el-button>
+            <el-button type="primary" @click="newaxure">新建原型</el-button>
           </span>
     </el-dialog>
     <div class="invite_box">
       <!--需要v-if特殊判断没有邀请的情况，没有邀请也需要做样式-->
       <div v-if="File1.length==0">
-        <p style="font-size:21px;weight:600;">暂无原型，赶紧去创建/上传吧</p>
+        <p style="font-size:21px;weight:600;">暂无原型，赶紧去创建吧</p>
       </div>
       <div v-for="file in File1" :key="file.id" class="el_card">
         <el-card class="box-card" shadow="hover">
@@ -27,6 +27,9 @@
             </el-button>
             <el-button style="float:right;margin:5px;color:green;" type="text" @click="open(file.id,file.title)">
               <b>打开</b>
+            </el-button>
+            <el-button style="float:right;margin:5px;color:green;" type="text" v-if="preinfo" @click="showpre(file.id)">
+              <b>预览地址</b>
             </el-button>
           </div>
           <div class="box_text">
@@ -39,7 +42,14 @@
       <el-button class="el_btn1" @click="buildProject">
         新建原型
       </el-button>
+      <el-button class="el_btn1" v-if="preinfo" @click="closepreview">关闭预览</el-button>
+      <el-button class="el_btn1" v-if="!preinfo" @click="openpreview">开启预览</el-button>
     </div>
+    <el-dialog :visible.sync="preinfo2" width="30%" :before-close="handleClose">
+      <div>
+        <p>{{ this.preurl }}</p>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -51,6 +61,9 @@ export default {
     return {
       inputname: "",
       info: false,
+      preurl: "",
+      preinfo: false,
+      preinfo2: false,
       File1: [
         {
           id: 1,
@@ -72,6 +85,23 @@ export default {
           switch (res.data.errno) {
             case 0:
               this.File1 = res.data.file;
+              break;
+          }
+        })
+        .catch(err => {
+          console.log(err);         /* 若出现异常则在终端输出相关信息 */
+        });
+    this.$axios({
+      method: 'get',           /* 指明请求方式，可以是 get 或 post */
+      url: '/api/project/previewstate/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+      params: {
+        projectid: this.$store.state.projectid,
+      }
+    })
+        .then((res) => {
+          switch (res.data.errno) {
+            case 0:
+              this.preinfo = res.data.state;
               break;
           }
         })
@@ -111,12 +141,56 @@ export default {
     newaxure() {
       this.$store.state.axurename = this.inputname;
       this.$router.push('/design');
+    },
+    closepreview() {
+      this.preinfo = false;
+      this.$axios({
+        method: 'post',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/project/change/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        data: qs.stringify({      /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+          projectid: this.$store.state.projectid,
+          op: 1
+        })
+      })
+          .then((res) => {
+            switch (res.data.errno) {
+              case 0:
+                this.$message.success("关闭预览成功");
+                break;
+            }
+          })
+          .catch(err => {
+            console.log(err);         /* 若出现异常则在终端输出相关信息 */
+          });
+    },
+    openpreview() {
+      this.preinfo = true;
+      this.$axios({
+        method: 'post',           /* 指明请求方式，可以是 get 或 post */
+        url: '/api/project/change/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
+        data: qs.stringify({      /* 需要向后端传输的数据，此处使用 qs.stringify 将 json 数据序列化以发送后端 */
+          projectid: this.$store.state.projectid,
+          op: 0
+        })
+      })
+          .then((res) => {
+            switch (res.data.errno) {
+              case 0:
+                this.$message.success("开启预览成功");
+                break;
+            }
+          })
+          .catch(err => {
+            console.log(err);         /* 若出现异常则在终端输出相关信息 */
+          });
+    },
+    showpre(val) {
+      this.preurl = "http://120.46.200.79/preview?projectid=" + this.$store.state.projectid + "&axureid=" + val;
+      this.preinfo2 = true;
     }
   }
 }
 </script>
-
-
 <style scoped>
 #prototype {
   min-height: calc(100vh - 72px);

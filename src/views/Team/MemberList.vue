@@ -294,7 +294,7 @@ p {
 }
 
 .member_box {
-  width: 1300px;
+  width: 74%;
   height: auto;
   padding: 10px;
   margin: auto;

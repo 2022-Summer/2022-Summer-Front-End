@@ -34,7 +34,7 @@
           <el-dialog :visible.sync="info" width="30%" :before-close="handleClose">
         <div>
           <el-upload ref="upload" style="display: inline" drag :headers="headers"
-            action="http://localhost:8080/api/project/upload/" :on-preview="handlePreview"
+            action="http://120.46.200.79:8000/api/project/upload/" :on-preview="handlePreview"
             :http-request="handleUploadForm" :auto-upload="false" :on-remove="handleRemove"
             :before-remove="beforeRemove" multiple>
             <el-link icon="el-icon-paperclip" type="primary">添加需要上传的文件</el-link>
@@ -126,7 +126,7 @@ export default {
           })
     },
     download(val){
-      let url = 'http://localhost:8080/api/project/download/?fileid=' + val;
+      let url = 'http://120.46.200.79:8000/api/project/download/?fileid=' + val;
       this.$axios({
         method: 'get',           /* 指明请求方式，可以是 get 或 post */
         url: '/api/project/download/',     /* 指明后端 api 路径，由于在 main.js 已指定根路径，因此在此处只需写相对路由 */
@@ -208,7 +208,7 @@ export default {
 }
 
 .invite_box {
-  width: 1100px;
+  width: 74%;
   height: auto;
   padding: 10px 25px;
   margin: auto;

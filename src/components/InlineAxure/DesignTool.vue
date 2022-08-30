@@ -154,7 +154,7 @@ export default {
       }
       else {
         console.log('支持Websocket')
-        var socketUrl = "http://localhost:8009/"
+        var socketUrl = "http://120.46.200.79:8009/"
         socketUrl = socketUrl.replace("https", "ws").replace("http", "ws")
         console.log(socketUrl)
         if(socket!==null){

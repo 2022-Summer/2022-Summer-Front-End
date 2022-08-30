@@ -3,7 +3,7 @@
     <div class="form_box2">
       <img src="../../assets/img/characters/filecenter.png">
         <el-tree :data="Files" :expand-on-click-node="false" class="el_tree">
-        <span class="custom-tree-node" slot-scope="{ node, data }">
+        <span class="custom-tree-node" slot-scope="{ node, data }" >
           <span>{{ node.label }}</span>
             <span v-if="data.wordid > 0">
               <d>&nbsp;最后编辑人:{{ data.lastEditor }}</d>
@@ -31,14 +31,14 @@
   background-position:right bottom;
 }
 .form_box2 {
-  width: 48%;
+  width: 60%;
   height: auto;
   padding: 10px 25px;
   margin: auto;
   border-radius: 40px;
   line-height: 50px;
   position: absolute;
-  top: 50%;  left: 50%;  
+  top: 50%;  left: calc(50% + 120px);
 	transform: translate(-50%,-50%);
   transition: 1.0s;
   background-color: rgba(255, 255, 255, 0.5);
@@ -46,7 +46,7 @@
   animation: appear_effect 1.5s;
 }
 .form_box2:hover{
-  width:56%;
+  width:68%;
   padding:20px 40px;
 }
 
@@ -60,6 +60,7 @@
 .el_tree{
   font-size: 24px;
   font-weight: 600;
+  line-height: 50px;
   padding: 20px;
   background-color: #EBFDFB;
 }

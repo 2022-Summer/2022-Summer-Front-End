@@ -20,6 +20,11 @@ const routes = [
     name: 'register',
     component: () => import('../views/Register.vue')
   },
+  {
+    path: '/preview',
+    name: 'preview',
+    component: () => import('../views/preview.vue')
+  },
   {//主页面
     path: '/home',
     name: 'home',

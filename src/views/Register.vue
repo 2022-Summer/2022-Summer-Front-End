@@ -72,7 +72,7 @@ export default{
         username:'', //昵称
         name:'',  //用户名
         password1:'', //密码
-        password1:'', //重复密码
+        password2:'', //重复密码
         code:'' //验证码
       },
       rules: {
@@ -171,7 +171,7 @@ export default{
 }
 
 .form_box {
-  width: 340px;
+  width: 26%;
   height: auto;
   padding: 10px 25px;
   margin: auto;
@@ -186,7 +186,7 @@ export default{
   animation: appear_effect 1.5s;
 }
 .form_box:hover{
-  width:400px;
+  width:34%;
   padding:20px 40px;
 }
 
